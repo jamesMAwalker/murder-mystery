@@ -1,14 +1,16 @@
-'use client '
-
-import './globals.css'
+import { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+
 
 import { Providers } from './(context)/_providers'
 import { Navbar } from './(layout-components)/navbar'
 import { BottomNav } from './(layout-components)/bottom-nav'
 
+import './globals.css'
+
 const inter = Inter({ subsets: ['latin'] })
+
 
 export const metadata: Metadata = {
   title: 'Murder Mystery',
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return (
     <html lang='en'>

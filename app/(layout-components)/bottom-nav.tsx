@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useRef, useState, SyntheticEvent } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
@@ -32,16 +32,21 @@ export const BottomNav = () => {
 
   const { push } = useRouter()
 
-  useEffect(() => {
-    const route = `/${rounds[selectedRound].path}/${pages[selectedPage].path}`
-    console.log('route: ', route);
-    
+  const handleChangeRoute = (e: SyntheticEvent) => {
+    e.preventDefault()
+
+    const round = rounds[selectedRound].path
+    const page = pages[selectedPage].path
+
+    const route = `/${round}/${page}`
+    console.log('route: ', route)
+
     // push(route)
-  }, [selectedRound, selectedPage])
-  
+  }
+
   return (
     <div className='fixed bottom-0 p-4 flex w-full items-center'>
-      <nav className='navbar grid grid-cols-2 gap-4'>
+      <nav className='navbar grid grid-cols-[.5fr_.5fr_.1fr] gap-2'>
         <Dropdown
           type='round'
           content={rounds}
@@ -54,6 +59,12 @@ export const BottomNav = () => {
           selected={selectedPage}
           setSelected={setSelectedPage}
         />
+        <button
+          onClick={handleChangeRoute}
+          className='btn full text-black btn-accent p-4 rounded-md'
+        >
+          →
+        </button>
       </nav>
     </div>
   )
@@ -67,24 +78,32 @@ interface IDropdown {
 }
 
 function Dropdown({ type, content, selected, setSelected }: IDropdown) {
-  const color = type === 'round' ? 'bg-accent' : 'bg-primary'
+  const handleOptionClick = (idx: number) => {
+    // TODO: Set dropdown to close on option click.
+    
+    setSelected(idx)
+  }
 
   return (
     <details className='dropdown dropdown-top'>
-      <summary className={cn('button p-4 rounded-md', color)}>
+      <summary
+        tabIndex={0}
+        className={cn('full border border-accent text-accent p-4 rounded-md ')}
+      >
         {content[selected][type]}
       </summary>
       <ul
+        tabIndex={0}
         className={cn(
-          'dropdown-content flex flex-col gap-2 z-[1] menu w-full p-2 shadow mb-2 rounded-box rounded-md',
-          color
+          'dropdown-content bg-black border border-accent flex flex-col gap-4 z-[1] menu w-full p-4 shadow mb-2 rounded-box rounded-md'
         )}
       >
         {content.map((contentItem: IDropdownContent, idx: number) => (
           <li
             key={contentItem[type]}
-            onTouchEnd={() => setSelected(idx)}
-            className='p-4 bg-slate-800 badge'
+            onClick={() => handleOptionClick(idx)}
+            // onTouchEnd={() => handleOptionClick(idx)}
+            className='p-4 bg-black text-accent badge'
           >
             {contentItem[type]}
           </li>

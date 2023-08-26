@@ -1,28 +1,13 @@
 'use client'
 
-import { use, useEffect } from 'react'
+import { useEffect } from 'react'
 import { UserButton } from '@clerk/nextjs/app-beta'
 import { useUser } from '@clerk/clerk-react'
 import Link from 'next/link'
 import axios from 'axios'
 
-import { api } from '../../convex/_generated/api'
-import { useMutation } from 'convex/react-internal'
-
 async function createUser(user: any) {
-  console.log('user: ', user);
-  // const res = await fetch('/api/createUser', {
-  //   method: 'POST',
-  //   headers: {
-  //     "Content-Type": "application/json"
-  //   },
-  //   body: JSON.stringify(user),
-  // })
-  const newUser = await axios.post('/api/createUser', user)
-
-  console.log('newUser: ', newUser)
-
-  return newUser
+  return await axios.post('/api/createUser', user)
 }
 
 export const Navbar = () => {
@@ -30,16 +15,18 @@ export const Navbar = () => {
 
   useEffect(() => {
     // TODO: Extract to hook & use in signup/signin pages.
-    console.log('user: ', user);  
 
     if (isSignedIn && user.id) {
-      const newConvexUser = {
-        email: user.primaryEmailAddress?.emailAddress,
-        name: user.fullName,
-        team: 'No team yet...',
+      const newConvexUser: IConvexUser = {
         user_id: user.id,
+        name: user.fullName,
+        email: user.primaryEmailAddress?.emailAddress,
+        has_team: false,
+        team_name: null,
+        team_id: null
       }
       createUser(newConvexUser)
+      console.log('newConvexUser: ', newConvexUser);
     }
   }, [isSignedIn, user])
 
@@ -54,7 +41,7 @@ export const Navbar = () => {
         {isSignedIn ? (
           <div className='flex gap-4 navbar-end'>
             <Link
-              href='/profile'
+              href='/user-profile'
               className='hover:bg-primary cursor-pointer badge p-4 uppercase text-white'
             >
               Profile
