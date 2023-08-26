@@ -8,19 +8,19 @@ declare interface IConvexUser {
 }
 
 declare interface IConvexTeam {
-  team_captain: string;
-  team_name: string;
-  members: string[];
+  team_captain: string | null;
+  team_name: string | null;
+  members: string[] | null;
 }
 
 declare interface IConvexInvitation {
-  invited_user_id: string;
-  inviting_team_id: string;
-  accepted: boolean;
+  invited_user_id: string | null;
+  inviting_team_id: string | null;
+  accepted: boolean | null;
 }
 
 declare interface IConvexRequest {
-  requesting_user_id: string;
-  requested_team_id: string;
-  accepted: boolean;
+  requesting_user_id: string | null;
+  requested_team_id: string | null;
+  accepted: boolean | null;
 }
