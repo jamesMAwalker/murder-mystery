@@ -24,8 +24,8 @@ export const get = query(async ({ db }) => {
 
 export const getById = query({
   args: { user_id: v.string() },
-  handler: async (ctx, args) => {
-    return await ctx.db
+  handler: async ({ db }, args) => {
+    return await db
       .query('users')
       .filter(user => user.eq(user.field("user_id"), args.user_id))
       .first()

@@ -13,8 +13,8 @@ interface IPageParams {
 
 const page = ({ params }: IPageParams) => {
   console.log('params: ', params);
-  return (
-    <div className='flex  gap-4'>
+  return (  
+    <div className='flex gap-4'>
       <span className='badge p-4'>{params.round}</span>
       <span className='badge p-4'>{params.page}</span>
     </div>
