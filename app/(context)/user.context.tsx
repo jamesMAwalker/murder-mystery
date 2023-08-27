@@ -1,11 +1,31 @@
-'use client';
+'use client'
 
-import { ConvexProvider, ConvexReactClient } from 'convex/react'
+import {
+  createContext,
+  ReactNode,
+  useContext,
+} from 'react'
 
-const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
+import { useGetUserFromDB } from '../(hooks)/convex/useGetUserFromDB'
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+
+const defaults = {
+  user: null,
+}
+
+const UserContext = createContext<{
+  user: IConvexUser | null
+  team?: IConvexTeam
+} | null>(defaults)
+
+export const useUserContext = () => useContext(UserContext)!
+
+
+
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const user = useGetUserFromDB()
+
   return (
-    <ConvexProvider client={convex}>{children}</ConvexProvider>
+    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
   )
 }
