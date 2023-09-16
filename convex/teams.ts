@@ -16,6 +16,9 @@ export const create = mutation({
     // check if user exists in db.
     if (!user) throw Error('User not found in database!')
 
+    // check if user has a team.
+    if (user.has_team) throw Error('User already has a team!')
+
     // get team.
     const existingTeamName = await db.query('teams').filter(team => team.eq(team.field("team_name"), team_name)).unique()
     
