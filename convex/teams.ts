@@ -1,17 +1,17 @@
 import { mutation, query } from './_generated/server'
 import { v } from "convex/values";
 
+
 export const create = mutation({
   args: {
     team_name: v.string(),
-    user_id: v.string()
+    user_id: v.id('users')
+    // user_id: v.string()
   },
   handler: async ({ db }, { team_name, user_id }) => {
 
     // get user.
-    const user = await db.query('users')
-    .filter(user => user.eq(user.field("user_id"), user_id))
-    .unique()
+    const user = await db.get(user_id)
     
     // check if user exists in db.
     if (!user) throw Error('User not found in database!')
