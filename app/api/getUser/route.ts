@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
   try {
     const existingUser = await convex.query(api.users.getById, { user_id: userData.user_id })
 
+    // return error if no user found.
     if (!existingUser) {
       return NextResponse.json({
         status: 422,
@@ -17,6 +18,7 @@ export async function POST(req: NextRequest) {
       })
     }
 
+    // return found user.
     return NextResponse.json({
       status: 200,
       message: 'User Created!',
@@ -26,9 +28,10 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('error: ', error);
 
+    // return error if something else goes wrong.
     return NextResponse.json({
       status: 500,
-      message: 'Error finding user!'
+      message: 'Error getting user!'
     })
   }
 
