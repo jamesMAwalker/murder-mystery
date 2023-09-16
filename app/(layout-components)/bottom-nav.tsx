@@ -9,9 +9,11 @@
 
 import { useRef, useState, SyntheticEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
+import { useGameContext } from '../(context)/game.context'
+import { useCreateTeamInDB } from '../(hooks)/convex/useCreateTeamInDB'
+import { useUserContext } from '../(context)/user.context'
 
 interface IDropdownContent {
   [key: string]: string
@@ -26,15 +28,18 @@ const pages: IDropdownContent[] = [
   { page: 'Suspects', path: 'suspects' }
 ]
 
-// export const BottomNav = () => {
-//   return (
-//     <div className='fixed bottom-0 p-4 flex w-full items-center'>
-//       <SlideMenu />
-//     </div>
-//   )
-// }
-
 export const BottomNav = () => {
+  const { user } = useUserContext()
+  const { createTeam } = useCreateTeamInDB()
+
+  const handleTestClick = (team_name: string) => {
+    if (user?._id) {
+      console.log('user: ', user);
+      createTeam(team_name, user._id)
+
+    }
+  }
+
   const { push } = useRouter()
 
   const [current, setCurrent] = useState(0)
@@ -48,30 +53,37 @@ export const BottomNav = () => {
   }
 
   return (
-    <div className='fixed bottom-0 left-0 rounded-none collapse bg-primary w-full'>
-      <input onClick={() => setOpen(!open)} type='checkbox' className='peer' />
-      <p className='collapse-title font-bold flex items-center justify-between bg-primary peer-checked:text-secondary-content'>
-        <span>{pages[current].page}</span>
-        <span className={cn(rotated)}>▲</span>
-      </p>
-      <ul className='w-full collapse-content flex-col-center p-0'>
-        {pages.map(({ page, path }, idx) => {
-          const active = idx === current
+    <>
+      <button onClick={() => handleTestClick('FDJ')} className='fixed bottom-24 btn btn-accent'>Create Team</button>
+      <div className='fixed bottom-0 left-0 rounded-none collapse bg-primary w-full'>
+        <input
+          onClick={() => setOpen(!open)}
+          type='checkbox'
+          className='peer'
+        />
+        <p className='collapse-title font-bold flex items-center justify-between bg-primary peer-checked:text-secondary-content'>
+          <span>{pages[current].page}</span>
+          <span className={cn(rotated)}>▲</span>
+        </p>
+        <ul className='w-full collapse-content flex-col-center p-0'>
+          {pages.map(({ page, path }, idx) => {
+            const active = idx === current
 
-          if (!active)
-            return (
-              <li
-                className={cn(
-                  'w-full px-4 py-2 text-primary-content peer-checked:text-secondary-content'
-                )}
-                onClick={() => handleClick(idx, path)}
-                key={page}
-              >
-                {page}
-              </li>
-            )
-        })}
-      </ul>
-    </div>
+            if (!active)
+              return (
+                <li
+                  className={cn(
+                    'w-full px-4 py-2 text-primary-content peer-checked:text-secondary-content'
+                  )}
+                  onClick={() => handleClick(idx, path)}
+                  key={page}
+                >
+                  {page}
+                </li>
+              )
+          })}
+        </ul>
+      </div>
+    </>
   )
 }
