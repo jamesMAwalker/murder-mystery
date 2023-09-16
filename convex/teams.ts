@@ -1,4 +1,4 @@
-import { mutation } from './_generated/server'
+import { mutation, query } from './_generated/server'
 import { v } from "convex/values";
 
 export const create = mutation({
@@ -39,6 +39,45 @@ export const create = mutation({
   }
 })
 
+export const get = query({
+  args: {
+    team_id: v.id('teams')
+  },
+  handler:async ({ db }, { team_id }) => {
+    const team = await db.get(team_id)
+
+    if (!team) throw Error('Team not found in database!')
+
+    return team;
+    
+  }
+})
+
+export const getOne = query({
+  args: {
+    user_id: v.string()
+  },
+  handler: async ({ db }, { user_id }) => {
+    // get user.
+    const user = await db.query('users')
+      .filter(user => user.eq(user.field("user_id"), user_id))
+      .unique()
+
+    // check if user exists in db.
+    if (!user) throw Error('User not found in database!')
+
+    // check if user has team.
+    if (!user.has_team) throw Error('User has no team!')
+
+    // get team.
+    const existingTeam = await db.query('teams').filter(team => team.eq(team.field("_id"), user.team_id)).unique()
+
+    // check if team exists in db.
+    if (!existingTeam) throw Error('Team not found in database!')
+
+    return existingTeam;
+  }
+})
 
 export const addMember = mutation({
   args: {
