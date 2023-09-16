@@ -1,5 +1,5 @@
 /*
-  * getUser Route *
+  * Teams Route *
   # Sending a POST to this route with a 'team_id' will return one team.
   # Sending a GET to this route will return all teams.
 */
@@ -11,64 +11,62 @@ import { api } from "@/convex/_generated/api";
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
+
 export async function POST(req: NextRequest) {
-  const userData = await req.json()
+  // TODO: Use 
+
+  const { team_id } = await req.json()
 
   try {
-    const existingUser = await convex.query(api.users.getById, { user_id: userData.user_id })
-
-    // return error if no user found.
-    if (!existingUser) {
+    const team = await convex.query(api.teams.get, { team_id })
+    
+    if (!team) {
       return NextResponse.json({
         status: 422,
-        message: 'User not found in database!'
+        message: 'Team not found in database!'
       })
     }
 
-    // return found user.
     return NextResponse.json({
       status: 200,
-      message: 'User Created!',
-      user: existingUser
+      message: 'Success!',
+      team
     })
 
   } catch (error) {
     console.error('error: ', error);
 
-    // return error if something else goes wrong.
     return NextResponse.json({
       status: 500,
-      message: 'Error getting user!'
+      message: 'Error finding team!'
     })
   }
+
 }
 
 export async function GET() {
   try {
-    const users = await convex.query(api.users.getAll)
+    const teams = await convex.query(api.teams.getAll)
 
-    // return error if no users found.
-    if (!users) {
+    if (!teams) {
       return NextResponse.json({
-        status: 422,
-        message: 'Error fetching users!'
+        status: 500,
+        message: 'Error fetching teams!'
       })
     }
 
-    // return found collection.
     return NextResponse.json({
       status: 200,
       message: 'Success!',
-      users
+      teams
     })
 
   } catch (error) {
     console.error('error: ', error);
 
-    // return error if something else goes wrong.
     return NextResponse.json({
       status: 500,
-      message: 'Sever Error!'
+      message: 'Server Error!'
     })
   }
 }

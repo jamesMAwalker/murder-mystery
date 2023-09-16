@@ -39,6 +39,8 @@ export const create = mutation({
   }
 })
 
+// TODO: Delete one of 'get' or 'getOne', then rename 'getAll' to get. 
+
 export const get = query({
   args: {
     team_id: v.id('teams')
@@ -52,6 +54,10 @@ export const get = query({
     
   }
 })
+
+export const getAll = query(async ({ db }) => {
+  return await db.query("teams").collect()
+}) 
 
 export const getOne = query({
   args: {

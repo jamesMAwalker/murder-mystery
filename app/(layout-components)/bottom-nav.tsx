@@ -1,7 +1,15 @@
 'use client'
 
+/*
+  ! Current Issues:
+  # As nice as it seemed to have the bottom nav determine the round as well as the page, I'm thinking this might end up being more confusing to people.
+  # Instead of including a button for selecting the round, this component should only allow users to choose the current page.
+  # In light of this, should we instead make this a slider rather than a dropdown?
+*/
+
 import { useRef, useState, SyntheticEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
 
@@ -10,105 +18,60 @@ interface IDropdownContent {
   path: string
 }
 
-const rounds: IDropdownContent[] = [
-  { round: 'Round 0', path: '' },
-  { round: 'Round 1', path: 'round-1' },
-  { round: 'Round 2', path: 'round-2' },
-  { round: 'Round 3', path: 'round-3' },
-  { round: 'Round 4', path: 'round-4' },
-]
-
 const pages: IDropdownContent[] = [
   { page: 'Home', path: '' },
   { page: 'Background', path: 'background' },
   { page: 'Instructions', path: 'instructions' },
   { page: 'Notes', path: 'notes' },
-  { page: 'Suspects', path: 'suspects' },
+  { page: 'Suspects', path: 'suspects' }
 ]
 
-export const BottomNav = () => {
-  const [selectedRound, setSelectedRound] = useState<number>(0)
-  const [selectedPage, setSelectedPage] = useState<number>(0)
+// export const BottomNav = () => {
+//   return (
+//     <div className='fixed bottom-0 p-4 flex w-full items-center'>
+//       <SlideMenu />
+//     </div>
+//   )
+// }
 
+export const BottomNav = () => {
   const { push } = useRouter()
 
-  const handleChangeRoute = (e: SyntheticEvent) => {
-    e.preventDefault()
+  const [current, setCurrent] = useState(0)
+  const [open, setOpen] = useState(false)
 
-    const round = rounds[selectedRound].path
-    const page = pages[selectedPage].path
+  const rotated = open ? 'rotate-180' : 'rotate-0'
 
-    const route = `/${round}/${page}`
-    console.log('route: ', route)
-
-    // push(route)
+  const handleClick = (idx: number, path: string) => {
+    setCurrent(idx)
+    push(path)
   }
 
   return (
-    <div className='fixed bottom-0 p-4 flex w-full items-center'>
-      <nav className='navbar grid grid-cols-[.5fr_.5fr_.1fr] gap-2'>
-        <Dropdown
-          type='round'
-          content={rounds}
-          selected={selectedRound}
-          setSelected={setSelectedRound}
-        />
-        <Dropdown
-          type='page'
-          content={pages}
-          selected={selectedPage}
-          setSelected={setSelectedPage}
-        />
-        <button
-          onClick={handleChangeRoute}
-          className='btn full text-black btn-accent p-4 rounded-md'
-        >
-          →
-        </button>
-      </nav>
-    </div>
-  )
-}
+    <div className='fixed bottom-0 left-0 rounded-none collapse bg-primary w-full'>
+      <input onClick={() => setOpen(!open)} type='checkbox' className='peer' />
+      <p className='collapse-title font-bold flex items-center justify-between bg-primary peer-checked:text-secondary-content'>
+        <span>{pages[current].page}</span>
+        <span className={cn(rotated)}>▲</span>
+      </p>
+      <ul className='w-full collapse-content flex-col-center p-0'>
+        {pages.map(({ page, path }, idx) => {
+          const active = idx === current
 
-interface IDropdown {
-  type: string
-  content: IDropdownContent[]
-  selected: number
-  setSelected: (set: any) => void
-}
-
-function Dropdown({ type, content, selected, setSelected }: IDropdown) {
-  const handleOptionClick = (idx: number) => {
-    // TODO: Set dropdown to close on option click.
-    
-    setSelected(idx)
-  }
-
-  return (
-    <details className='dropdown dropdown-top'>
-      <summary
-        tabIndex={0}
-        className={cn('full border border-accent text-accent p-4 rounded-md ')}
-      >
-        {content[selected][type]}
-      </summary>
-      <ul
-        tabIndex={0}
-        className={cn(
-          'dropdown-content bg-black border border-accent flex flex-col gap-4 z-[1] menu w-full p-4 shadow mb-2 rounded-box rounded-md'
-        )}
-      >
-        {content.map((contentItem: IDropdownContent, idx: number) => (
-          <li
-            key={contentItem[type]}
-            onClick={() => handleOptionClick(idx)}
-            // onTouchEnd={() => handleOptionClick(idx)}
-            className='p-4 bg-black text-accent badge'
-          >
-            {contentItem[type]}
-          </li>
-        ))}
+          if (!active)
+            return (
+              <li
+                className={cn(
+                  'w-full px-4 py-2 text-primary-content peer-checked:text-secondary-content'
+                )}
+                onClick={() => handleClick(idx, path)}
+                key={page}
+              >
+                {page}
+              </li>
+            )
+        })}
       </ul>
-    </details>
+    </div>
   )
 }
