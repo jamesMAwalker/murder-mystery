@@ -1,3 +1,10 @@
+/*
+  * getUser Route *
+  # Sending a POST to this route with a 'team_id' will return one team.
+  # Sending a GET to this route will return all teams.
+*/
+
+
 import { NextResponse, NextRequest } from "next/server";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "@/convex/_generated/api";
@@ -34,5 +41,34 @@ export async function POST(req: NextRequest) {
       message: 'Error getting user!'
     })
   }
+}
 
+export async function GET() {
+  try {
+    const users = await convex.query(api.users.getAll)
+
+    // return error if no users found.
+    if (!users) {
+      return NextResponse.json({
+        status: 422,
+        message: 'Error fetching users!'
+      })
+    }
+
+    // return found collection.
+    return NextResponse.json({
+      status: 200,
+      message: 'Success!',
+      users
+    })
+
+  } catch (error) {
+    console.error('error: ', error);
+
+    // return error if something else goes wrong.
+    return NextResponse.json({
+      status: 500,
+      message: 'Sever Error!'
+    })
+  }
 }
