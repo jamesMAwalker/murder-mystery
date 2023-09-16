@@ -1,4 +1,5 @@
 declare interface IConvexUser {
+  _id?: string;
   user_id: string;
   name: string | null | undefined;
   email: string | undefined;
@@ -8,6 +9,7 @@ declare interface IConvexUser {
 }
 
 declare interface IConvexTeam {
+  _id?: string; 
   team_captain: string | null;
   team_name: string | null;
   members: string[] | null;
