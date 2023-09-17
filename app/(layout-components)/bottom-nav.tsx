@@ -12,8 +12,9 @@ import { useRouter } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
 import { useGameContext } from '../(context)/game.context'
-import { useCreateTeamInDB } from '../(hooks)/convex/useCreateTeamInDB'
+import { useCreateTeamInDB } from '../(hooks)/convex/teams/useCreateTeamInDB'
 import { useUserContext } from '../(context)/user.context'
+import { useCreateTeamRequestInDB } from '../(hooks)/convex/requests/useCreateRequest'
 
 interface IDropdownContent {
   [key: string]: string
@@ -32,13 +33,20 @@ export const BottomNav = () => {
   const { user } = useUserContext()
   const { createTeam } = useCreateTeamInDB()
 
-  const handleTestClick = (team_name: string) => {
-    if (user?._id) {
-      console.log('user: ', user);
-      createTeam(team_name, user._id)
+  const { createRequest } = useCreateTeamRequestInDB()
 
-    }
+  const handleTestClick = () => {
+    const team_id = '4gmbygg691879fkmnze3pxy89j5pt50'
+    const user_id = '498ncp61be3rq103xh9h80p49j5wcx8'
+    createRequest(team_id, user_id)
   }
+  // const handleTestClick = (team_name: string) => {
+  //   if (user?._id) {
+  //     console.log('user: ', user);
+  //     createTeam(team_name, user._id)
+
+  //   }
+  // }
 
   const { push } = useRouter()
 
@@ -54,7 +62,13 @@ export const BottomNav = () => {
 
   return (
     <>
-      <button onClick={() => handleTestClick('FDJ')} className='fixed bottom-24 btn btn-accent'>Create Team</button>
+      <button
+        // onClick={() => handleTestClick('FDJ')}
+        onClick={() => handleTestClick()}
+        className='fixed bottom-24 btn btn-accent'
+      >
+        Create Request
+      </button>
       <div className='fixed bottom-0 left-0 rounded-none collapse bg-primary w-full'>
         <input
           onClick={() => setOpen(!open)}

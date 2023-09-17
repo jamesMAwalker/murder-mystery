@@ -6,8 +6,8 @@ import {
   useContext,
 } from 'react'
 
-import { useGetUserFromDB } from '../(hooks)/convex/useGetUserFromDB'
-import { useGetTeamFromDB } from '../(hooks)/convex/useGetTeamFromDB'
+import { useGetUserFromDB } from '../(hooks)/convex/users/useGetUserFromDB'
+import { useGetTeamFromDB } from '../(hooks)/convex/teams/useGetTeamFromDB'
 
 const defaults = {
   user: null
