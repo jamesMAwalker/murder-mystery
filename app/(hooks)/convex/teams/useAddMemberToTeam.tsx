@@ -18,13 +18,13 @@ export const useAddMemberToTeam = () => {
 
         console.log('_____res from add to team hook:_____ ', res);
 
-        const updatedTeam = res.data
+        const updatedTeam = res.data.team
 
-        if (!updatedTeam) throw Error('Could not find user!')
+        if (!updatedTeam) throw Error('Error updating team!')
 
         setTeam(updatedTeam)
       } catch (error: any) {
-        console.error('error: ', error)
+        console.error('error message: ', error)
         setError(error?.message)
       }
     })()
