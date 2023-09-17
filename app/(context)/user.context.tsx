@@ -17,7 +17,7 @@ const defaults = {
 const UserContext = createContext<{
   user: IConvexUser | null
   team?: IConvexTeam
-  requests?: IConvexRequest
+  requests?: IConvexRequest | null
 } | null>(defaults)
 
 export const useUserContext = () => useContext(UserContext)!
