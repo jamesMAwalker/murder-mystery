@@ -1,7 +1,6 @@
-import { mutation } from './_generated/server'
+import { mutation, query } from './_generated/server'
 import { v } from "convex/values";
 
-// TODO: Error handling.
 
 export const create = mutation({
   args: {
@@ -48,6 +47,22 @@ export const create = mutation({
     })
 
     return request;
+
+  }
+})
+
+export const getById = query({
+  args: {
+    user_id: v.id('users')
+  },
+  handler: async ({ db }, { user_id }) => {
+    const userRequests = await db.query('requests')
+      .filter(request => request.eq(request.field("requesting_user_id"), user_id))
+      .unique()
+
+    if (!userRequests) throw Error('No requests found!')
+
+    return userRequests;
 
   }
 })
