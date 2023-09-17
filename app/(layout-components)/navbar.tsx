@@ -4,20 +4,17 @@ import { useEffect } from 'react'
 import { UserButton } from '@clerk/nextjs/app-beta'
 import { useUser } from '@clerk/clerk-react'
 import Link from 'next/link'
-import axios from 'axios'
+
+import { useCreateUserInDB } from '../(hooks)/convex/users/useCreateUserInDB'
 
 
 // TODO: Move user creation to signin/singup pages.
-async function createUser(user: any) {
-  return await axios.post('/api/createUser', user)
-}
 
 export const Navbar = () => {
   const { isSignedIn, user } = useUser()
+  const { createUser } = useCreateUserInDB()
 
   useEffect(() => {
-    // TODO: Extract to hook & use in signup/signin pages.
-
     if (isSignedIn && user.id) {
       const newConvexUser: IConvexUser = {
         user_id: user.id,
