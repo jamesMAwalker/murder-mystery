@@ -19,7 +19,7 @@ export const useGetUserFromDB = () => {
           try {
             const res = await getUserDataFromDB(clerkUser.id)
 
-            // console.log('++++res++++: ', res);
+            // console.log('_____res from get user hook_____: ', res);
             
             const foundConvexUser = res.data.user
 

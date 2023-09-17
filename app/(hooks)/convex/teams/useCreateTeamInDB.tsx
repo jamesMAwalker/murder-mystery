@@ -15,7 +15,7 @@ export const useCreateTeamInDB = () => {
       try {
         const res = await createTeamInDB(team_name, user_id)
         
-        // console.log('+++++res from create team hook:+++++ ', res);
+        // console.log('_____res from create team hook:_____ ', res);
         
         const newConvexTeam = res.data
 

@@ -14,6 +14,8 @@ export const useGetAllUsersFromDB = () => {
     ;(async () => {
       try {
         const res = await getUsersFromDB()
+        
+        // console.log('_____res from get all users hook_____: ', res);
 
         const foundConvexUsers = res.data.users
 

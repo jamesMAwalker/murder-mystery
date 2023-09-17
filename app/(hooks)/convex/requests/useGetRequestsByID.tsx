@@ -15,7 +15,9 @@ export const useGetRequestsByID = (user_id: string | undefined) => {
       ;(async () => {
         try {
           const res = await getRequestsByUserID(user_id)
-          console.log('res from useGetRequests: ', res)
+
+          // console.log('_____res from get request hook_____: ', res)
+          
           const foundConvexRequests = res.data.team
 
           if (!foundConvexRequests) {

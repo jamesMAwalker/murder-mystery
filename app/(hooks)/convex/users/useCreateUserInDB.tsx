@@ -16,7 +16,8 @@ export const useCreateUserInDB = () => {
     ;(async () => {
       try {
         const res = await createUserInDB(userData)
-        console.log('_____res from create user hook:_____ ', res)
+        
+        // console.log('_____res from create user hook:_____ ', res)
        
         const newConvexUser = res.data
 

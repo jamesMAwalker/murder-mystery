@@ -14,6 +14,9 @@ export const useGetAllTeamsFromDB = () => {
       ;(async () => {
         try {
           const res = await getTeamsFromDB()
+          
+          // console.log('_____res from get all teams hook_____: ', res);
+
           const foundConvexTeams = res.data.teams
 
           if (!foundConvexTeams) throw Error('Could not find team!')
