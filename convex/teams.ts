@@ -67,6 +67,7 @@ export const getOne = query({
     user_id: v.string()
   },
   handler: async ({ db }, { user_id }) => {
+    
     // get user.
     const user = await db.query('users')
       .filter(user => user.eq(user.field("user_id"), user_id))

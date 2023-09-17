@@ -23,13 +23,13 @@ export async function POST(req: NextRequest) {
       data: newConvexRequest
     })
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('____error____: ', error);
 
     return NextResponse.json({
       status: 500,
       message: 'Something went wrong!',
-      error: error.message
+      error: error?.message
     })
   }
 
