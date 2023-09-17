@@ -6,8 +6,18 @@ import { useCreateRequestInDB } from '../(hooks)/convex/requests/useCreateReques
 import { useGetRequestsByTeamID } from '../(hooks)/convex/requests/useGetRequestsByTeamID'
 import { useGetRequestsByUserID } from '../(hooks)/convex/requests/useGetRequestsByUserID'
 import { useAddMemberToTeam } from '../(hooks)/convex/teams/useAddMemberToTeam'
+import { useRemoveMemberFromTeam } from '../(hooks)/convex/teams/useRemoveMemberFromTeam'
 
 export const BE_Test = () => {
+  // test remove member from team
+  const { removeMemberFromTeam } = useRemoveMemberFromTeam()
+
+  const handleRemoveMember = () => {
+    const team_id = '4gmbygg691879fkmnze3pxy89j5pt50'
+    const user_id = '498ncp61be3rq103xh9h80p49j5wcx8'
+    removeMemberFromTeam(team_id, user_id)
+  }
+
   // test add member to team
   const { addMemberToTeam } = useAddMemberToTeam()
 
@@ -54,13 +64,27 @@ export const BE_Test = () => {
   }
 
   return (
-    <button
-      // onClick={() => handleCreateTeam()}
-      // onClick={() => handleCreateRequest()}
-      onClick={() => handleAddMember()}
-      className='fixed bottom-24 btn btn-warning'
-    >
-      Test: Add Member
-    </button>
+    <>
+      <button
+        // onClick={() => handleCreateTeam()}
+        // onClick={() => handleCreateRequest()}
+        onClick={() => handleAddMember()}
+        // onClick={() => handleRemoveMember()}
+        className='fixed bottom-40 btn btn-warning'
+      >
+        Test: Add Member
+        {/* Test: Remove Member */}
+      </button>
+      <button
+        // onClick={() => handleCreateTeam()}
+        // onClick={() => handleCreateRequest()}
+        // onClick={() => handleAddMember()}
+        onClick={() => handleRemoveMember()}
+        className='fixed bottom-24 btn btn-warning btn-outline'
+      >
+        {/* Test: Add Member */}
+        Test: Remove Member
+      </button>
+    </>
   )
 }
