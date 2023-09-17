@@ -11,7 +11,7 @@ export const create = mutation({
 
     // get user.
     const user = await db.get(user_id)
-    
+
     // check if user exists in db.
     if (!user) throw Error('User not found in database!')
 
@@ -20,7 +20,7 @@ export const create = mutation({
 
     // get team.
     const existingTeamName = await db.query('teams').filter(team => team.eq(team.field("team_name"), team_name)).unique()
-    
+
     // check if team name exists in db.
     if (existingTeamName) throw Error('Team name already taken!')
 
@@ -47,26 +47,26 @@ export const get = query({
   args: {
     team_id: v.id('teams')
   },
-  handler:async ({ db }, { team_id }) => {
+  handler: async ({ db }, { team_id }) => {
     const team = await db.get(team_id)
 
     if (!team) throw Error('Team not found in database!')
 
     return team;
-    
+
   }
 })
 
 export const getAll = query(async ({ db }) => {
   return await db.query("teams").collect()
-}) 
+})
 
 export const getOne = query({
   args: {
     user_id: v.string()
   },
   handler: async ({ db }, { user_id }) => {
-    
+
     // get user.
     const user = await db.query('users')
       .filter(user => user.eq(user.field("user_id"), user_id))
@@ -97,24 +97,24 @@ export const addMember = mutation({
 
     // get user.
     const user = await db.get(user_id)
-    
+
     // check if user exists in db.
-    if (!user) throw Error('User not found in database!')
+    if (!user) throw 'User not found in database!'
 
     // check if user is already attached to a team.
-    if (user.has_team) throw Error('User already on a team!')
+    if (user.has_team) throw 'User already on a team!'
 
     // get team.
     const team = await db.get(team_id)
-    
+
     // check if team exists.
-    if (!team) throw Error('Error finding team!')
+    if (!team) throw 'Error finding team!'
 
     // check if team has capacity.
-    if (team?.members.length >= 10) throw Error('Team already has max members!')
+    if (team?.members.length >= 10) throw 'Team already has max members!'
 
     // check if user is already on this team.
-    if (team.members.includes(user._id)) throw Error('User is already on this team!')
+    if (team.members.includes(user_id)) throw 'User is already on this team!'
 
     // update team.
     await db.patch(team._id, {
@@ -130,7 +130,6 @@ export const addMember = mutation({
 
     const updatedTeam = await db.get(team_id)
 
-    
     return { team: updatedTeam, message: 'Successfully added!' };
 
   }
@@ -139,15 +138,13 @@ export const addMember = mutation({
 export const removeMember = mutation({
   args: {
     team_id: v.id('teams'),
-    user_id: v.string()
+    user_id: v.id('users')
   },
   handler: async ({ db }, { team_id, user_id }) => {
 
     // get user.
-    const user = await db.query('users')
-    .filter(user => user.eq(user.field("user_id"), user_id))
-    .unique()
-    
+    const user = await db.get(user_id)
+
     // check if user exists in db.
     if (!user) throw Error('User not found in database!')
 
@@ -156,9 +153,12 @@ export const removeMember = mutation({
 
     // get team.
     const team = await db.get(team_id)
-    
+
     // check if team exists.
     if (!team) throw Error('Team not found in database!')
+
+    // check if user is not on this team.
+    if (!team.members.includes(user_id)) throw Error('User is not on this team!')
 
     // check if user is captain; set as captain first member that is not captain.
     if (user._id === team.team_captain) {
@@ -170,18 +170,21 @@ export const removeMember = mutation({
     }
 
     // update team.
-    const teamRemovedFrom = await db.patch(team._id, {
+    await db.patch(team._id, {
       members: team.members.filter(member_id => member_id === user._id)
     })
 
     // update member.
-    const removedMember = await db.patch(user._id, {
+    await db.patch(user._id, {
       has_team: false,
       team_id: null,
       team_name: null
     })
 
-    return { teamRemovedFrom, removedMember };
+    // get team after update.
+    const updatedTeam = await db.get(team_id)
+
+    return { team: updatedTeam, message: 'Successfully removed!' };
 
   }
 })
