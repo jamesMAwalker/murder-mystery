@@ -6,7 +6,6 @@ export const create = mutation({
   args: {
     team_name: v.string(),
     user_id: v.id('users')
-    // user_id: v.string()
   },
   handler: async ({ db }, { team_name, user_id }) => {
 
@@ -92,14 +91,12 @@ export const getOne = query({
 export const addMember = mutation({
   args: {
     team_id: v.id('teams'),
-    user_id: v.string()
+    user_id: v.id('users')
   },
   handler: async ({ db }, { team_id, user_id }) => {
 
     // get user.
-    const user = await db.query('users')
-    .filter(user => user.eq(user.field("user_id"), user_id))
-    .unique()
+    const user = await db.get(user_id)
     
     // check if user exists in db.
     if (!user) throw Error('User not found in database!')
@@ -116,23 +113,25 @@ export const addMember = mutation({
     // check if team has capacity.
     if (team?.members.length >= 10) throw Error('Team already has max members!')
 
-    // check if user is already on team.
+    // check if user is already on this team.
     if (team.members.includes(user._id)) throw Error('User is already on this team!')
 
     // update team.
-    const teamAddedTo = await db.patch(team._id, {
+    await db.patch(team._id, {
       members: [...team.members, user._id]
     })
 
     // update member
-    const addedMember = await db.patch(user._id, {
+    await db.patch(user._id, {
       has_team: true,
       team_id: team._id,
       team_name: team.team_name
     })
 
+    const updatedTeam = await db.get(team_id)
+
     
-    return { teamAddedTo, addedMember};
+    return { team: updatedTeam, message: 'Successfully added!' };
 
   }
 })
