@@ -20,16 +20,15 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({
       status: 200,
       message: 'Team updated!',
-      data: updatedTeam
+      team: updatedTeam
     })
 
-  } catch (error) {
-    console.error('error: ', error);
+  } catch (error: any) {
 
     return NextResponse.json({
       status: 500,
       message: 'Something went wrong!',
-      error
+      error: error.message
     })
   }
 
