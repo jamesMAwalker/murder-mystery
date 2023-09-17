@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 const getTeamsFromDB = async () => {
-  return await axios.get('/api/getTeam')
+  return await axios.get('/api/team/get')
 }
 
 export const useGetAllTeamsFromDB = () => {

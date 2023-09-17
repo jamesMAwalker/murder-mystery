@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 const getTeamFromDB = async (team_id: string) => {
-  return await axios.post('/api/getTeam', { team_id: team_id })
+  return await axios.post('/api/team/get', { team_id: team_id })
 }
 
 export const useGetTeamFromDB = (team_id: string | null) => {
