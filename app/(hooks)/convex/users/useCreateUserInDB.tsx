@@ -11,8 +11,10 @@ async function createUserInDB(user: IConvexUser) {
 
 export const useCreateUserInDB = () => {
   const [user, setUser] = useState<IConvexUser>(Object)
+    const [error, setError] = useState<string | null>(null)
 
-  function createUser(userData: IConvexUser) {
+    
+    function createUser(userData: IConvexUser) {
     ;(async () => {
       try {
         const res = await createUserInDB(userData)
@@ -24,8 +26,9 @@ export const useCreateUserInDB = () => {
         if (!newConvexUser) throw Error('Error creating user!')
 
         setUser(newConvexUser)
-      } catch (error) {
+      } catch (error: any) {
         console.error('error: ', error)
+        setError(error?.message)
       }
     })()
   }

@@ -9,8 +9,10 @@ const createTeamInDB = async (team_name: string, user_id: string) => {
 
 export const useCreateTeamInDB = () => {
   const [team, setTeam] = useState<IConvexTeam>(Object)
+    const [error, setError] = useState<string | null>(null)
 
-  function createTeam(team_name: string, user_id: string) {
+    
+    function createTeam(team_name: string, user_id: string) {
     ;(async () => {
       try {
         const res = await createTeamInDB(team_name, user_id)
@@ -22,8 +24,9 @@ export const useCreateTeamInDB = () => {
         if (!newConvexTeam) throw Error('Could not find user!')
 
         setTeam(newConvexTeam)
-      } catch (error) {
+      } catch (error: any) {
         console.error('error: ', error)
+        setError(error?.message)
       }
     })()
   }

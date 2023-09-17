@@ -9,20 +9,26 @@ const getUsersFromDB = async () => {
 
 export const useGetAllUsersFromDB = () => {
   const [users, setUsers] = useState<IConvexUser[]>(Object)
+    const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
+    
+    useEffect(() => {
     ;(async () => {
       try {
         const res = await getUsersFromDB()
         
         // console.log('_____res from get all users hook_____: ', res);
-
+        
         const foundConvexUsers = res.data.users
-
+        
         if (!foundConvexUsers) throw Error('Error fetching users!')
-
+        
         setUsers(foundConvexUsers)
-      } catch (error) {}
+      } catch (error:any) {
+        console.error('error: ', error);
+        setError(error?.message)
+
+      }
     })()
   }, [])
 

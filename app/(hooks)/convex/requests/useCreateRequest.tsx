@@ -9,6 +9,7 @@ const createRequestInDB = async (team_id: string, user_id: string) => {
 
 export const useCreateRequestInDB = () => {
   const [request, setRequest] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   function createRequest(team_id: string, user_id: string) {
     ;(async () => {
@@ -22,11 +23,12 @@ export const useCreateRequestInDB = () => {
         if (!newConvexRequest) throw Error('Error initiating request!')
 
         setRequest(newConvexRequest)
-      } catch (error) {
+      } catch (error: any) {
         console.error('error: ', error)
+        setError(error?.message)
       }
     })()
   }
 
-  return { createRequest, request }
+  return { createRequest, request, error }
 }

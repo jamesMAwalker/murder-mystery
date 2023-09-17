@@ -9,7 +9,10 @@ const getRequestsByUserID = async (user_id: string) => {
 
 export const useGetRequestsByID = (user_id: string | undefined) => {
   const [requests, setRequests] = useState<IConvexRequest | null>(Object)
+    const [error, setError] = useState<string | null>(null)
 
+    
+    
   useEffect(() => {
     if (user_id) {
       ;(async () => {
@@ -25,8 +28,9 @@ export const useGetRequestsByID = (user_id: string | undefined) => {
           } else {
             setRequests(foundConvexRequests)
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error('error: ', error)
+          setError(error?.message)
         }
       })()
     }

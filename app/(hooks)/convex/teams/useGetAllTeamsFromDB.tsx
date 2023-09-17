@@ -9,23 +9,25 @@ const getTeamsFromDB = async () => {
 
 export const useGetAllTeamsFromDB = () => {
   const [team, setTeam] = useState<IConvexTeam[]>(Object)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-      ;(async () => {
-        try {
-          const res = await getTeamsFromDB()
-          
-          // console.log('_____res from get all teams hook_____: ', res);
+    ;(async () => {
+      try {
+        const res = await getTeamsFromDB()
 
-          const foundConvexTeams = res.data.teams
+        // console.log('_____res from get all teams hook_____: ', res);
 
-          if (!foundConvexTeams) throw Error('Could not find team!')
+        const foundConvexTeams = res.data.teams
 
-          setTeam(foundConvexTeams)
-        } catch (error) {
-          console.error('error: ', error)
-        }
-      })()
+        if (!foundConvexTeams) throw Error('Could not find team!')
+
+        setTeam(foundConvexTeams)
+      } catch (error: any) {
+        console.error('error: ', error)
+        setError(error?.message)
+      }
+    })()
   }, [])
 
   return team

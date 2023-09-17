@@ -1,8 +1,8 @@
-'use client';
+'use client'
 
-import { useEffect, useReducer, useState } from "react";
-import { useUser } from "@clerk/nextjs";
-import axios from "axios";
+import { useEffect, useState } from 'react'
+import { useUser } from '@clerk/nextjs'
+import axios from 'axios'
 
 const getUserDataFromDB = async (user_id: string) => {
   return await axios.post('/api/user/get', { user_id })
@@ -10,6 +10,8 @@ const getUserDataFromDB = async (user_id: string) => {
 
 export const useGetUserFromDB = () => {
   const [user, setUser] = useState<IConvexUser>(Object)
+  const [error, setError] = useState<string | null>(null)
+
   const { user: clerkUser } = useUser()
 
   useEffect(() => {
@@ -20,19 +22,20 @@ export const useGetUserFromDB = () => {
             const res = await getUserDataFromDB(clerkUser.id)
 
             // console.log('_____res from get user hook_____: ', res);
-            
+
             const foundConvexUser = res.data.user
 
             if (!foundConvexUser) throw Error('Could not find user!')
 
             setUser(foundConvexUser)
-          } catch (error) {
-            console.error('error: ', error);
+          } catch (error: any) {
+            console.error('error: ', error)
+            setError(error?.message)
           }
         }
       })()
     }
   }, [clerkUser])
 
-  return user;
+  return user
 }
