@@ -5,10 +5,17 @@ import { api } from "@/convex/_generated/api";
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
 export async function POST(req: NextRequest) {
-  const { user_id } = await req.json()
+  const {
+    user_id = null,
+    team_id = null
+  } = await req.json()
+
+  const getRequestsByUserOrTeamId = user_id
+    ? async () => await convex.query(api.requests.getByUserId, { user_id })
+    : async () => await convex.query(api.requests.getByTeamId, { team_id })
 
   try {
-    const requests = await convex.query(api.requests.getById, user_id)
+    const requests = await getRequestsByUserOrTeamId()
 
     if (!requests) {
       return NextResponse.json({
@@ -20,11 +27,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       status: 200,
       message: 'Success!',
-      data: requests
+      requests
     })
 
   } catch (error: any) {
-    console.error('____error____: ', error);
+
 
     return NextResponse.json({
       status: 500,
