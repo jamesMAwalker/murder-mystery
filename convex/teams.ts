@@ -161,21 +161,23 @@ export const removeMember = mutation({
     if (!team.members.includes(user_id)) throw Error('User is not on this team!')
 
     // check if user is captain; set as captain first member that is not captain.
-    if (user._id === team.team_captain) {
-      db.patch(team._id, {
-        team_captain: team.members.filter(member => {
-          member !== team.team_captain
-        }).at(0)
+    if (user_id === team.team_captain) {
+      const newCaptain = team.members.filter(member => {
+        return member !== team.team_captain
+      }).at(0)
+
+      db.patch(team_id, {
+        team_captain: newCaptain
       })
     }
 
     // update team.
-    await db.patch(team._id, {
-      members: team.members.filter(member_id => member_id === user._id)
+    await db.patch(team_id, {
+      members: team.members.filter(member_id => member_id !== user_id)
     })
 
     // update member.
-    await db.patch(user._id, {
+    await db.patch(user_id, {
       has_team: false,
       team_id: null,
       team_name: null
