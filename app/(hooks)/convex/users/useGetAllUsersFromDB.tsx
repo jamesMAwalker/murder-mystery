@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 const getUsersFromDB = async () => {
-  return await axios.get('/api/getUser')
+  return await axios.get('/api/user/get')
 }
 
 export const useGetAllUsersFromDB = () => {

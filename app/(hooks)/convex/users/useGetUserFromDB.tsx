@@ -5,7 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 
 const getUserDataFromDB = async (user_id: string) => {
-  return await axios.post('/api/getUser', { user_id })
+  return await axios.post('/api/user/get', { user_id })
 }
 
 export const useGetUserFromDB = () => {
