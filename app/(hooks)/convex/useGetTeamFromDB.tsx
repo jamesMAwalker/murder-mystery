@@ -15,7 +15,7 @@ export const useGetTeamFromDB = (team_id: string | null) => {
       ;(async () => {
         try {
           const res = await getTeamFromDB(team_id)
-          console.log('res: ', res)
+          console.log('res from useGetTeam: ', res)
           const foundConvexTeam = res.data.team
 
           if (!foundConvexTeam) throw Error('Could not find team!')

@@ -6,6 +6,8 @@ import { useUser } from '@clerk/clerk-react'
 import Link from 'next/link'
 import axios from 'axios'
 
+
+// TODO: Move user creation to signin/singup pages.
 async function createUser(user: any) {
   return await axios.post('/api/createUser', user)
 }
@@ -23,10 +25,9 @@ export const Navbar = () => {
         email: user.primaryEmailAddress?.emailAddress,
         has_team: false,
         team_name: null,
-        team_id: null
+        team_id: null,
       }
       createUser(newConvexUser)
-      console.log('newConvexUser: ', newConvexUser);
     }
   }, [isSignedIn, user])
 

@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useUser } from '@clerk/nextjs'
+import { useState } from 'react'
 import axios from 'axios'
 
 const createTeamInDB = async (team_name: string, user_id: string) => {
@@ -9,7 +8,6 @@ const createTeamInDB = async (team_name: string, user_id: string) => {
 }
 
 export const useCreateTeamInDB = () => {
-  // const [user, setUser] = useState<IConvexUser>(Object)
   const [team, setTeam] = useState<IConvexTeam>(Object)
 
   function createTeam(team_name: string, user_id: string) {

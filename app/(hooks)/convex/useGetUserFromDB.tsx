@@ -18,6 +18,9 @@ export const useGetUserFromDB = () => {
         if (clerkUser?.id) {
           try {
             const res = await getUserDataFromDB(clerkUser.id)
+
+            // console.log('++++res++++: ', res);
+            
             const foundConvexUser = res.data.user
 
             if (!foundConvexUser) throw Error('Could not find user!')
