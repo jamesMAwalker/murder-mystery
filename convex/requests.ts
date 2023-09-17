@@ -51,18 +51,34 @@ export const create = mutation({
   }
 })
 
-export const getById = query({
+export const getByUserId = query({
   args: {
     user_id: v.id('users')
   },
   handler: async ({ db }, { user_id }) => {
     const userRequests = await db.query('requests')
       .filter(request => request.eq(request.field("requesting_user_id"), user_id))
-      .unique()
+      .collect()
 
     if (!userRequests) throw Error('No requests found!')
 
     return userRequests;
+
+  }
+})
+
+export const getByTeamId = query({
+  args: {
+    team_id: v.id('teams')
+  },
+  handler: async ({ db }, { team_id }) => {
+    const teamRequests = await db.query('requests')
+      .filter(request => request.eq(request.field("requested_team_id"), team_id))
+      .collect()
+
+    if (!teamRequests) throw Error('No requests found!')
+
+    return teamRequests;
 
   }
 })
