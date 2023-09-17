@@ -5,8 +5,18 @@ import { useCreateTeamInDB } from '../(hooks)/convex/teams/useCreateTeamInDB'
 import { useCreateRequestInDB } from '../(hooks)/convex/requests/useCreateRequest'
 import { useGetRequestsByTeamID } from '../(hooks)/convex/requests/useGetRequestsByTeamID'
 import { useGetRequestsByUserID } from '../(hooks)/convex/requests/useGetRequestsByUserID'
+import { useAddMemberToTeam } from '../(hooks)/convex/teams/useAddMemberToTeam'
 
 export const BE_Test = () => {
+  // test add member to team
+  const { addMemberToTeam } = useAddMemberToTeam()
+
+  const handleAddMember = () => {
+    const team_id = '4gmbygg691879fkmnze3pxy89j5pt50'
+    const user_id = '498ncp61be3rq103xh9h80p49j5wcx8'
+    addMemberToTeam(team_id, user_id)
+  }
+
   // test get requests by user id
   const requestsByUserId = useGetRequestsByUserID(
     '498ncp61be3rq103xh9h80p49j5wcx8'
@@ -46,10 +56,11 @@ export const BE_Test = () => {
   return (
     <button
       // onClick={() => handleCreateTeam()}
-      onClick={() => handleCreateRequest()}
+      // onClick={() => handleCreateRequest()}
+      onClick={() => handleAddMember()}
       className='fixed bottom-24 btn btn-warning'
     >
-      Test: Create Request
+      Test: Add Member
     </button>
   )
 }
