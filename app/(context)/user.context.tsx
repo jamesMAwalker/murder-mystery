@@ -8,7 +8,7 @@ import {
 
 import { useGetUserFromDB } from '../(hooks)/convex/users/useGetUserFromDB'
 import { useGetTeamFromDB } from '../(hooks)/convex/teams/useGetTeamFromDB'
-import { useGetRequestsByID } from '../(hooks)/convex/requests/useGetRequestsByID'
+import { useGetRequestsByUserID } from '../(hooks)/convex/requests/useGetRequestsByUserID'
 
 const defaults = {
   user: null
@@ -25,7 +25,7 @@ export const useUserContext = () => useContext(UserContext)!
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const user = useGetUserFromDB() || null
   const team = useGetTeamFromDB(user?.team_id) || null
-  const requests = useGetRequestsByID(user?._id) || null
+  const requests = useGetRequestsByUserID(user?._id) || null
 
   return (
     <UserContext.Provider value={{ user, team, requests }}>{children}</UserContext.Provider>
