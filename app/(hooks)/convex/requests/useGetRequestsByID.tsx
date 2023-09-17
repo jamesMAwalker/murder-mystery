@@ -8,19 +8,21 @@ const getRequestsByUserID = async (user_id: string) => {
 }
 
 export const useGetRequestsByID = (user_id: string | undefined) => {
-  const [requests, setRequests] = useState<IConvexRequest>(Object)
+  const [requests, setRequests] = useState<IConvexRequest | null>(Object)
 
   useEffect(() => {
     if (user_id) {
       ;(async () => {
         try {
           const res = await getRequestsByUserID(user_id)
-          console.log('res from useGetTeam: ', res)
-          const foundConvexTeam = res.data.team
+          console.log('res from useGetRequests: ', res)
+          const foundConvexRequests = res.data.team
 
-          if (!foundConvexTeam) throw Error('Could not find team!')
-
-          setRequests(foundConvexTeam)
+          if (!foundConvexRequests) {
+            setRequests(null)
+          } else {
+            setRequests(foundConvexRequests)
+          }
         } catch (error) {
           console.error('error: ', error)
         }
