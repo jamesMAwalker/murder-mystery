@@ -1,4 +1,4 @@
-import { mutation } from './_generated/server'
+import { mutation, query } from './_generated/server'
 import { v } from "convex/values";
 
 // TODO: Error handling.
@@ -54,5 +54,37 @@ export const create = mutation({
     const invitation = await db.get(invitationId)
 
     return { message: 'Invitation successful!', ...invitation };
+  }
+})
+
+export const getByUserId = query({
+  args: {
+    user_id: v.id('users')
+  },
+  handler: async ({ db }, { user_id }) => {
+    const userInvitations = await db.query('invitations')
+      .filter(invite => invite.eq(invite.field("invited_user_id"), user_id))
+      .collect()
+
+    if (!userInvitations) throw Error('No invitations found!')
+
+    return userInvitations;
+
+  }
+})
+
+export const getByTeamId = query({
+  args: {
+    team_id: v.id('teams')
+  },
+  handler: async ({ db }, { team_id }) => {
+    const teamInvitations = await db.query('invitations')
+      .filter(invite => invite.eq(invite.field("inviting_team_id"), team_id))
+      .collect()
+
+    if (!teamInvitations) throw Error('No invitations found!')
+
+    return teamInvitations;
+
   }
 })
