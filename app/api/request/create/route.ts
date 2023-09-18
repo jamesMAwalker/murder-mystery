@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       status: 200,
       message: 'Request sent!',
-      data: newConvexRequest
+      request: newConvexRequest
     })
 
   } catch (error: any) {
