@@ -7,11 +7,19 @@ import { useGetRequestsByTeamID } from '../(hooks)/convex/requests/useGetRequest
 import { useGetRequestsByUserID } from '../(hooks)/convex/requests/useGetRequestsByUserID'
 import { useAddMemberToTeam } from '../(hooks)/convex/teams/useAddMemberToTeam'
 import { useRemoveMemberFromTeam } from '../(hooks)/convex/teams/useRemoveMemberFromTeam'
+import { useCreateInvitationInDB } from '../(hooks)/convex/invitations/useCreateInivitation'
 
 export const BE_Test = () => {
+  // test create invitation
+  const { createInvitation } = useCreateInvitationInDB()
+  const handleCreateInvitation = () => {
+     const team_id = '4gmbygg691879fkmnze3pxy89j5pt50'
+     const user_id = '4acgwrxxrg65mrghs0mrpf0j9j5jehr'
+     createInvitation(team_id, user_id)
+  }
+
   // test remove member from team
   const { removeMemberFromTeam } = useRemoveMemberFromTeam()
-
   const handleRemoveMember = () => {
     const team_id = '4gmbygg691879fkmnze3pxy89j5pt50'
     const user_id = '498ncp61be3rq103xh9h80p49j5wcx8'
@@ -20,7 +28,6 @@ export const BE_Test = () => {
 
   // test add member to team
   const { addMemberToTeam } = useAddMemberToTeam()
-
   const handleAddMember = () => {
     const team_id = '4gmbygg691879fkmnze3pxy89j5pt50'
     const user_id = '498ncp61be3rq103xh9h80p49j5wcx8'
@@ -31,13 +38,11 @@ export const BE_Test = () => {
   const requestsByUserId = useGetRequestsByUserID(
     '498ncp61be3rq103xh9h80p49j5wcx8'
   )
-  // console.log('requestsByUserId: ', requestsByUserId)
 
   // test get requests by team id
   const requestsByTeamId = useGetRequestsByTeamID(
     '4gmbygg691879fkmnze3pxy89j5pt50'
   )
-  // console.log('requestsByTeamId: ', requestsByTeamId)
 
   // test loading user requests into context
   const uctx = useUserContext()
@@ -45,7 +50,6 @@ export const BE_Test = () => {
 
   // test request creation
   const { createRequest } = useCreateRequestInDB()
-
   const handleCreateRequest = () => {
     const team_id = '4gmbygg691879fkmnze3pxy89j5pt50'
     const user_id = '498ncp61be3rq103xh9h80p49j5wcx8'
@@ -54,7 +58,6 @@ export const BE_Test = () => {
 
   // test team creation
   const { createTeam } = useCreateTeamInDB()
-
   const handleCreateTeam = () => {
     const team_name = 'FDJ'
 
@@ -65,25 +68,27 @@ export const BE_Test = () => {
 
   return (
     <>
-      <button
+      {/* <button
         // onClick={() => handleCreateTeam()}
         // onClick={() => handleCreateRequest()}
-        onClick={() => handleAddMember()}
         // onClick={() => handleRemoveMember()}
+        onClick={() => handleAddMember()}
         className='fixed bottom-40 btn btn-warning'
       >
+        Test: Remove Member
         Test: Add Member
-        {/* Test: Remove Member */}
-      </button>
+      </button> */}
       <button
         // onClick={() => handleCreateTeam()}
         // onClick={() => handleCreateRequest()}
         // onClick={() => handleAddMember()}
-        onClick={() => handleRemoveMember()}
+        // onClick={() => handleRemoveMember()}
+        onClick={() => handleCreateInvitation()}
         className='fixed bottom-24 btn btn-warning btn-outline'
       >
         {/* Test: Add Member */}
-        Test: Remove Member
+        {/* Test: Remove Member */}
+        Test: Invite to Team
       </button>
     </>
   )
