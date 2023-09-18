@@ -8,8 +8,18 @@ import { useGetRequestsByUserID } from '../(hooks)/convex/requests/useGetRequest
 import { useAddMemberToTeam } from '../(hooks)/convex/teams/useAddMemberToTeam'
 import { useRemoveMemberFromTeam } from '../(hooks)/convex/teams/useRemoveMemberFromTeam'
 import { useCreateInvitationInDB } from '../(hooks)/convex/invitations/useCreateInivitation'
+import { useGetInvitationsByTeamID } from '../(hooks)/convex/invitations/useGetInvitationsByTeamID'
+import { useGetInvitationsByUserID } from '../(hooks)/convex/invitations/useGetInvitationsByUserID'
 
 export const BE_Test = () => {
+  // test get invitaions by team id
+  const user_invitations = useGetInvitationsByUserID(
+    '4acgwrxxrg65mrghs0mrpf0j9j5jehr'
+  )
+
+  // test get invitaions by team id
+  const team_invitations = useGetInvitationsByTeamID('4gmbygg691879fkmnze3pxy89j5pt50')
+
   // test create invitation
   const { createInvitation } = useCreateInvitationInDB()
   const handleCreateInvitation = () => {
