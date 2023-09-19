@@ -12,6 +12,7 @@ import { CreateTeamModal } from "../(layout-components)/create-team-modal";
 const UserProfilePage = () => {
   // user data from convex db
   const { user: convexUser } = useUserContext();
+  console.log("convexUser: ", convexUser);
 
   // users and teams data from convex db
   const { users, teams } = useGameContext();
@@ -21,7 +22,9 @@ const UserProfilePage = () => {
 
   // modal function to satisfy typescript
   const [activeModal, setActiveModal] = useState<string | null>(null);
-
+  const [hasTeam, setHasTeam] = useState<boolean | null>(
+    convexUser?.has_team || null
+  );
   function showModal(id: string) {
     setActiveModal(id);
   }
@@ -65,7 +68,7 @@ const UserProfilePage = () => {
           </div>
 
           <TeamButtons
-            hasTeam={convexUser.has_team}
+            hasTeam={hasTeam}
             showModal={showModal}
             team={convexUser.team_name}
           />
@@ -77,7 +80,11 @@ const UserProfilePage = () => {
               hideModal={hideModal}
             />
           )}
-          <CreateTeamModal activeModal={activeModal} hideModal={hideModal} />
+          <CreateTeamModal
+            activeModal={activeModal}
+            hideModal={hideModal}
+            setHasTeam={setHasTeam}
+          />
         </div>
       )}
     </div>

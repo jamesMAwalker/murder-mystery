@@ -1,34 +1,36 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import axios from 'axios'
+import { useState } from "react";
+import axios from "axios";
 
 const createTeamInDB = async (team_name: string, user_id: string) => {
-  return await axios.post('/api/team/create', { team_name, user_id })
-}
+  return await axios.post("/api/team/create", { team_name, user_id });
+};
 
 export const useCreateTeamInDB = () => {
-  const [team, setTeam] = useState<IConvexTeam>(Object)
-  const [error, setError] = useState<string | null>(null)
+  const [team, setTeam] = useState<IConvexTeam>(Object);
+  const [error, setError] = useState<string | null>(null);
 
   function createTeam(team_name: string, user_id: string) {
-    ;(async () => {
+    console.log("user_id: ", user_id);
+    console.log("team_name: ", team_name);
+    (async () => {
       try {
-        const res = await createTeamInDB(team_name, user_id)
+        const res = await createTeamInDB(team_name, user_id);
 
-        // console.log('_____res from create team hook:_____ ', res);
+        console.log("_____res from create team hook:_____ ", res);
 
-        const newConvexTeam = res.data
+        const newConvexTeam = res.data;
 
-        if (!newConvexTeam) throw Error('Could not find user!')
+        if (!newConvexTeam) throw Error("Could not find user!");
 
-        setTeam(newConvexTeam)
+        setTeam(newConvexTeam);
       } catch (error: any) {
-        console.error('error: ', error)
-        setError(error?.message)
+        console.error("error: ", error);
+        setError(error?.message);
       }
-    })()
+    })();
   }
 
-  return { createTeam, team }
-}
+  return { createTeam, team };
+};

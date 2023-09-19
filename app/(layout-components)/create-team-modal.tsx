@@ -1,16 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useCreateTeamInDB } from "../(hooks)/convex/teams/useCreateTeamInDB";
+import { useUserContext } from "../(context)/user.context";
 
 interface CreateTeamModalProps {
   activeModal: string | null;
   hideModal: () => void;
+  setHasTeam: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
   activeModal,
   hideModal,
+  setHasTeam,
 }) => {
+  const { user: convexUser } = useUserContext();
+  console.log("user: ", convexUser);
   const [teamName, setTeamName] = useState("");
   const modalRef = useRef<HTMLInputElement | null>(null);
+  const { createTeam, team } = useCreateTeamInDB();
 
   useEffect(() => {
     if (activeModal === "create-team-modal") {
@@ -23,8 +30,14 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
   };
 
   const handleCreateTeamSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     // TODO: create team logic
+    e.preventDefault();
+
+    // send create team request to convex db
+    createTeam(teamName, convexUser?._id || "");
+    setHasTeam(true);
+
+    // reset team name state and hide modal
     setTeamName("");
     hideModal();
   };
