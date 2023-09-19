@@ -10,8 +10,16 @@ import { useRemoveMemberFromTeam } from '../(hooks)/convex/teams/useRemoveMember
 import { useCreateInvitationInDB } from '../(hooks)/convex/invitations/useCreateInivitation'
 import { useGetInvitationsByTeamID } from '../(hooks)/convex/invitations/useGetInvitationsByTeamID'
 import { useGetInvitationsByUserID } from '../(hooks)/convex/invitations/useGetInvitationsByUserID'
+import { useDeleteInvitationFromDB } from '../(hooks)/convex/invitations/useDestroyInvitation'
 
 export const BE_Test = () => {
+  // test destroy invitation
+  const { destroyInvitation } = useDeleteInvitationFromDB()
+  const handleDeleteInvitation = () => {
+    const toDeleteId = '4mabvkc7rs1g28bxqyb8ez5j9jhyqfg'
+    destroyInvitation(toDeleteId)
+  }
+
   // test get invitaions by team id
   const user_invitations = useGetInvitationsByUserID(
     '4acgwrxxrg65mrghs0mrpf0j9j5jehr'
@@ -93,12 +101,14 @@ export const BE_Test = () => {
         // onClick={() => handleCreateRequest()}
         // onClick={() => handleAddMember()}
         // onClick={() => handleRemoveMember()}
-        onClick={() => handleCreateInvitation()}
+        // onClick={() => handleCreateInvitation()}
+        onClick={() => handleDeleteInvitation()}
         className='fixed bottom-24 btn btn-warning btn-outline'
       >
         {/* Test: Add Member */}
         {/* Test: Remove Member */}
-        Test: Invite to Team
+        {/* Test: Invite to Team */}
+        Test: Dismiss Invitation
       </button>
     </>
   )
