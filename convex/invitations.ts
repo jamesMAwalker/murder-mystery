@@ -88,3 +88,23 @@ export const getByTeamId = query({
 
   }
 })
+
+export const destroy = mutation({
+  args: {
+    invitation_id: v.id('invitations'),
+  },
+  handler: async ({ db }, { invitation_id }) => {
+
+    // get invitation.
+    const invitationToDestroy = await db.get(invitation_id)
+
+    // check if user exists in db.
+    if (!invitationToDestroy) throw Error('Invitation not found!')
+
+    // delete invitation.
+    await db.delete(invitation_id)
+
+
+    return 'Invitation deleted!';
+  }
+})
