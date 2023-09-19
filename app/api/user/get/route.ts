@@ -11,6 +11,7 @@ import { api } from "@/convex/_generated/api";
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
+// Get ONE user.
 export async function POST(req: NextRequest) {
   const userData = await req.json()
 
@@ -43,6 +44,8 @@ export async function POST(req: NextRequest) {
   }
 }
 
+
+// Get ALL users.
 export async function GET() {
   try {
     const users = await convex.query(api.users.getAll)

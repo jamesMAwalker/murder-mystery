@@ -1,8 +1,8 @@
 'use client'
 
 import { createContext, ReactNode, useContext } from 'react'
-import { useGetAllTeamsFromDB } from '../(hooks)/convex/useGetAllTeamsFromDB'
-import { useGetAllUsersFromDB } from '../(hooks)/convex/useGetAllUsersFromDB'
+import { useGetAllTeamsFromDB } from '../(hooks)/convex/teams/useGetAllTeamsFromDB'
+import { useGetAllUsersFromDB } from '../(hooks)/convex/users/useGetAllUsersFromDB'
 
 
 const defaults = {

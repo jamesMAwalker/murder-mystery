@@ -13,13 +13,13 @@ const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
 
 export async function POST(req: NextRequest) {
-  // TODO: Use 
+  // TODO: Use ...something I forgot 😌...
 
   const { team_id } = await req.json()
 
   try {
     const team = await convex.query(api.teams.get, { team_id })
-    
+
     if (!team) {
       return NextResponse.json({
         status: 422,

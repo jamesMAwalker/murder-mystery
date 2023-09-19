@@ -7,9 +7,8 @@
   # In light of this, should we instead make this a slider rather than a dropdown?
 */
 
-import { useRef, useState, SyntheticEvent } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
 
@@ -25,14 +24,6 @@ const pages: IDropdownContent[] = [
   { page: 'Notes', path: 'notes' },
   { page: 'Suspects', path: 'suspects' }
 ]
-
-// export const BottomNav = () => {
-//   return (
-//     <div className='fixed bottom-0 p-4 flex w-full items-center'>
-//       <SlideMenu />
-//     </div>
-//   )
-// }
 
 export const BottomNav = () => {
   const { push } = useRouter()

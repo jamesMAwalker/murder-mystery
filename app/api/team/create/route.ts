@@ -5,33 +5,31 @@ import { api } from "@/convex/_generated/api";
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
 export async function POST(req: NextRequest) {
-  const userData = await req.json()
+  const { team_name, user_id } = await req.json()
 
-  
   try {
-    const existingUser = await convex.query(api.users.getById, { user_id: userData.user_id})
-    
-    if (existingUser) {
+    const newConvexTeam = await convex.mutation(api.teams.create, { team_name, user_id })
+
+    if (!newConvexTeam) {
       return NextResponse.json({
         status: 422,
-        message: 'User already exists in database.'
+        message: 'Error creating team!'
       })
     }
 
-    const newConvexUser = await convex.mutation(api.users.create, userData)
-    
     return NextResponse.json({
       status: 200,
-      message: 'User Created!',
-      data: newConvexUser
+      message: 'Team Created!',
+      data: newConvexTeam
     })
 
   } catch (error) {
     console.error('error: ', error);
-    
+
     return NextResponse.json({
       status: 500,
-      message: 'Error creating user!'
+      message: 'Error creating user!',
+      error
     })
   }
 
