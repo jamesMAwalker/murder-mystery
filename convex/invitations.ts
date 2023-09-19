@@ -98,12 +98,11 @@ export const destroy = mutation({
     // get invitation.
     const invitationToDestroy = await db.get(invitation_id)
 
-    // check if user exists in db.
+    // check if inivitation exists in db.
     if (!invitationToDestroy) throw Error('Invitation not found!')
 
     // delete invitation.
     await db.delete(invitation_id)
-
 
     return 'Invitation deleted!';
   }
