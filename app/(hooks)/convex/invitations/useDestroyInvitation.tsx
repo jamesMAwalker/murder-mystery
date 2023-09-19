@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const createDeleteFromDB = async (invitation_id: string) => {
+const deleteInvitationFromDB = async (invitation_id: string) => {
   return await axios.delete('/api/invitation/destroy', {
     data: { invitation_id }
   })
@@ -16,7 +16,7 @@ export const useDeleteInvitationFromDB = () => {
   function destroyInvitation(invitation_id: string) {
     ;(async () => {
       try {
-        const res = await createDeleteFromDB(invitation_id)
+        const res = await deleteInvitationFromDB(invitation_id)
 
         console.log('_____res from delete inivitation hook:_____ ', res)
 
