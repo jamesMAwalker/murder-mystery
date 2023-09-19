@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "@clerk/nextjs";
 import { useUserContext } from "../(context)/user.context";
 import { useGameContext } from "../(context)/game.context";
@@ -15,18 +15,15 @@ const UserProfilePage = () => {
 
   // users and teams data from convex db
   const { users, teams } = useGameContext();
-  console.log("teams: ", teams);
 
   // session data from clerk
   const { isLoaded, isSignedIn } = useSession();
-  console.log("isLoaded: ", isLoaded);
 
   // modal function to satisfy typescript
   const [activeModal, setActiveModal] = useState<string | null>(null);
 
   function showModal(id: string) {
     setActiveModal(id);
-    console.log("id: ", id);
   }
 
   function hideModal() {
@@ -73,11 +70,13 @@ const UserProfilePage = () => {
             team={convexUser.team_name}
           />
 
-          <JoinTeamModal
-            teams={teams}
-            activeModal={activeModal}
-            hideModal={hideModal}
-          />
+          {teams && Array.isArray(teams) && (
+            <JoinTeamModal
+              teams={teams}
+              activeModal={activeModal}
+              hideModal={hideModal}
+            />
+          )}
           <CreateTeamModal activeModal={activeModal} hideModal={hideModal} />
         </div>
       )}
