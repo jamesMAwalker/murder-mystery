@@ -82,3 +82,22 @@ export const getByTeamId = query({
 
   }
 })
+
+export const destroy = mutation({
+  args: {
+    request_id: v.id('requests'),
+  },
+  handler: async ({ db }, { request_id }) => {
+
+    // get request.
+    const requestToDestroy = await db.get(request_id)
+
+    // check if request exists in db.
+    if (!requestToDestroy) throw Error('Request not found!')
+
+    // delete request.
+    await db.delete(request_id)
+
+    return 'Request deleted!';
+  }
+})
