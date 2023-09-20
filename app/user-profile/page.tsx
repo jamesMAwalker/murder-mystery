@@ -1,108 +1,61 @@
-'use client'
+"use client";
 
-import { useUser } from '@clerk/clerk-react'
-import { useUserContext } from '../(context)/user.context'
+import React, { useState, useEffect } from "react";
+import { useSession } from "@clerk/nextjs";
+import { useUserContext } from "../(context)/user.context";
+import { useGameContext } from "../(context)/game.context";
+
+import { TeamButtons } from "../(layout-components)/team-buttons";
+import { JoinTeamModal } from "../(layout-components)/join-team-modal";
+import { CreateTeamModal } from "../(layout-components)/create-team-modal";
 
 const UserProfilePage = () => {
-  const { user } = useUser()
+  // user data from convex db
+  const { user: convexUser } = useUserContext();
+  console.log("convexUser: ", convexUser);
 
-  // user data from convex now available.
-  const { user: convexUser } = useUserContext()
+  // users and teams data from convex db
+  const { users, teams } = useGameContext();
 
-  function showModal() {
-    const dialog = document.getElementById('my_modal_3') as HTMLDialogElement
-    if (dialog) {
-      dialog.showModal()
-    }
+  // session data from clerk
+  const { isLoaded, isSignedIn } = useSession();
+
+  // modal function to satisfy typescript
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [loggedUser, setLoggedUser] = useState<IConvexUser | null>(null);
+  console.log("loggedUser: ", loggedUser);
+
+  const [hasTeam, setHasTeam] = useState<boolean | null>(
+    convexUser?.has_team || null
+  );
+
+  function showModal(id: string) {
+    setActiveModal(id);
   }
 
-  const users: IConvexUser[] = [
-    {
-      name: 'John Doe',
-      email: 'eee.gmail.com',
-      has_team: false,
-      team_name: null,
-      team_id: null,
-      user_id: '1'
-    },
-    {
-      name: 'Jane Doe',
-      email: 'eee.gmail.com',
-      has_team: false,
-      team_name: null,
-      team_id: null,
-      user_id: '2'
-    },
-    {
-      name: 'Krispy Kris',
-      email: 'krisp.gmail.com',
-      has_team: true,
-      team_name: 'Bozos',
-      team_id: '1',
-      user_id: '3'
-    },
-    {
-      name: 'Meatball Rob',
-      email: 'meatball.gmail.com',
-      has_team: true,
-      team_name: 'Bozos',
-      team_id: '1',
-      user_id: '4'
-    },
-    {
-      name: 'Tim Bozo',
-      email: 'timbozo.gmail.com',
-      has_team: true,
-      team_name: 'Idiots',
-      team_id: '2',
-      user_id: '5'
-    },
-    {
-      name: 'Mike Penis',
-      email: 'mikep@gmail.com',
-      has_team: true,
-      team_name: 'seniles',
-      team_id: '3',
-      user_id: '6'
-    },
-    {
-      name: 'Vivieee Swamii',
-      email: 'viv@gmail.com',
-      has_team: true,
-      team_name: 'neo-boneheads',
-      team_id: '4',
-      user_id: '7'
-    },
-    {
-      email: 'joshsmayhew@gmail.com',
-      name: 'Joshua Mayhew',
-      has_team: true,
-      team_name: 'No team yet...',
-      team_id: '5',
-      user_id: 'user_2UWZ2MFETBoJZCYShYpS3HzmZo2'
+  function hideModal() {
+    setActiveModal(null);
+  }
+
+  useEffect(() => {
+    // check for convexUser and set hasTeam state to ensure that the button render reflects changes to the convexUser
+
+    if (convexUser) {
+      setLoggedUser(convexUser);
+
+      setHasTeam(convexUser.has_team);
     }
-  ]
+  }, [convexUser, loggedUser, hasTeam]);
 
-  const teamsSet = new Set(
-    users
-      .map((user) => user.team_name)
-      .filter((team) => team !== 'No team yet...' && team !== null)
-  )
-
-  const uniqueTeams = Array.from(teamsSet)
-
-  // const loggedUser = users.find((u) => u.user_id === user?.id)
-  const loggedUser = users.find((u) => u.user_id === '1')
-
-  if (!loggedUser) {
+  // check that clerk session is loaded and user is signed in
+  if (!isLoaded || !isSignedIn || !convexUser) {
     return (
-      <div>
-        <h2>Loading</h2>
+      <div className="flex items-center justify-center">
+        <span className="loading loading-spinner loading-lg"></span>
       </div>
-    )
+    );
   }
 
-  const { name, email, team_name, user_id } = loggedUser
   /*
     * User Profile UI Elements
     # User Info: Should show user's: name, email, team name (if on team).
@@ -116,50 +69,40 @@ const UserProfilePage = () => {
   */
 
   return (
-    <div className='relative'>
-      {loggedUser && (
-        <div className='flex flex-col gap-4 bg-slate-800 p-4 rounded-md shadow-md'>
-          <h1 className='text-white text-2xl'>{name}</h1>
-          <p className='text-white text-xl'>{email}</p>
+    <div className="relative bg-slate-800 p-4 sm:p-6 rounded-lg shadow-md">
+      {convexUser && (
+        <div className="flex flex-col gap-6 items-center">
+          <div className="flex flex-col gap-2 w-full">
+            <p className="text-white text-xl sm:text-2xl font-semibold">
+              {convexUser.name}
+            </p>
+            <p className="text-white text-base sm:text-lg">
+              {convexUser.email}
+            </p>
+            <TeamButtons
+              hasTeam={hasTeam}
+              setHasTeam={setHasTeam}
+              showModal={showModal}
+              team={convexUser.team_name}
+            />
+          </div>
 
-          {team_name && team_name !== 'No team yet...' ? (
-            <div className='flex flex-col gap-4'>
-              <h2 className='text-white text-xl'>Team: {team_name}</h2>
-              <button className='btn btn-primary'>Add Member</button>
-              <button className='btn btn-primary'>Leave Team</button>
-            </div>
-          ) : (
-            <div className='flex flex-col gap-4'>
-              <h2 className='text-white text-xl'>No team yet...</h2>
-              <button className='btn btn-accent' onClick={showModal}>
-                Join Team
-              </button>
-              <dialog id='my_modal_3' className='modal'>
-                <form method='dialog' className='modal-box'>
-                  <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>
-                    ✕
-                  </button>
-                  <h2 className='text-white text-xl'>Available Teams</h2>
-                  <div className='flex flex-col gap-4 pt-6'>
-                    {uniqueTeams.map((team) => (
-                      <li
-                        key={team}
-                        className='flex items-center justify-between p-4 bg-slate-800 gap-2 w-full rounded-md'
-                      >
-                        <span className='font-semibold'>{team}</span>
-                        <button className='btn btn-primary'>Join</button>
-                      </li>
-                    ))}
-                  </div>
-                </form>
-              </dialog>
-              <button className='btn btn-primary'>Create Team</button>
-            </div>
+          {teams && Array.isArray(teams) && (
+            <JoinTeamModal
+              teams={teams}
+              activeModal={activeModal}
+              hideModal={hideModal}
+            />
           )}
+          <CreateTeamModal
+            activeModal={activeModal}
+            hideModal={hideModal}
+            setLoggedUser={setLoggedUser}
+          />
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default UserProfilePage
+export default UserProfilePage;
