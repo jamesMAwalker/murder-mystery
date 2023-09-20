@@ -12,7 +12,6 @@ import { CreateTeamModal } from "../(layout-components)/create-team-modal";
 const UserProfilePage = () => {
   // user data from convex db
   const { user: convexUser } = useUserContext();
-  console.log("convexUser: ", convexUser);
 
   // users and teams data from convex db
   const { users, teams } = useGameContext();
@@ -34,7 +33,7 @@ const UserProfilePage = () => {
   }
 
   // check that clerk session is loaded and user is signed in
-  if (!isLoaded || !isSignedIn) {
+  if (!isLoaded || !isSignedIn || !convexUser) {
     return (
       <div className="flex items-center justify-center">
         <span className="loading loading-spinner loading-lg"></span>
@@ -65,13 +64,13 @@ const UserProfilePage = () => {
             <p className="text-white text-base sm:text-lg">
               {convexUser.email}
             </p>
+            <TeamButtons
+              hasTeam={hasTeam}
+              setHasTeam={setHasTeam}
+              showModal={showModal}
+              team={convexUser.team_name}
+            />
           </div>
-
-          <TeamButtons
-            hasTeam={hasTeam}
-            showModal={showModal}
-            team={convexUser.team_name}
-          />
 
           {teams && Array.isArray(teams) && (
             <JoinTeamModal

@@ -14,7 +14,6 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
   setHasTeam,
 }) => {
   const { user: convexUser } = useUserContext();
-  console.log("user: ", convexUser);
   const [teamName, setTeamName] = useState("");
   const modalRef = useRef<HTMLInputElement | null>(null);
   const { createTeam, team } = useCreateTeamInDB();
@@ -34,7 +33,7 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
     e.preventDefault();
 
     // send create team request to convex db
-    createTeam(teamName, convexUser?._id || "");
+    createTeam(teamName, convexUser?._id);
     setHasTeam(true);
 
     // reset team name state and hide modal

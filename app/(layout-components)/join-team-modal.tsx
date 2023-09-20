@@ -17,6 +17,7 @@ export const JoinTeamModal: React.FC<JoinTeamModalProps> = ({
   const { user: convexUser } = useUserContext();
 
   const userId = convexUser?._id || undefined;
+  console.log("userId: ", userId);
 
   const requests = useGetRequestsByUserID(userId);
 
