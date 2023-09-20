@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
 import { useGetTeamFromDB } from "../(hooks)/convex/teams/useGetTeamFromDB";

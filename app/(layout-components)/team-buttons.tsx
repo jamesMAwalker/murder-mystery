@@ -16,13 +16,13 @@ export const TeamButtons: React.FC<TeamButtonsProps> = ({
 }) => {
   const { user: convexUser } = useUserContext();
 
-  useEffect(() => {
-    // check for convexUser and set hasTeam state to ensure that the button render reflects changes to the convexUser
+  // useEffect(() => {
+  //   // check for convexUser and set hasTeam state to ensure that the button render reflects changes to the convexUser
 
-    if (convexUser) {
-      setHasTeam(convexUser.has_team);
-    }
-  }, [convexUser]);
+  //   if (convexUser) {
+  //     setHasTeam(convexUser.has_team);
+  //   }
+  // }, [convexUser, hasTeam]);
 
   if (hasTeam === null || hasTeam === undefined) {
     return (

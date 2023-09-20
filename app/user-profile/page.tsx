@@ -12,6 +12,7 @@ import { CreateTeamModal } from "../(layout-components)/create-team-modal";
 const UserProfilePage = () => {
   // user data from convex db
   const { user: convexUser } = useUserContext();
+  console.log("convexUser: ", convexUser);
 
   // users and teams data from convex db
   const { users, teams } = useGameContext();
@@ -21,9 +22,13 @@ const UserProfilePage = () => {
 
   // modal function to satisfy typescript
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [loggedUser, setLoggedUser] = useState<IConvexUser | null>(null);
+  console.log("loggedUser: ", loggedUser);
+
   const [hasTeam, setHasTeam] = useState<boolean | null>(
     convexUser?.has_team || null
   );
+
   function showModal(id: string) {
     setActiveModal(id);
   }
@@ -31,6 +36,16 @@ const UserProfilePage = () => {
   function hideModal() {
     setActiveModal(null);
   }
+
+  useEffect(() => {
+    // check for convexUser and set hasTeam state to ensure that the button render reflects changes to the convexUser
+
+    if (convexUser) {
+      setLoggedUser(convexUser);
+
+      setHasTeam(convexUser.has_team);
+    }
+  }, [convexUser, loggedUser, hasTeam]);
 
   // check that clerk session is loaded and user is signed in
   if (!isLoaded || !isSignedIn || !convexUser) {
@@ -82,7 +97,7 @@ const UserProfilePage = () => {
           <CreateTeamModal
             activeModal={activeModal}
             hideModal={hideModal}
-            setHasTeam={setHasTeam}
+            setLoggedUser={setLoggedUser}
           />
         </div>
       )}
