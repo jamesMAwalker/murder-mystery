@@ -191,6 +191,34 @@ export const removeMember = mutation({
   }
 })
 
+export const destroy = mutation({
+  args: {
+    team_id: v.id('teams'),
+  },
+  handler: async ({ db }, { team_id }) => {
+
+    // get request.
+    const teamToDestroy = await db.get(team_id)
+
+    // check if request exists in db.
+    if (!teamToDestroy) throw Error('Team not found!')
+
+    // for all members reset team related fields
+    teamToDestroy.members.forEach(memberId => {
+      db.patch(memberId, {
+        has_team: false,
+        team_id: null,
+        team_name: null
+      })
+    })
+
+    // delete team.
+    await db.delete(team_id)
+
+    return 'Team deleted!';
+  }
+})
+
 /*
 
   * Team Functions *
