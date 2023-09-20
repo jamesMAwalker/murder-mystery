@@ -18,12 +18,9 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 
@@ -59,4 +56,40 @@ body {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
+}
+
+/* Global CSS */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  /* semi-transparent black */
+  z-index: 999;
+  /* ensures the backdrop is below the modal but above other content */
+  display: none;
+  /* by default, the backdrop is not shown */
+}
+
+.modal {
+  position: fixed;
+  top: 10%;
+  /* start from the upper part of the page */
+  left: 50%;
+  /* center the modal horizontally */
+  transform: translateX(-50%);
+  /* adjust for precise centering */
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  /* ensures the modal doesn't take the whole height */
+  overflow-y: auto;
+  /* in case the modal content exceeds the maximum height */
+  z-index: 1000;
+  /* ensures the modal is on top of the backdrop and other content */
+  display: none;
+  /* by default, the modal is not shown */
 }

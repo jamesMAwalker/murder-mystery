@@ -9,7 +9,7 @@ declare interface IConvexUser {
 }
 
 declare interface IConvexTeam {
-  _id?: string; 
+  _id?: string;
   team_captain: string | null;
   team_name: string | null;
   members: string[] | null;
