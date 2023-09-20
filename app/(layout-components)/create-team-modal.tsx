@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useCreateTeamInDB } from "../(hooks)/convex/teams/useCreateTeamInDB";
 import { useUserContext } from "../(context)/user.context";
-import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
 
 interface CreateTeamModalProps {
   activeModal: string | null;
@@ -16,15 +15,13 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
 }) => {
   const [teamName, setTeamName] = useState("");
   const modalRef = useRef<HTMLInputElement | null>(null);
-  const { createTeam, team } = useCreateTeamInDB();
+  const { createTeam } = useCreateTeamInDB();
   const { user: convexUser } = useUserContext();
-  console.log("convexUser: ", convexUser);
-  const user = useGetUserFromDB();
-  console.log("user: ", user);
+  console.log("user: ", convexUser);
 
   useEffect(() => {
     if (activeModal === "create-team-modal") {
-      modalRef.current?.focus(); // Auto-focus the input on modal open
+      modalRef.current?.focus();
     }
   }, [activeModal]);
 
@@ -32,21 +29,22 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
     setTeamName(e.target.value);
   };
 
-  const handleCreateTeamSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    // TODO: create team logic
+  const handleCreateTeamSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
+    if (!convexUser?._id) return;
 
-    // send create team request to convex db
-    createTeam(teamName, convexUser?._id || "");
+    createTeam(teamName, convexUser._id);
 
-    setLoggedUser(user);
+    const updatedUser = { ...convexUser, has_team: true, team_name: teamName };
 
-    // reset team name state and hide modal
+    setLoggedUser(updatedUser);
     setTeamName("");
     hideModal();
   };
 
-  if (activeModal !== "create-team-modal") {
+  if (activeModal !== "create-team-modal" || !convexUser) {
     return null;
   }
 

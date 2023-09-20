@@ -8,11 +8,11 @@ import { useGameContext } from "../(context)/game.context";
 import { TeamButtons } from "../(layout-components)/team-buttons";
 import { JoinTeamModal } from "../(layout-components)/join-team-modal";
 import { CreateTeamModal } from "../(layout-components)/create-team-modal";
+import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
 
 const UserProfilePage = () => {
   // user data from convex db
-  const { user: convexUser } = useUserContext();
-  console.log("convexUser: ", convexUser);
+  const { user } = useUserContext();
 
   // users and teams data from convex db
   const { users, teams } = useGameContext();
@@ -25,8 +25,10 @@ const UserProfilePage = () => {
   const [loggedUser, setLoggedUser] = useState<IConvexUser | null>(null);
   console.log("loggedUser: ", loggedUser);
 
+  const fetchedUser = useGetUserFromDB();
+
   const [hasTeam, setHasTeam] = useState<boolean | null>(
-    convexUser?.has_team || null
+    loggedUser?.has_team || null
   );
 
   function showModal(id: string) {
@@ -38,17 +40,15 @@ const UserProfilePage = () => {
   }
 
   useEffect(() => {
-    // check for convexUser and set hasTeam state to ensure that the button render reflects changes to the convexUser
-
-    if (convexUser) {
-      setLoggedUser(convexUser);
-
-      setHasTeam(convexUser.has_team);
+    if (fetchedUser) {
+      console.log("fetchedUser: ", fetchedUser);
+      setLoggedUser(fetchedUser);
+      setHasTeam(fetchedUser.has_team);
     }
-  }, [convexUser, loggedUser, hasTeam]);
+  }, [fetchedUser]);
 
   // check that clerk session is loaded and user is signed in
-  if (!isLoaded || !isSignedIn || !convexUser) {
+  if (!isLoaded || !isSignedIn || !loggedUser) {
     return (
       <div className="flex items-center justify-center">
         <span className="loading loading-spinner loading-lg"></span>
@@ -70,20 +70,19 @@ const UserProfilePage = () => {
 
   return (
     <div className="relative bg-slate-800 p-4 sm:p-6 rounded-lg shadow-md">
-      {convexUser && (
+      {loggedUser && (
         <div className="flex flex-col gap-6 items-center">
           <div className="flex flex-col gap-2 w-full">
             <p className="text-white text-xl sm:text-2xl font-semibold">
-              {convexUser.name}
+              {loggedUser.name}
             </p>
             <p className="text-white text-base sm:text-lg">
-              {convexUser.email}
+              {loggedUser.email}
             </p>
             <TeamButtons
-              hasTeam={hasTeam}
-              setHasTeam={setHasTeam}
+              hasTeam={loggedUser.has_team}
               showModal={showModal}
-              team={convexUser.team_name}
+              team={loggedUser.team_name}
             />
           </div>
 

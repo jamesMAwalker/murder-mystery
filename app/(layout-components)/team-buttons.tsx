@@ -3,18 +3,19 @@ import { useUserContext } from "../(context)/user.context";
 
 interface TeamButtonsProps {
   hasTeam: boolean | null | undefined; // changed to include null for initial state
-  setHasTeam: React.Dispatch<React.SetStateAction<boolean | null>>;
   showModal: (id: string) => void;
   team: any; // Ideally, define a Team type
 }
 
 export const TeamButtons: React.FC<TeamButtonsProps> = ({
   hasTeam,
-  setHasTeam,
   showModal,
   team,
 }) => {
-  const { user: convexUser } = useUserContext();
+  const { user } = useUserContext();
+
+  console.log("team: ", team);
+  console.log("hasTeam: ", hasTeam);
 
   // useEffect(() => {
   //   // check for convexUser and set hasTeam state to ensure that the button render reflects changes to the convexUser
