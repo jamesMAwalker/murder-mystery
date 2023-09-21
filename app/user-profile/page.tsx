@@ -8,11 +8,18 @@ import { useGameContext } from "../(context)/game.context";
 import { TeamButtons } from "../(layout-components)/team-buttons";
 import { JoinTeamModal } from "../(layout-components)/join-team-modal";
 import { CreateTeamModal } from "../(layout-components)/create-team-modal";
-import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
+// import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
 
 const UserProfilePage = () => {
   // user data from convex db
-  const { user } = useUserContext();
+  const {
+    user,
+    loggedUser,
+    activeProfileModal,
+    showProfileModal,
+    hideProfileModal,
+    setLoggedUser,
+  } = useUserContext();
 
   // users and teams data from convex db
   const { users, teams } = useGameContext();
@@ -21,31 +28,30 @@ const UserProfilePage = () => {
   const { isLoaded, isSignedIn } = useSession();
 
   // modal function to satisfy typescript
-  const [activeModal, setActiveModal] = useState<string | null>(null);
-  const [loggedUser, setLoggedUser] = useState<IConvexUser | null>(null);
-  console.log("loggedUser: ", loggedUser);
 
-  const fetchedUser = useGetUserFromDB();
+  // const fetchedUser = useGetUserFromDB();
 
-  const [hasTeam, setHasTeam] = useState<boolean | null>(
-    loggedUser?.has_team || null
-  );
+  // const [hasTeam, setHasTeam] = useState<boolean | null>(
+  //   user?.has_team || null
+  // );
 
-  function showModal(id: string) {
-    setActiveModal(id);
-  }
-
-  function hideModal() {
-    setActiveModal(null);
-  }
+  // useEffect(() => {
+  //   if (fetchedUser) {
+  //     console.log("fetchedUser: ", fetchedUser);
+  //     setLoggedUser(fetchedUser);
+  //     setHasTeam(fetchedUser.has_team);
+  //   }
+  // }, [fetchedUser]);
 
   useEffect(() => {
-    if (fetchedUser) {
-      console.log("fetchedUser: ", fetchedUser);
-      setLoggedUser(fetchedUser);
-      setHasTeam(fetchedUser.has_team);
+    // check for returned user data from convex db
+    if (user) {
+      // set local state with user data
+      setLoggedUser(user);
+
+      // setHasTeam(user.has_team);
     }
-  }, [fetchedUser]);
+  }, [user]);
 
   // check that clerk session is loaded and user is signed in
   if (!isLoaded || !isSignedIn || !loggedUser) {
@@ -79,25 +85,11 @@ const UserProfilePage = () => {
             <p className="text-white text-base sm:text-lg">
               {loggedUser.email}
             </p>
-            <TeamButtons
-              hasTeam={loggedUser.has_team}
-              showModal={showModal}
-              team={loggedUser.team_name}
-            />
+            <TeamButtons />
           </div>
 
-          {teams && Array.isArray(teams) && (
-            <JoinTeamModal
-              teams={teams}
-              activeModal={activeModal}
-              hideModal={hideModal}
-            />
-          )}
-          <CreateTeamModal
-            activeModal={activeModal}
-            hideModal={hideModal}
-            setLoggedUser={setLoggedUser}
-          />
+          {teams && Array.isArray(teams) && <JoinTeamModal />}
+          <CreateTeamModal />
         </div>
       )}
     </div>

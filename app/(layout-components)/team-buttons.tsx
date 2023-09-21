@@ -1,29 +1,10 @@
-import React, { useEffect } from "react";
 import { useUserContext } from "../(context)/user.context";
 
-interface TeamButtonsProps {
-  hasTeam: boolean | null | undefined; // changed to include null for initial state
-  showModal: (id: string) => void;
-  team: any; // Ideally, define a Team type
-}
+export const TeamButtons: React.FC = () => {
+  const { loggedUser, showProfileModal } = useUserContext();
 
-export const TeamButtons: React.FC<TeamButtonsProps> = ({
-  hasTeam,
-  showModal,
-  team,
-}) => {
-  const { user } = useUserContext();
-
-  console.log("team: ", team);
-  console.log("hasTeam: ", hasTeam);
-
-  // useEffect(() => {
-  //   // check for convexUser and set hasTeam state to ensure that the button render reflects changes to the convexUser
-
-  //   if (convexUser) {
-  //     setHasTeam(convexUser.has_team);
-  //   }
-  // }, [convexUser, hasTeam]);
+  const hasTeam = loggedUser?.has_team;
+  const team = loggedUser?.team_name;
 
   if (hasTeam === null || hasTeam === undefined) {
     return (
@@ -54,13 +35,13 @@ export const TeamButtons: React.FC<TeamButtonsProps> = ({
         <div className="flex flex-col sm:flex-row gap-4">
           <button
             className="btn btn-primary cursor-pointer w-full sm:w-auto"
-            onClick={() => showModal("join-team-modal")}
+            onClick={() => showProfileModal("join-team-modal")}
           >
             Join Team
           </button>
           <button
             className="btn btn-accent w-full sm:w-auto"
-            onClick={() => showModal("create-team-modal")}
+            onClick={() => showProfileModal("create-team-modal")}
           >
             Create Team
           </button>
