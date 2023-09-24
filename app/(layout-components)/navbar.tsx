@@ -3,27 +3,32 @@
 import { useEffect } from 'react'
 import { UserButton } from '@clerk/nextjs/app-beta'
 import { useUser } from '@clerk/clerk-react'
-import Link from 'next/link'
+import Link from 'next/link'  
 
 import { useCreateUserInDB } from '../(hooks)/convex/users/useCreateUserInDB'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 
-// TODO: Move user creation to signin/singup pages.
+// TODO: Handle user creation in Convex Webhook
 
 export const Navbar = () => {
   const { isSignedIn, user } = useUser()
-  const { createUser } = useCreateUserInDB()
+
+  const createUser = useMutation(api.users.create)
 
   useEffect(() => {
+
     if (isSignedIn && user.id) {
-      const newConvexUser: IConvexUser = {
-        user_id: user.id,
-        name: user.fullName,
-        email: user.primaryEmailAddress?.emailAddress,
+      const newConvexUser = {
+        user_id: user.id!,
+        name: user.fullName!,
+        email: user.primaryEmailAddress?.emailAddress!,
         has_team: false,
         team_name: null,
         team_id: null,
       }
+
       createUser(newConvexUser)
     }
   }, [isSignedIn, user])
