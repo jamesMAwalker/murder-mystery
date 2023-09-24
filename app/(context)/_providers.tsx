@@ -1,19 +1,15 @@
 import { AccountProvider } from './account.context'
-import { ConvexProvider } from './convex.context'
+import { ClerkConvexProvider } from './clerk-convex.context'
 import { GameProvider } from './game.context'
-import { UserProvider } from './user.context'
-
+// import { UserProvider } from './user.context'
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <AccountProvider>
-      <ConvexProvider>
-        <UserProvider>
-          <GameProvider>
-            {children}
-          </GameProvider>
-        </UserProvider>
-      </ConvexProvider>
-    </AccountProvider>
+      <ClerkConvexProvider>
+        <GameProvider>{children}</GameProvider>
+      </ClerkConvexProvider>
   )
 }
+
+{/* <UserProvider></UserProvider> */}
+{/* <AccountProvider></AccountProvider> */}
