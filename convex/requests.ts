@@ -51,10 +51,7 @@ export const create = mutation({
 })
 
 export const getByUserId = query({
-  args: {
-    user_id: v.id('users')
-  },
-  handler: async (ctx, { user_id }) => {
+  handler: async (ctx) => {
     
     const { db, auth } = ctx
 
@@ -70,7 +67,7 @@ export const getByUserId = query({
       .unique()
 
     const userRequests = await db.query('requests')
-      .filter(request => request.eq(request.field("requesting_user_id"), user_id))
+      .filter(request => request.eq(request.field("requesting_user_id"), user?._id))
       .collect()
 
     if (!userRequests) throw Error('No requests found!')
