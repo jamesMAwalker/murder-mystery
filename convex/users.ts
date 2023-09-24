@@ -45,9 +45,20 @@ export const getAll = query(async ({ db }) => {
 export const getById = query({
   args: { user_id: v.string() },
   handler: async ({ db }, args) => {
-    return await db
+    const user = await db
       .query('users')
       .filter(user => user.eq(user.field("user_id"), args.user_id))
       .unique()
+
+    if (!user) throw Error('User not found in database!')
+
+    return user
+  }
+})
+
+export const getByConvexId = query({
+  args: { user_id: v.id('users') },
+  handler: async ({ db }, { user_id }) => {
+    return await db.get(user_id)
   }
 })
