@@ -6,7 +6,6 @@ export const create = mutation({
   args: {
     team_id: v.id('teams'),
     user_id: v.id('users')
-    // user_id: v.string()
   },
   handler: async ({ db }, { team_id, user_id }) => {
 
@@ -55,7 +54,21 @@ export const getByUserId = query({
   args: {
     user_id: v.id('users')
   },
-  handler: async ({ db }, { user_id }) => {
+  handler: async (ctx, { user_id }) => {
+    
+    const { db, auth } = ctx
+
+    // get user from auth
+    const clerk_user = await auth.getUserIdentity()
+
+    const clerkId = clerk_user?.subject // subject is the user ID
+
+    // get user from db with clerk id
+    const user = await db
+      .query('users')
+      .filter(user => user.eq(user.field("user_id"), clerkId))
+      .unique()
+
     const userRequests = await db.query('requests')
       .filter(request => request.eq(request.field("requesting_user_id"), user_id))
       .collect()
