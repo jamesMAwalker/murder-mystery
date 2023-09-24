@@ -1,62 +1,50 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useCreateTeamInDB } from "../(hooks)/convex/teams/useCreateTeamInDB";
 import { useUserContext } from "../(context)/user.context";
-import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
 
-interface CreateTeamModalProps {
-  activeModal: string | null;
-  hideModal: () => void;
-  setLoggedUser: React.Dispatch<React.SetStateAction<IConvexUser | null>>;
-}
-
-export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
-  activeModal,
-  hideModal,
-  setLoggedUser,
-}) => {
+export const CreateTeamModal: React.FC = () => {
   const [teamName, setTeamName] = useState("");
   const modalRef = useRef<HTMLInputElement | null>(null);
-  const { createTeam, team } = useCreateTeamInDB();
-  const { user: convexUser } = useUserContext();
-  console.log("convexUser: ", convexUser);
-  const user = useGetUserFromDB();
-  console.log("user: ", user);
+  const { createTeam } = useCreateTeamInDB();
+  const { activeProfileModal, hideProfileModal, setLoggedUser, loggedUser } =
+    useUserContext();
 
   useEffect(() => {
-    if (activeModal === "create-team-modal") {
-      modalRef.current?.focus(); // Auto-focus the input on modal open
+    if (activeProfileModal === "create-team-modal") {
+      modalRef.current?.focus();
     }
-  }, [activeModal]);
+  }, [activeProfileModal]);
 
   const handleTeamNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTeamName(e.target.value);
   };
 
-  const handleCreateTeamSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    // TODO: create team logic
+  const handleCreateTeamSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
+    if (!loggedUser?._id) return;
 
-    // send create team request to convex db
-    createTeam(teamName, convexUser?._id || "");
+    createTeam(teamName, loggedUser._id);
 
-    setLoggedUser(user);
+    const updatedUser = { ...loggedUser, has_team: true, team_name: teamName };
 
-    // reset team name state and hide modal
+    setLoggedUser(updatedUser);
     setTeamName("");
-    hideModal();
+    hideProfileModal();
   };
 
-  if (activeModal !== "create-team-modal") {
+  if (activeProfileModal !== "create-team-modal" || !loggedUser) {
     return null;
   }
 
   return (
     <div className="flex flex-col items-center justify-start h-full bg-black !fixed w-screen h-screen z-10 inset-0 p-4">
-      {convexUser && (
+      {loggedUser && (
         <div className="modal-box bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-md mt-20">
           <button
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            onClick={hideModal}
+            onClick={hideProfileModal}
           >
             ✕
           </button>
