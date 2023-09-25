@@ -18,6 +18,7 @@ import type * as invitations from "../invitations";
 import type * as lib_getUserFromAuthSession from "../lib/getUserFromAuthSession";
 import type * as notes from "../notes";
 import type * as requests from "../requests";
+import type * as suspects from "../suspects";
 import type * as teams from "../teams";
 import type * as users from "../users";
 
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   "lib/getUserFromAuthSession": typeof lib_getUserFromAuthSession;
   notes: typeof notes;
   requests: typeof requests;
+  suspects: typeof suspects;
   teams: typeof teams;
   users: typeof users;
 }>;
