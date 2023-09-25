@@ -106,13 +106,6 @@ export const BE_Test = () => {
         // onClick={() => handleCreateTeam()}
         // onClick={() => handleCreateRequest()}
         // onClick={() => handleRemoveMember()}
-        onClick={() => handleAddMember()}
-        className='fixed bottom-40 btn btn-warning'
-      >
-        Test: Remove Member
-        Test: Add Member
-      </button> */}
-      <button
         // onClick={() => handleCreateTeam()}
         // onClick={() => handleCreateRequest()}
         // onClick={() => handleAddMember()}
@@ -120,16 +113,13 @@ export const BE_Test = () => {
         // onClick={() => handleCreateInvitation()}
         // onClick={() => handleDeleteInvitation()}
         // onClick={() => handleDeleteRequest()}
-        onClick={() => handleDestroyTeam()}
-        className='fixed bottom-24 btn btn-warning btn-outline'
+        // onClick={() => handleDestroyTeam()}
+        onClick={() => handleAddMember()}
+        className='fixed bottom-40 btn btn-warning'
       >
-        {/* Test: Add Member */}
-        {/* Test: Remove Member */}
-        {/* Test: Invite to Team */}
-        {/* Test: Dismiss Invitation */}
-        {/* Test: Dismiss Request */}
-        Test: Delete Team
-      </button>
+        Test: Remove Member
+        Test: Add Member
+      </button> */}
     </>
   )
 }
