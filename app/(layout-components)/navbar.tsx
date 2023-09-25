@@ -7,6 +7,8 @@ import Link from "next/link";
 
 import { useCreateUserInDB } from "../(hooks)/convex/users/useCreateUserInDB";
 
+const notifications = ["test 1", "test 2", "test 3"];
+
 // TODO: Move user creation to signin/singup pages.
 
 export const Navbar = () => {
