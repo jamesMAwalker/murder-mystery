@@ -1,11 +1,10 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react'
-import { api } from '@/convex/_generated/api'
-import { useConvexAuth, useMutation, useQuery } from 'convex/react-internal'
-import { useAuth } from '@clerk/nextjs';
-import { WithoutSystemFields } from 'convex/server'
-
+import React, { useEffect } from "react";
+import { api } from "@/convex/_generated/api";
+import { useConvexAuth, useMutation, useQuery } from "convex/react-internal";
+import { useAuth } from "@clerk/nextjs";
+import { WithoutSystemFields } from "convex/server";
 
 /*
   * NOTES *
@@ -19,32 +18,33 @@ import { WithoutSystemFields } from 'convex/server'
 
 const ProfileConvex = () => {
   // for detecting valid clerk user
-  const convexAuthState = useConvexAuth()
+  const convexAuthState = useConvexAuth();
 
   // for using user data from clerk
-  const clerkAuthState = useAuth()
+  const clerkAuthState = useAuth();
+  console.log("clerkAuthState: ", clerkAuthState);
 
-  const teams = useQuery(api.teams.getAll)
+  const teams = useQuery(api.teams.getAll);
 
-  const requests = useQuery(api.requests.getByUserId)
+  const requests = useQuery(api.requests.getByUserId);
 
   return (
-    <div className='flex-col-tl gap-6'>
+    <div className="flex-col-tl gap-6">
       <h1>Current Teams</h1>
       <ul className="flex-col-tl gap-4">
-        {teams?.map(team => {
-          return <li key={team._id}>{team.team_name}</li>
+        {teams?.map((team) => {
+          return <li key={team._id}>{team.team_name}</li>;
         })}
       </ul>
       <hr />
       <h1>Current Requests</h1>
       <ul className="flex-col-tl gap-4">
-        {requests?.map(request => {
-          return <li key={request._id}>{request._id}</li>
+        {requests?.map((request) => {
+          return <li key={request._id}>{request._id}</li>;
         })}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default ProfileConvex
+export default ProfileConvex;
