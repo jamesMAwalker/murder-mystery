@@ -30,8 +30,8 @@ export default function RootLayout({
       >
         <Providers>
           <Navbar />
-          <main className='py-24 w-[90%] min-h-screen h-auto relative w-full flex flex-col items-center'>
-            <div className='content-wrapper h-auto w-[90%]'>{children}</div>
+          <main className='py-24 w-[90%] min-h-screen h-auto relative w-full flex flex-col items-center z-10'>
+            <div className='content-wrapper h-auto w-[90%] z-10'>{children}</div>
           </main>
           <BE_Test />
           <BottomNav />
