@@ -4,29 +4,14 @@ import React, { useState } from "react";
 import { api } from "@/convex/_generated/api";
 import { useConvexAuth, useMutation, useQuery } from "convex/react-internal";
 import { useAuth, useSession } from "@clerk/nextjs";
-import { WithoutSystemFields } from "convex/server";
-import { Doc } from "@/convex/_generated/dataModel";
 
 import { TeamSelection } from "../(layout-components)/team-selection";
 import { JoinTeamModal } from "../(layout-components)/join-team-modal";
 import { CreateTeamModal } from "../(layout-components)/create-team-modal";
-/*
-  * NOTES *
-
-  + useQuery | useMutation +
-  # These functions allow us to use any of the functions built into the convex backend without API routes or even HTTP requests. Use these to handle all database operations.
-
-  + No HTTP Means No Suspense +
-  # Because suspense works by detecting the state of any http requests, using useQuery and useMutation avoids suspense entirely. This means loading states need to be handled manually.
-*/
 
 const UserProfilePage = () => {
-  const convexAuthState = useConvexAuth();
-  const clerkAuthState = useAuth();
-  const user = useQuery(api.users.getFromSession);
-  const teams = useQuery(api.teams.getAll);
-  console.log("teams: ", teams);
   const { isSignedIn, isLoaded, session } = useSession();
+  const user = useQuery(api.users.getFromSession);
 
   enum ModalType {
     JOIN = "join",
@@ -35,18 +20,13 @@ const UserProfilePage = () => {
   }
 
   const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
-
   const showJoinModal = () => setModalType(ModalType.JOIN);
   const showCreateModal = () => setModalType(ModalType.CREATE);
   const closeModal = () => setModalType(ModalType.NONE);
 
-  console.log("isSignedIn: ", isSignedIn);
-  console.log("isLoaded: ", isLoaded);
-  console.log("session: ", session);
-
   if (!isSignedIn || !isLoaded || !user) {
     return (
-      <div className="flex-center full !h-[40vh]">
+      <div className="flex-center h-40">
         <span className="loading loading-ring loading-lg scale-150"></span>
       </div>
     );
@@ -59,14 +39,12 @@ const UserProfilePage = () => {
         showJoinModal={showJoinModal}
         showCreateModal={showCreateModal}
       />
-
       {modalType === ModalType.JOIN && (
         <JoinTeamModal closeModal={closeModal} />
       )}
       {modalType === ModalType.CREATE && (
         <CreateTeamModal closeModal={closeModal} />
       )}
-
       <RequestInfoSection />
     </div>
   );
@@ -76,9 +54,8 @@ export default UserProfilePage;
 
 function UserInfoSection() {
   const user = useQuery(api.users.getFromSession);
-
   return (
-    <div className="USER_INFO">
+    <div>
       <h1 className="text-xl md:text-2xl font-bold">
         Welcome, <span className="text-accent">{user?.name}</span>
       </h1>
@@ -88,17 +65,37 @@ function UserInfoSection() {
 
 function RequestInfoSection() {
   const requests = useQuery(api.requests.getFromSessionByUser);
+  const teams = useQuery(api.teams.getAll);
 
-  return (
-    <div className="p-4 bg-white rounded-lg shadow-md">
-      <h1 className="mb-2 font-bold text-gray-800">Current Requests</h1>
-      <ul className="space-y-2">
-        {requests?.map((request: any) => (
-          <li key={request._id} className="text-gray-600">
-            {request._id}
+  const requestedTeamName = (request: any) =>
+    teams?.find((team: any) => team._id === request.requested_team_id)
+      ?.team_name;
+
+  const renderRequests = (requests: any) => {
+    return requests?.length > 0 ? (
+      <ul className="flex-col gap-4 w-full overflow-y-auto">
+        {requests.map((request: any) => (
+          <li
+            key={request._id}
+            className="flex items-center justify-between p-4 bg-slate-800 gap-2 w-full rounded-md"
+          >
+            <span className="font-semibold text-lg">
+              {requestedTeamName(request)}
+            </span>
           </li>
         ))}
       </ul>
+    ) : (
+      <h2 className="text-white text-lg font-semibold">
+        You have no pending requests.
+      </h2>
+    );
+  };
+
+  return (
+    <div className="p-4 bg-white rounded-lg shadow-md">
+      <h1 className="mb-2 font-bold text-gray-800">Pending Team Requests</h1>
+      {renderRequests(requests)}
     </div>
   );
 }

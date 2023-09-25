@@ -2,7 +2,7 @@ import React from "react";
 // import { useCreateRequestInDB } from "../(hooks)/convex/requests/useCreateRequest";
 // import { useUserContext } from "../(context)/user.context";
 import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react-internal";
+import { useQuery, useMutation } from "convex/react-internal";
 import { useGetRequestsByUserID } from "../(hooks)/convex/requests/useGetRequestsByUserID";
 
 interface JoinTeamModalProps {
@@ -13,10 +13,7 @@ export const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ closeModal }) => {
   const user = useQuery(api.users.getFromSession);
   const teams = useQuery(api.teams.getAll);
   const userId = user?._id;
-  const createTeamRequest = () => {
-    console.log("createTeamRequest");
-    const request = api.users.createRequest(userId);
-  };
+  const createRequest = useMutation(api.requests.createFromSession);
 
   // Uncomment when needed
   // const { createRequest, request, error } = useCreateRequestInDB();
@@ -52,9 +49,9 @@ export const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ closeModal }) => {
                 <button
                   className="btn btn-primary btn-md"
                   // Uncomment when function is ready
-                  // onClick={() => handleTeamRequest(team._id, userId)}
+                  onClick={() => createRequest({ team_id: team._id })}
                 >
-                  Join
+                  Request to Join
                 </button>
               </li>
             ))}
