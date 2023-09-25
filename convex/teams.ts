@@ -1,14 +1,18 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { getUserFromAuthSession } from "./lib/getUserFromAuthSession";
 
 export const create = mutation({
   args: {
     team_name: v.string(),
     user_id: v.id("users"),
   },
-  handler: async ({ db }, { team_name, user_id }) => {
+  handler: async (ctx, { team_name, user_id }) => {
+    
+    const { db } = ctx;
+
     // get user.
-    const user = await db.get(user_id);
+    const user = await getUserFromAuthSession(ctx)
 
     // check if user exists in db.
     if (!user) throw Error("User not found in database!");
@@ -25,7 +29,7 @@ export const create = mutation({
     // check if team name exists in db.
     if (existingTeamName) throw Error("Team name already taken!");
 
-    // TODO: Check if teams capacity has been reached.
+    // TODO: Check if total teams capacity has been reached.
 
     // Insert team into db.
     const teamId = await db.insert("teams", {
@@ -46,26 +50,39 @@ export const create = mutation({
   },
 });
 
-// TODO: Delete one of 'get' or 'getOne', then rename 'getAll' to get.
-
-export const get = query({
-  args: {
-    team_id: v.id("teams"),
-  },
-  handler: async ({ db }, { team_id }) => {
-    const team = await db.get(team_id);
-
-    if (!team) throw Error("Team not found in database!");
-
-    return team;
-  },
-});
 
 export const getAll = query(async ({ db }) => {
   return await db.query("teams").collect();
 });
 
-export const getOne = query({
+
+export const getFromSession = query(async (ctx) => {
+ 
+  const { db } = ctx;
+  
+  // get user.
+  const user = await getUserFromAuthSession(ctx)
+
+  // check if user exists in db.
+  if (!user) throw Error('Error finding user!')
+
+  // check if user has a team
+  if (!user.has_team) throw Error('User does not have a team!')
+
+  // get the current user's team entry.
+  const team = await db
+    .query("teams")
+    .filter((team) => team.eq(team.field("_id"), user?.team_id))
+    .unique();
+
+  // check if team exists
+  if (!team) throw Error('Error finding team!')
+
+  return team;
+});
+
+
+export const getByUserId = query({
   args: {
     user_id: v.string(),
   },
@@ -92,6 +109,19 @@ export const getOne = query({
     if (!existingTeam) throw Error("Team not found in database!");
 
     return existingTeam;
+  },
+});
+
+export const getByTeamId = query({
+  args: {
+    team_id: v.id("teams"),
+  },
+  handler: async ({ db }, { team_id }) => {
+    const team = await db.get(team_id);
+
+    if (!team) throw Error("Team not found in database!");
+
+    return team;
   },
 });
 
@@ -140,7 +170,60 @@ export const addMember = mutation({
   },
 });
 
-// delete user from team if user is on team.
+export const removeMember = mutation({
+  args: {
+    team_id: v.id("teams"),
+    user_id: v.id("users"),
+  },
+  handler: async ({ db }, { team_id, user_id }) => {
+    // get user.
+    const user = await db.get(user_id);
+
+    // check if user exists in db.
+    if (!user) throw Error("User not found in database!");
+
+    // check if user is already attached to a team.
+    if (!user.has_team) throw Error("User has no team!");
+
+    // get team.
+    const team = await db.get(team_id);
+
+    // check if team exists.
+    if (!team) throw Error("Error finding team!");
+
+    // check if user is already on this team.
+    if (!team.members.includes(user_id)) throw Error("User is not on this team!");
+
+    // filter out user to remove.
+    const teamWithoutUser = team.members.filter(memberId => {
+      return memberId !== user_id
+    })
+  
+    // if user is captain set new captain.
+    if (user.is_captain) {
+      await db.patch(team._id, {
+        team_captain: teamWithoutUser[0] 
+      })
+    }
+
+    // update team.
+    await db.patch(team._id, {
+      members: teamWithoutUser
+    });
+
+    // update member
+    await db.patch(user._id, {
+      has_team: false,
+      is_captain: false,
+      team_id: null,
+      team_name: null,
+    });
+
+    const updatedTeam = await db.get(team_id);
+
+    return { team: updatedTeam, message: "Successfully removed!" };
+  },
+});
 
 export const destroy = mutation({
   args: {
