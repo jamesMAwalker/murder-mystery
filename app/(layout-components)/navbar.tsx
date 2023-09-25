@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect } from "react";
 import { UserButton } from "@clerk/nextjs/app-beta";
 import { useUser } from "@clerk/clerk-react";
@@ -6,8 +7,7 @@ import Link from "next/link";
 
 import { useCreateUserInDB } from "../(hooks)/convex/users/useCreateUserInDB";
 
-// Dummy data for notifications
-const notifications = ["test", "test2"]; // Example with 2 notifications for now
+// TODO: Move user creation to signin/singup pages.
 
 export const Navbar = () => {
   const { isSignedIn, user } = useUser();
@@ -15,10 +15,10 @@ export const Navbar = () => {
 
   useEffect(() => {
     if (isSignedIn && user.id) {
-      const newConvexUser: IConvexUser = {
-        user_id: user.id,
-        name: user.fullName,
-        email: user.primaryEmailAddress?.emailAddress,
+      const newConvexUser = {
+        user_id: user.id!,
+        name: user.fullName!,
+        email: user.primaryEmailAddress?.emailAddress!,
         has_team: false,
         team_name: null,
         team_id: null,

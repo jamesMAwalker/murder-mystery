@@ -1,195 +1,141 @@
-import { mutation, query } from './_generated/server'
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-
 
 export const create = mutation({
   args: {
     team_name: v.string(),
-    user_id: v.id('users')
+    user_id: v.id("users"),
   },
   handler: async ({ db }, { team_name, user_id }) => {
-
     // get user.
-    const user = await db.get(user_id)
+    const user = await db.get(user_id);
 
     // check if user exists in db.
-    if (!user) throw Error('User not found in database!')
+    if (!user) throw Error("User not found in database!");
 
     // check if user has a team.
-    if (user.has_team) throw Error('User already has a team!')
+    if (user.has_team) throw Error("User already has a team!");
 
     // get team.
-    const existingTeamName = await db.query('teams').filter(team => team.eq(team.field("team_name"), team_name)).unique()
+    const existingTeamName = await db
+      .query("teams")
+      .filter((team) => team.eq(team.field("team_name"), team_name))
+      .unique();
 
     // check if team name exists in db.
-    if (existingTeamName) throw Error('Team name already taken!')
+    if (existingTeamName) throw Error("Team name already taken!");
 
     // TODO: Check if teams capacity has been reached.
 
     // Insert team into db.
-    const teamId = await db.insert('teams', {
+    const teamId = await db.insert("teams", {
       team_name,
       team_captain: user._id,
-      members: [user._id]
-    })
+      members: [user._id],
+    });
 
     // Update team fields of all added members.
-    await db.patch(user._id, { has_team: true, team_name, team_id: teamId })
-
+    await db.patch(user._id, { has_team: true, team_name, team_id: teamId });
 
     return user;
-  }
-})
+  },
+});
 
-// TODO: Delete one of 'get' or 'getOne', then rename 'getAll' to get. 
+// TODO: Delete one of 'get' or 'getOne', then rename 'getAll' to get.
 
 export const get = query({
   args: {
-    team_id: v.id('teams')
+    team_id: v.id("teams"),
   },
   handler: async ({ db }, { team_id }) => {
-    const team = await db.get(team_id)
+    const team = await db.get(team_id);
 
-    if (!team) throw Error('Team not found in database!')
+    if (!team) throw Error("Team not found in database!");
 
     return team;
-
-  }
-})
+  },
+});
 
 export const getAll = query(async ({ db }) => {
-  return await db.query("teams").collect()
-})
+  return await db.query("teams").collect();
+});
 
 export const getOne = query({
   args: {
-    user_id: v.string()
+    user_id: v.string(),
   },
   handler: async ({ db }, { user_id }) => {
-
     // get user.
-    const user = await db.query('users')
-      .filter(user => user.eq(user.field("user_id"), user_id))
-      .unique()
+    const user = await db
+      .query("users")
+      .filter((user) => user.eq(user.field("user_id"), user_id))
+      .unique();
 
     // check if user exists in db.
-    if (!user) throw Error('User not found in database!')
+    if (!user) throw Error("User not found in database!");
 
     // check if user has team.
-    if (!user.has_team) throw Error('User has no team!')
+    if (!user.has_team) throw Error("User has no team!");
 
     // get team.
-    const existingTeam = await db.query('teams').filter(team => team.eq(team.field("_id"), user.team_id)).unique()
+    const existingTeam = await db
+      .query("teams")
+      .filter((team) => team.eq(team.field("_id"), user.team_id))
+      .unique();
 
     // check if team exists in db.
-    if (!existingTeam) throw Error('Team not found in database!')
+    if (!existingTeam) throw Error("Team not found in database!");
 
     return existingTeam;
-  }
-})
+  },
+});
 
 export const addMember = mutation({
   args: {
-    team_id: v.id('teams'),
-    user_id: v.id('users')
+    team_id: v.id("teams"),
+    user_id: v.id("users"),
   },
   handler: async ({ db }, { team_id, user_id }) => {
-
     // get user.
-    const user = await db.get(user_id)
+    const user = await db.get(user_id);
 
     // check if user exists in db.
-    if (!user) throw 'User not found in database!'
+    if (!user) throw "User not found in database!";
 
     // check if user is already attached to a team.
-    if (user.has_team) throw 'User already on a team!'
+    if (user.has_team) throw "User already on a team!";
 
     // get team.
-    const team = await db.get(team_id)
+    const team = await db.get(team_id);
 
     // check if team exists.
-    if (!team) throw 'Error finding team!'
+    if (!team) throw "Error finding team!";
 
     // check if team has capacity.
-    if (team?.members.length >= 10) throw 'Team already has max members!'
+    if (team?.members.length >= 10) throw "Team already has max members!";
 
     // check if user is already on this team.
-    if (team.members.includes(user_id)) throw 'User is already on this team!'
+    if (team.members.includes(user_id)) throw "User is already on this team!";
 
     // update team.
     await db.patch(team._id, {
-      members: [...team.members, user._id]
-    })
+      members: [...team.members, user._id],
+    });
 
     // update member
     await db.patch(user._id, {
       has_team: true,
       team_id: team._id,
-      team_name: team.team_name
-    })
+      team_name: team.team_name,
+    });
 
-    const updatedTeam = await db.get(team_id)
+    const updatedTeam = await db.get(team_id);
 
-    return { team: updatedTeam, message: 'Successfully added!' };
-
-  }
-})
-
-export const removeMember = mutation({
-  args: {
-    team_id: v.id('teams'),
-    user_id: v.id('users')
+    return { team: updatedTeam, message: "Successfully added!" };
   },
-  handler: async ({ db }, { team_id, user_id }) => {
+});
 
-    // get user.
-    const user = await db.get(user_id)
-
-    // check if user exists in db.
-    if (!user) throw Error('User not found in database!')
-
-    // check if user is already without a team.
-    if (!user.has_team) throw Error('User has no team!')
-
-    // get team.
-    const team = await db.get(team_id)
-
-    // check if team exists.
-    if (!team) throw Error('Team not found in database!')
-
-    // check if user is not on this team.
-    if (!team.members.includes(user_id)) throw Error('User is not on this team!')
-
-    // check if user is captain; set as captain first member that is not captain.
-    if (user_id === team.team_captain) {
-      const newCaptain = team.members.filter(member => {
-        return member !== team.team_captain
-      }).at(0)
-
-      db.patch(team_id, {
-        team_captain: newCaptain
-      })
-    }
-
-    // update team.
-    await db.patch(team_id, {
-      members: team.members.filter(member_id => member_id !== user_id)
-    })
-
-    // update member.
-    await db.patch(user_id, {
-      has_team: false,
-      team_id: null,
-      team_name: null
-    })
-
-    // get team after update.
-    const updatedTeam = await db.get(team_id)
-
-    return { team: updatedTeam, message: 'Successfully removed!' };
-
-  }
-})
+// delete user from team if user is on team.
 
 export const destroy = mutation({
   args: {
@@ -234,17 +180,17 @@ export const destroy = mutation({
 
   - requestJoinTeam
   # Needs: 'user_id', 'team_id'
-  # Flow: Check that user's 'has_team' field is false. Send a request 
-  
+  # Flow: Check that user's 'has_team' field is false. Send a request
+
   - addMember -
   # Needs: 'team_id', 'user_id'
-  # Flow: Get entry for 'user_id'. If 'has_team' is false, proceed to get the entry for 'team_id'. Perform a patch operation to add the user to the 'members' array on the team entry. If successful, set added user's 'team_id', 'team_name' with values from the team entry. Set user's 'has_team' flag to true. 
+  # Flow: Get entry for 'user_id'. If 'has_team' is false, proceed to get the entry for 'team_id'. Perform a patch operation to add the user to the 'members' array on the team entry. If successful, set added user's 'team_id', 'team_name' with values from the team entry. Set user's 'has_team' flag to true.
 
   - removeMember -
   # Needs: 'team_id', 'user_id'
   # Flow: Only an admin or the user can remove themselves from a team. Get the team entry with 'team_id', and filter the 'members' list for non-matching 'user_id'. Patch the memebers array with the result of the filter.
 
-  - deleteTeam - 
+  - deleteTeam -
   # Needs: 'team_id', 'user_id'
   # Flow: Only team leader can delete team. Get team with 'team_id'. Get user with 'user_id'. If team & user exist in db and 'user._id' matches 'team_captain', update 'has_team', 'team_id', and 'team_name' fields on all users. If successful, delete team entry from db.
 
