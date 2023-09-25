@@ -7,6 +7,51 @@ export const create = mutation({
     team_name: v.string(),
     user_id: v.id("users"),
   },
+  handler: async ({ db }, { team_name, user_id }) => {
+    
+    const user = await db.get(user_id)
+
+    // check if user exists in db.
+    if (!user) throw Error("User not found in database!");
+
+    // check if user has a team.
+    if (user.has_team) throw Error("User already has a team!");
+
+    // get team.
+    const existingTeamName = await db
+      .query("teams")
+      .filter((team) => team.eq(team.field("team_name"), team_name))
+      .unique();
+
+    // check if team name exists in db.
+    if (existingTeamName) throw Error("Team name already taken!");
+
+    // TODO: Check if total teams capacity has been reached.
+
+    // Insert team into db.
+    const teamId = await db.insert("teams", {
+      team_name,
+      team_captain: user._id,
+      members: [user._id],
+    });
+
+    // Update team fields of all added members.
+    await db.patch(user._id, {
+      is_captain: true,
+      has_team: true,
+      team_name,
+      team_id: teamId
+    })
+
+    return user;
+  },
+});
+
+export const createFromSession = mutation({
+  args: {
+    team_name: v.string(),
+    user_id: v.id("users"),
+  },
   handler: async (ctx, { team_name, user_id }) => {
     
     const { db } = ctx;
