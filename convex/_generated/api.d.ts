@@ -15,6 +15,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as invitations from "../invitations";
+import type * as lib_getUserFromAuthSession from "../lib/getUserFromAuthSession";
 import type * as notes from "../notes";
 import type * as requests from "../requests";
 import type * as teams from "../teams";
@@ -30,6 +31,7 @@ import type * as users from "../users";
  */
 declare const fullApi: ApiFromModules<{
   invitations: typeof invitations;
+  "lib/getUserFromAuthSession": typeof lib_getUserFromAuthSession;
   notes: typeof notes;
   requests: typeof requests;
   teams: typeof teams;
