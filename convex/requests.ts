@@ -6,6 +6,53 @@ import { getUserFromAuthSession } from './lib/getUserFromAuthSession';
 export const create = mutation({
   args: {
     team_id: v.id('teams'),
+    user_id: v.id('users')
+  },
+  handler: async ({ db }, { team_id, user_id }) => {
+    
+    const user = await db.get(user_id)
+
+    // check if user exists in db.
+    if (!user) throw Error('Error finding user!')
+
+    // check if user is already attached to a team.
+    if (user.has_team) throw Error('User already on a team!')
+
+    // check if user has already made a request to this team (entry with both team_id & user_id exists).
+    const existingRequests = await db.query('requests')
+      .filter(request => {
+        return (
+          request.eq(request.field("requested_team_id"), team_id) &&
+          request.eq(request.field("requesting_user_id"), user_id)
+        )
+      })
+      .collect()
+
+    if (existingRequests.length > 0) throw Error('You have already requested to join this team!')
+
+    // get team.
+    const team = await db.get(team_id)
+
+    // check if team exists
+    if (!team) throw Error('Error finding team!')
+
+    // check if team has capacity
+    if (team?.members.length >= 10) throw Error('Team already has max members!')
+
+    const request = await db.insert('requests', {
+      requesting_user_id: user._id,
+      requested_team_id: team._id,
+      accepted: false
+    })
+
+    return request;
+
+  }
+})
+
+export const createFromSession = mutation({
+  args: {
+    team_id: v.id('teams'),
   },
   handler: async (ctx, { team_id }) => {
     
@@ -59,9 +106,6 @@ export const getFromSessionByUser = query({
 
     // get user from db using clerk auth session.
     const user = await getUserFromAuthSession(ctx)
-    
-    // check if user exists.
-    if (!user) throw new Error('User not found in databse.')
     
     // get requests using user's database id.
     const userRequests = await db.query('requests')
