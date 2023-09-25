@@ -4,6 +4,7 @@ declare interface IConvexUser {
   name: string | null | undefined;
   email: string | undefined;
   has_team: boolean;
+  is_captain: boolean;
   team_id: string | null;
   team_name: string | null;
 }

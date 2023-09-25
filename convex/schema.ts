@@ -7,6 +7,7 @@ export default defineSchema({
     name: v.string(),
     email: v.string(),
     has_team: v.boolean(),
+    is_captain: v.boolean(),
     team_id: v.union(v.string(), v.null()),
     team_name: v.union(v.string(), v.null()),
   }),

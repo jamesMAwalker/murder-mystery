@@ -25,6 +25,7 @@ export const Navbar = () => {
         name: user.fullName!,
         email: user.primaryEmailAddress?.emailAddress!,
         has_team: false,
+        is_captain: false,
         team_name: null,
         team_id: null,
       }
