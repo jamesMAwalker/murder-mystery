@@ -1,99 +1,104 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useSession } from "@clerk/nextjs";
-import { useUserContext } from "../(context)/user.context";
-import { useGameContext } from "../(context)/game.context";
+import React, { useState } from "react";
+import { api } from "@/convex/_generated/api";
+import { useConvexAuth, useMutation, useQuery } from "convex/react-internal";
+import { useAuth, useSession } from "@clerk/nextjs";
+import { WithoutSystemFields } from "convex/server";
+import { Doc } from "@/convex/_generated/dataModel";
 
-import { TeamButtons } from "../(layout-components)/team-buttons";
+import { TeamSelection } from "../(layout-components)/team-selection";
 import { JoinTeamModal } from "../(layout-components)/join-team-modal";
 import { CreateTeamModal } from "../(layout-components)/create-team-modal";
-// import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
+/*
+  * NOTES *
+
+  + useQuery | useMutation +
+  # These functions allow us to use any of the functions built into the convex backend without API routes or even HTTP requests. Use these to handle all database operations.
+
+  + No HTTP Means No Suspense +
+  # Because suspense works by detecting the state of any http requests, using useQuery and useMutation avoids suspense entirely. This means loading states need to be handled manually.
+*/
 
 const UserProfilePage = () => {
-  // user data from convex db
-  const {
-    user,
-    loggedUser,
-    activeProfileModal,
-    showProfileModal,
-    hideProfileModal,
-    setLoggedUser,
-  } = useUserContext();
+  const convexAuthState = useConvexAuth();
+  const clerkAuthState = useAuth();
+  const user = useQuery(api.users.getFromSession);
+  const teams = useQuery(api.teams.getAll);
+  console.log("teams: ", teams);
+  const { isSignedIn, isLoaded, session } = useSession();
 
-  // users and teams data from convex db
-  const { users, teams } = useGameContext();
+  enum ModalType {
+    JOIN = "join",
+    CREATE = "create",
+    NONE = "none",
+  }
 
-  // session data from clerk
-  const { isLoaded, isSignedIn } = useSession();
+  const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
 
-  // modal function to satisfy typescript
+  const showJoinModal = () => setModalType(ModalType.JOIN);
+  const showCreateModal = () => setModalType(ModalType.CREATE);
+  const closeModal = () => setModalType(ModalType.NONE);
 
-  // const fetchedUser = useGetUserFromDB();
+  console.log("isSignedIn: ", isSignedIn);
+  console.log("isLoaded: ", isLoaded);
+  console.log("session: ", session);
 
-  // const [hasTeam, setHasTeam] = useState<boolean | null>(
-  //   user?.has_team || null
-  // );
-
-  // useEffect(() => {
-  //   if (fetchedUser) {
-  //     console.log("fetchedUser: ", fetchedUser);
-  //     setLoggedUser(fetchedUser);
-  //     setHasTeam(fetchedUser.has_team);
-  //   }
-  // }, [fetchedUser]);
-
-  useEffect(() => {
-    // check for returned user data from convex db
-    if (user) {
-      // set local state with user data
-      setLoggedUser(user);
-
-      // setHasTeam(user.has_team);
-    }
-  }, [user]);
-
-  // check that clerk session is loaded and user is signed in
-  if (!isLoaded || !isSignedIn || !loggedUser) {
+  if (!isSignedIn || !isLoaded || !user) {
     return (
-      <div className="flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
+      <div className="flex-center full !h-[40vh]">
+        <span className="loading loading-ring loading-lg scale-150"></span>
       </div>
     );
   }
 
-  /*
-    * User Profile UI Elements
-    # User Info: Should show user's: name, email, team name (if on team).
-    # Action Buttons:
-    - If not on team: Should show buttons: Join Team, Create Team
-      > Each of these opens a dropdown with a list of joinable teams (not full).
-    - If on team: Should show buttons: Add Member, Leave Team
-      > Add member shows a dropdown with a list of unattached participants.
-
-    # If you think of anything else, feel free to add!
-  */
-
   return (
-    <div className="relative bg-slate-800 p-4 sm:p-6 rounded-lg shadow-md">
-      {loggedUser && (
-        <div className="flex flex-col gap-6 items-center">
-          <div className="flex flex-col gap-2 w-full">
-            <p className="text-white text-xl sm:text-2xl font-semibold">
-              {loggedUser.name}
-            </p>
-            <p className="text-white text-base sm:text-lg">
-              {loggedUser.email}
-            </p>
-            <TeamButtons />
-          </div>
+    <div className="my-4 md:my-8 space-y-4 md:space-y-6 bg-slate-800 rounded-lg shadow-md p-2 md:p-4">
+      <UserInfoSection />
+      <TeamSelection
+        showJoinModal={showJoinModal}
+        showCreateModal={showCreateModal}
+      />
 
-          {teams && Array.isArray(teams) && <JoinTeamModal />}
-          <CreateTeamModal />
-        </div>
+      {modalType === ModalType.JOIN && (
+        <JoinTeamModal closeModal={closeModal} />
       )}
+      {modalType === ModalType.CREATE && (
+        <CreateTeamModal closeModal={closeModal} />
+      )}
+
+      <RequestInfoSection />
     </div>
   );
 };
 
 export default UserProfilePage;
+
+function UserInfoSection() {
+  const user = useQuery(api.users.getFromSession);
+
+  return (
+    <div className="USER_INFO">
+      <h1 className="text-xl md:text-2xl font-bold">
+        Welcome, <span className="text-accent">{user?.name}</span>
+      </h1>
+    </div>
+  );
+}
+
+function RequestInfoSection() {
+  const requests = useQuery(api.requests.getFromSessionByUser);
+
+  return (
+    <div className="p-4 bg-white rounded-lg shadow-md">
+      <h1 className="mb-2 font-bold text-gray-800">Current Requests</h1>
+      <ul className="space-y-2">
+        {requests?.map((request: any) => (
+          <li key={request._id} className="text-gray-600">
+            {request._id}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
