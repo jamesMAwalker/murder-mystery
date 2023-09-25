@@ -35,7 +35,12 @@ export const create = mutation({
     });
 
     // Update team fields of all added members.
-    await db.patch(user._id, { has_team: true, team_name, team_id: teamId });
+    await db.patch(user._id, {
+      is_captain: true,
+      has_team: true,
+      team_name,
+      team_id: teamId
+    })
 
     return user;
   },
