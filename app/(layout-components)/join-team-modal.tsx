@@ -1,53 +1,59 @@
 import React from "react";
 import { useCreateRequestInDB } from "../(hooks)/convex/requests/useCreateRequest";
 import { useUserContext } from "../(context)/user.context";
-import { useGameContext } from "../(context)/game.context";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react-internal";
 import { useGetRequestsByUserID } from "../(hooks)/convex/requests/useGetRequestsByUserID";
 
-export const JoinTeamModal: React.FC = () => {
-  const { loggedUser, activeProfileModal, hideProfileModal } = useUserContext();
-  const { teams } = useGameContext();
+interface JoinTeamModalProps {
+  closeModal: () => void;
+}
 
-  const userId = loggedUser?._id || undefined;
+export const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ closeModal }) => {
+  const user = useQuery(api.users.getFromSession);
+  const teams = useQuery(api.teams.getAll);
+  console.log("teams: ", teams);
+
+  const userId = user?._id || undefined;
   console.log("userId: ", userId);
 
   const requests = useGetRequestsByUserID(userId);
   console.log("requests: ", requests);
 
-  const { createRequest, request, error } = useCreateRequestInDB();
+  // const { createRequest, request, error } = useCreateRequestInDB();
 
-  const filteredTeamsByExistingRequest = teams?.filter((team: any) => {
-    if (Array.isArray(requests)) {
-      const hasNoExistingRequest = requests?.some(
-        (request) => request.requested_team_id !== team._id
-      );
-      return hasNoExistingRequest;
-    }
-  });
+  // const filteredTeamsByExistingRequest = teams?.filter((team: any) => {
+  //   if (Array.isArray(requests)) {
+  //     const hasNoExistingRequest = requests?.some(
+  //       (request) => request.requested_team_id !== team._id
+  //     );
+  //     return hasNoExistingRequest;
+  //   }
+  // });
 
-  const teamsWithAvailableSpots = filteredTeamsByExistingRequest?.filter(
-    (team: any) => team.members.length <= 10
-  );
+  // const teamsWithAvailableSpots = filteredTeamsByExistingRequest?.filter(
+  //   (team: any) => team.members.length <= 10
+  // );
 
-  if (activeProfileModal !== "join-team-modal" || !teams || !userId) {
+  if (!teams || !userId) {
     return null;
   }
 
-  const handleTeamRequest = (team_id: string, user_id: string) => {
-    createRequest(team_id, user_id);
-    hideProfileModal();
-  };
+  // const handleTeamRequest = (team_id: string, user_id: string) => {
+  //   createRequest(team_id, user_id);
+  //   hideProfileModal();
+  // };
 
   return (
     <div className="flex-col-tl bg-black gap-4 !fixed w-screen h-screen z-10 inset-0 p-4">
       <button
         className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-        onClick={hideProfileModal}
+        onClick={closeModal}
       >
         &times;
       </button>
       <h3 className="font-bold text-lg">Available Teams</h3>
-      {teams && teams.length > 0 && (
+      {/* {teams && teams.length > 0 && (
         <ul className=" flex-col-tl gap-4 w-full overflow-scroll">
           {teamsWithAvailableSpots?.map((team: any) => (
             <li
@@ -64,7 +70,7 @@ export const JoinTeamModal: React.FC = () => {
             </li>
           ))}
         </ul>
-      )}
+      )} */}
     </div>
   );
 };
