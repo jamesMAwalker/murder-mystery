@@ -13,7 +13,7 @@ export const create = mutation({
     team_name: v.null(),
   },
   handler: async ({ db }, args) => {
-    
+
     // check if email exists in db.
     const existingUser = await db
       .query("users")
@@ -24,7 +24,6 @@ export const create = mutation({
     if (existingUser) {
       return { message: 'Existing user found.', user: existingUser }
     }
-
 
     // check if id exists in db.
     const existingId = await db
@@ -62,7 +61,7 @@ export const getFromSession = query({
   }
 })
 
-export const getById = query({
+export const getByClerkId = query({
   args: { user_id: v.string() },
   handler: async ({ db }, args) => {
     const user = await db
@@ -79,6 +78,10 @@ export const getById = query({
 export const getByConvexId = query({
   args: { user_id: v.id('users') },
   handler: async ({ db }, { user_id }) => {
-    return await db.get(user_id)
+    const user = await db.get(user_id)
+    
+    if (!user) throw Error('User not found in database!')
+    
+    return user
   }
 })
