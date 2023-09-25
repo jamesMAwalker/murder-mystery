@@ -1,5 +1,6 @@
 import { mutation, query } from './_generated/server'
 import { v } from "convex/values";
+import { getUserFromAuthSession } from './lib/getUserFromAuthSession';
 
 
 export const create = mutation({
@@ -50,29 +51,42 @@ export const create = mutation({
   }
 })
 
-export const getByUserId = query({
+export const getFromSessionByUser = query({
   handler: async (ctx) => {
     
-    const { db, auth } = ctx
+    const { db } = ctx
 
-    // get user from auth
-    const clerk_user = await auth.getUserIdentity()
-
-    const clerkId = clerk_user?.subject // subject is the user ID
-
-    // get user from db with clerk id
-    const user = await db
-      .query('users')
-      .filter(user => user.eq(user.field("user_id"), clerkId))
-      .unique()
-
+    // get user from db using clerk auth session.
+    const user = await getUserFromAuthSession(ctx)
+    
+    // check if user exists.
+    if (!user) throw new Error('User not found in databse.')
+    
+    // get requests using user's database id.
     const userRequests = await db.query('requests')
       .filter(request => request.eq(request.field("requesting_user_id"), user?._id))
       .collect()
 
-    if (!userRequests) throw Error('No requests found!')
-
     return userRequests;
+
+  }
+})
+
+export const getFromSessionByTeam = query({
+  handler: async (ctx) => {
+    const { db } = ctx
+
+    // get user from session.
+    const user = await getUserFromAuthSession(ctx)
+
+    // get requests by team id.
+    const teamRequests = await db.query('requests')
+      .filter(request => request.eq(request.field("requested_team_id"), user?.team_id))
+      .collect()
+
+    if (!teamRequests) return { status: 200, message: 'No requests found.' }
+
+    return teamRequests;
 
   }
 })
