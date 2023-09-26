@@ -6,11 +6,15 @@ import React from "react";
 interface TeamSelectionProps {
   showJoinModal: () => void;
   showCreateModal: () => void;
+  showAddModal: () => void;
+  showLeaveModal: () => void;
 }
 
 export const TeamSelection: React.FC<TeamSelectionProps> = ({
   showJoinModal,
   showCreateModal,
+  showAddModal,
+  showLeaveModal,
 }) => {
   const user = useQuery(api.users.getFromSession);
 
@@ -30,10 +34,16 @@ export const TeamSelection: React.FC<TeamSelectionProps> = ({
       <div className="flex flex-col gap-4 w-full">
         <h2 className="text-white text-lg font-semibold">Team: {team}</h2>
         <div className="flex flex-col sm:flex-row gap-4">
-          <button className="btn btn-primary w-full sm:w-auto">
+          <button
+            className="btn btn-primary w-full sm:w-auto"
+            onClick={() => showAddModal()}
+          >
             Add Member
           </button>
-          <button className="btn btn-accent w-full sm:w-auto">
+          <button
+            className="btn btn-accent w-full sm:w-auto"
+            onClick={() => showLeaveModal()}
+          >
             Leave Team
           </button>
         </div>

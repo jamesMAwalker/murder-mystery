@@ -8,20 +8,26 @@ import { useAuth, useSession } from "@clerk/nextjs";
 import { TeamSelection } from "../(layout-components)/team-selection";
 import { JoinTeamModal } from "../(layout-components)/join-team-modal";
 import { CreateTeamModal } from "../(layout-components)/create-team-modal";
+import { AddMemberModal } from "../(layout-components)/add-member-modal";
+import { LeaveTeamModal } from "../(layout-components)/leave-team-modal";
 
 const UserProfilePage = () => {
-  const { isSignedIn, isLoaded, session } = useSession();
+  const { isSignedIn, isLoaded } = useSession();
   const user = useQuery(api.users.getFromSession);
 
   enum ModalType {
     JOIN = "join",
     CREATE = "create",
+    ADD = "add",
+    LEAVE = "leave",
     NONE = "none",
   }
 
   const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
   const showJoinModal = () => setModalType(ModalType.JOIN);
   const showCreateModal = () => setModalType(ModalType.CREATE);
+  const showAddModal = () => setModalType(ModalType.ADD);
+  const showLeaveModal = () => setModalType(ModalType.LEAVE);
   const closeModal = () => setModalType(ModalType.NONE);
 
   if (!isSignedIn || !isLoaded || !user) {
@@ -38,12 +44,20 @@ const UserProfilePage = () => {
       <TeamSelection
         showJoinModal={showJoinModal}
         showCreateModal={showCreateModal}
+        showAddModal={showAddModal}
+        showLeaveModal={showLeaveModal}
       />
       {modalType === ModalType.JOIN && (
         <JoinTeamModal closeModal={closeModal} />
       )}
       {modalType === ModalType.CREATE && (
         <CreateTeamModal closeModal={closeModal} />
+      )}
+      {modalType === ModalType.ADD && (
+        <AddMemberModal closeModal={closeModal} />
+      )}
+      {modalType === ModalType.LEAVE && (
+        <LeaveTeamModal closeModal={closeModal} />
       )}
       <RequestInfoSection />
     </div>

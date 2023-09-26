@@ -8,8 +8,7 @@ export const create = mutation({
     user_id: v.id("users"),
   },
   handler: async ({ db }, { team_name, user_id }) => {
-    
-    const user = await db.get(user_id)
+    const user = await db.get(user_id);
 
     // check if user exists in db.
     if (!user) throw Error("User not found in database!");
@@ -40,8 +39,8 @@ export const create = mutation({
       is_captain: true,
       has_team: true,
       team_name,
-      team_id: teamId
-    })
+      team_id: teamId,
+    });
 
     return user;
   },
@@ -53,11 +52,10 @@ export const createFromSession = mutation({
     user_id: v.id("users"),
   },
   handler: async (ctx, { team_name, user_id }) => {
-    
     const { db } = ctx;
 
     // get user.
-    const user = await getUserFromAuthSession(ctx)
+    const user = await getUserFromAuthSession(ctx);
 
     // check if user exists in db.
     if (!user) throw Error("User not found in database!");
@@ -88,31 +86,30 @@ export const createFromSession = mutation({
       is_captain: true,
       has_team: true,
       team_name,
-      team_id: teamId
-    })
+      team_id: teamId,
+    });
 
     return user;
   },
 });
 
-
 export const getAll = query(async ({ db }) => {
   return await db.query("teams").collect();
 });
 
-
 export const getFromSession = query(async (ctx) => {
- 
   const { db } = ctx;
-  
+
   // get user.
-  const user = await getUserFromAuthSession(ctx)
+  const user = await getUserFromAuthSession(ctx);
 
   // check if user exists in db.
-  if (!user) throw Error('Error finding user!')
+  if (!user) throw Error("Error finding user!");
 
   // check if user has a team
-  if (!user.has_team) throw Error('User does not have a team!')
+  if (!user.has_team) return null;
+
+  // throw Error("User does not have a team!");
 
   // get the current user's team entry.
   const team = await db
@@ -121,11 +118,10 @@ export const getFromSession = query(async (ctx) => {
     .unique();
 
   // check if team exists
-  if (!team) throw Error('Error finding team!')
+  if (!team) throw Error("Error finding team!");
 
   return team;
 });
-
 
 export const getByUserId = query({
   args: {
@@ -237,23 +233,39 @@ export const removeMember = mutation({
     if (!team) throw Error("Error finding team!");
 
     // check if user is already on this team.
-    if (!team.members.includes(user_id)) throw Error("User is not on this team!");
+    if (!team.members.includes(user_id))
+      throw Error("User is not on this team!");
 
     // filter out user to remove.
-    const teamWithoutUser = team.members.filter(memberId => {
-      return memberId !== user_id
-    })
-  
-    // if user is captain set new captain.
-    if (user.is_captain) {
-      await db.patch(team._id, {
-        team_captain: teamWithoutUser[0] 
-      })
+    const teamWithoutUser = team.members.filter(
+      (memberId) => memberId !== user_id
+    );
+
+    // Check if the team has only one member left.
+    if (teamWithoutUser.length === 0) {
+      await db.delete(team._id); // Delete the team
+
+      // Update the member's team details to null
+      await db.patch(user._id, {
+        has_team: false,
+        is_captain: false,
+        team_id: null,
+        team_name: null,
+      });
+
+      return { message: "Team deleted since there are no more members!" };
     }
 
-    // update team.
+    // if user is captain set new captain.
+    if (user.is_captain && teamWithoutUser.length) {
+      await db.patch(team._id, {
+        team_captain: teamWithoutUser[0],
+      });
+    }
+
+    // Update the team members list.
     await db.patch(team._id, {
-      members: teamWithoutUser
+      members: teamWithoutUser,
     });
 
     // update member
@@ -272,31 +284,30 @@ export const removeMember = mutation({
 
 export const destroy = mutation({
   args: {
-    team_id: v.id('teams'),
+    team_id: v.id("teams"),
   },
   handler: async ({ db }, { team_id }) => {
-
     // get request.
-    const teamToDestroy = await db.get(team_id)
+    const teamToDestroy = await db.get(team_id);
 
     // check if request exists in db.
-    if (!teamToDestroy) throw Error('Team not found!')
+    if (!teamToDestroy) throw Error("Team not found!");
 
     // for all members reset team related fields
-    teamToDestroy.members.forEach(memberId => {
+    teamToDestroy.members.forEach((memberId) => {
       db.patch(memberId, {
         has_team: false,
         team_id: null,
-        team_name: null
-      })
-    })
+        team_name: null,
+      });
+    });
 
     // delete team.
-    await db.delete(team_id)
+    await db.delete(team_id);
 
-    return 'Team deleted!';
-  }
-})
+    return "Team deleted!";
+  },
+});
 
 /*
 
