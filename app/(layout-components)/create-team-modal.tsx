@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useCreateTeamInDB } from "../(hooks)/convex/teams/useCreateTeamInDB";
-import { useUserContext } from "../(context)/user.context";
 import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react-internal";
+import { useQuery, useMutation } from "convex/react-internal";
 
 interface CreateTeamModalProps {
   closeModal: () => void;
@@ -12,39 +10,23 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
   closeModal,
 }) => {
   const user = useQuery(api.users.getFromSession);
-  const teams = useQuery(api.teams.getAll);
+  const createTeam = useMutation(api.teams.createFromSession);
   const [teamName, setTeamName] = useState("");
   console.log("teamName: ", teamName);
   const modalRef = useRef<HTMLInputElement | null>(null);
-
-  // useEffect(() => {
-  //   if (activeProfileModal === "create-team-modal") {
-  //     modalRef.current?.focus();
-  //   }
-  // }, [activeProfileModal]);
 
   const handleTeamNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTeamName(e.target.value);
   };
 
-  const handleCreateTeamSubmit = () => {
+  const handleCreateTeamSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!user?._id) return;
+
+    // createTeam(teamName, loggedUser._id);
+    createTeam({ team_name: teamName, user_id: user._id });
+    closeModal();
   };
-
-  // const handleCreateTeamSubmit = async (
-  //   e: React.FormEvent<HTMLFormElement>
-  // ) => {
-  //   e.preventDefault();
-  //   if (!user?._id) return;
-
-  //   createTeam(teamName, loggedUser._id);
-
-  //   const updatedUser = { ...loggedUser, has_team: true, team_name: teamName };
-
-  //   setLoggedUser(updatedUser);
-  //   setTeamName("");
-  //   hideProfileModal();
-  // };
 
   if (!user) {
     return null;
@@ -61,7 +43,7 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
             ✕
           </button>
           <h3 className="font-bold text-xl mb-4">Create a Team</h3>
-          <form>
+          <form onSubmit={handleCreateTeamSubmit}>
             <div className="form-control w-full mb-4">
               <label className="label text-lg mb-2">
                 <span className="label-text">What is your team name?</span>
