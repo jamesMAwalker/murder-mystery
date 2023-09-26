@@ -35,12 +35,12 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
   return (
     <div className="flex flex-col items-center justify-start h-full bg-black !fixed w-screen h-screen z-10 inset-0 p-4">
       {user && (
-        <div className="modal-box bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-md mt-20">
+        <div className="modal-box bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-md mt-20 relative">
           <button
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={closeModal}
           >
-            ✕
+            &times;
           </button>
           <h3 className="font-bold text-xl mb-4">Create a Team</h3>
           <form onSubmit={handleCreateTeamSubmit}>
