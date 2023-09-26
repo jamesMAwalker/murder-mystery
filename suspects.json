@@ -1,0 +1,68 @@
+[
+  {
+    "user_id": null,
+    "suspect_name": "Josh",
+    "image_url": "https://res.cloudinary.com/jameswalker-work/image/upload/v1695659067/murder-mystery/jimb-big_sm1qev.png",
+    "home_country": "USA",
+    "gender": "male",
+    "age": "mid-thirties",
+    "occupation": "IT Enthusiast",
+    "bio": "Josh is an IT specialist who recently entered the field. He's known for his intelligence and love for board games, which he shares with Myles.",
+    "is_guilty": false
+  },
+  {
+    "user_id": null,
+    "suspect_name": "Jack",
+    "image_url": "https://res.cloudinary.com/jameswalker-work/image/upload/v1695659067/murder-mystery/jimb-big_sm1qev.png",
+    "home_country": "UK",
+    "gender": "male",
+    "age": "late-twenties",
+    "occupation": "University Professor",
+    "bio": "Jack grew up with a rough background in Ireland and learned to box with the gypsies. He is currently a professor at a local university, known for his Irish heritage, his love of beer being exceeded only by his love of family.",
+    "is_guilty": false
+  },
+  {
+    "user_id": null,
+    "suspect_name": "Myles",
+    "image_url": "https://res.cloudinary.com/jameswalker-work/image/upload/v1695659067/murder-mystery/jimb-big_sm1qev.png",
+    "home_country": "UK",
+    "gender": "male",
+    "age": "early-thirties",
+    "occupation": "Lagnuage Teacher",
+    "bio": "Myles is a well-spoken British language teacher, known for his quick wit and love for board games. He is the host of the party, and Tien is his wife.",
+    "is_guilty": false
+  },
+  {
+    "user_id": null,
+    "suspect_name": "Tien",
+    "image_url": "https://res.cloudinary.com/jameswalker-work/image/upload/v1695659067/murder-mystery/jimb-big_sm1qev.png",
+    "home_country": "Vietnam",
+    "gender": "female",
+    "age": "late-twenties",
+    "occupation": "Live Translator",
+    "bio": "Tien is Myles's wife, a Vietnamese woman. She works the graveyard shift as a live translator.",
+    "is_guilty": false
+  },
+  {
+    "user_id": null,
+    "suspect_name": "Huy",
+    "image_url": "https://res.cloudinary.com/jameswalker-work/image/upload/v1695659067/murder-mystery/jimb-big_sm1qev.png",
+    "home_country": "Vietnam",
+    "gender": "male",
+    "age": "mid-twenties",
+    "occupation": "Student",
+    "bio": "Devastatingly handsome but bored and unchallenged by life, mysterious. Part of a noire partnership with Linh.",
+    "is_guilty": false
+  },
+  {
+    "user_id": null,
+    "suspect_name": "Linh",
+    "image_url": "https://res.cloudinary.com/jameswalker-work/image/upload/v1695659067/murder-mystery/jimb-big_sm1qev.png",
+    "home_country": "Vietnam",
+    "gender": "female",
+    "age": "mid-twenties",
+    "occupation": "Student",
+    "bio": "Emanating barely controlled anger and violence, shrewd and calculating. Part of a noire partnership with Huy.",
+    "is_guilty": false
+  }
+]

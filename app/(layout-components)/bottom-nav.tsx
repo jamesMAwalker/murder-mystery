@@ -1,12 +1,5 @@
 'use client'
 
-/*
-  ! Current Issues:
-  # As nice as it seemed to have the bottom nav determine the round as well as the page, I'm thinking this might end up being more confusing to people.
-  # Instead of including a button for selecting the round, this component should only allow users to choose the current page.
-  # In light of this, should we instead make this a slider rather than a dropdown?
-*/
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -39,7 +32,7 @@ export const BottomNav = () => {
   }
 
   return (
-    <div className='fixed bottom-0 left-0 rounded-none collapse bg-primary w-full'>
+    <div className='hover:opacity-25 fixed z-50 bottom-0 left-0 rounded-none collapse bg-primary w-full'>
       <input onClick={() => setOpen(!open)} type='checkbox' className='peer' />
       <p className='collapse-title font-bold flex items-center justify-between bg-primary peer-checked:text-secondary-content'>
         <span>{pages[current].page}</span>
