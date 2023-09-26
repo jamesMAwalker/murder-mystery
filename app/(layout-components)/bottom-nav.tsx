@@ -32,7 +32,7 @@ export const BottomNav = () => {
   }
 
   return (
-    <div className='hover:opacity-25 fixed z-50 bottom-0 left-0 rounded-none collapse bg-primary w-full'>
+    <div className='fixed z-50 bottom-0 left-0 rounded-none collapse bg-primary w-full'>
       <input onClick={() => setOpen(!open)} type='checkbox' className='peer' />
       <p className='collapse-title font-bold flex items-center justify-between bg-primary peer-checked:text-secondary-content'>
         <span>{pages[current].page}</span>
