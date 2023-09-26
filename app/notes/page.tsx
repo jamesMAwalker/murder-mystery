@@ -30,25 +30,27 @@ const NotesPage = ({ params }: any) => {
         <h2>Choose a Suspect</h2>
         <ul className='w-full grid grid-cols-3 gap-4'>
           {suspects?.map((sus, idx) => {
-            const selectedStyle =
-              idx === selectedSuspect ? 'border-secondary' : 'border-neutral'
+            const selectedStyle = idx === selectedSuspect
 
             return (
               <li
                 key={sus._id}
                 onClick={() => setSelectedSuspect(idx)}
                 className={cn(
-                  'relative rounded-md w-full flex-col-bl aspect-square border border-4 p-2',
-                  selectedStyle
+                  'SUSPECT_PORTRAIT relative rounded-md w-full flex-col-bl aspect-square border border-4 p-2',
+                  selectedStyle ? 'border-secondary' : 'border-neutral'
                 )}
               >
-                <span className='relative z-10 badge badge-neutral'>
+                <span className={cn(
+                  'relative z-10 badge badge-neutral',
+                   selectedStyle ? 'badge-secondary' : 'badge-neutral'
+                  )}>
                   {sus.suspect_name}
                 </span>
                 <img
                   src={sus.image_url!}
                   alt={sus.suspect_name}
-                  className='absolute object-cover full inset-0'
+                  className='absolute object-cover full inset-0 rounded-sm'
                 />
               </li>
             )
@@ -80,6 +82,11 @@ function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
       note_content: existingNoteContent!
     })
   }
+
+  useEffect(() => {
+    setExistingNoteContent(suspectNote?.note)
+  }, [suspectNote?.note])
+  
   
   
   const [newNoteContent, setNewNoteContent] = useState('Record your notes here...')
@@ -98,19 +105,21 @@ function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
 
   useEffect(() => {
     setHasExistingNote(!!suspectNote)
-  }, [suspectNote])
+  }, [suspectNote, suspect._id])
 
   return hasExistingNote ? (
     <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
       <div className='flex w-full justify-between items-center'>
         <h4 className='font-bold'>Notes on {suspect.suspect_name}</h4>
-        <button onClick={handleUpdateExisting} className='btn btn-primary'>Save</button>
+        <button onClick={handleUpdateExisting} className='btn btn-primary'>
+          Save
+        </button>
       </div>
       <textarea
         ref={existingNoteRef}
         value={existingNoteContent}
         onChange={(e) => setExistingNoteContent(e.target.value)}
-        className='border border-accent w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+        className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
       />
     </div>
   ) : (
@@ -123,7 +132,7 @@ function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
       </div>
       <textarea
         ref={newNoteRef}
-        className='border border-secondary w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+        className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
         value={newNoteContent}
         onChange={(e) => setNewNoteContent(e.target.value)}
       />
