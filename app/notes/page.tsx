@@ -41,10 +41,12 @@ const NotesPage = ({ params }: any) => {
                   selectedStyle ? 'border-secondary' : 'border-neutral'
                 )}
               >
-                <span className={cn(
-                  'relative z-10 badge badge-neutral',
-                   selectedStyle ? 'badge-secondary' : 'badge-neutral'
-                  )}>
+                <span
+                  className={cn(
+                    'relative z-10 badge badge-neutral',
+                    selectedStyle ? 'badge-secondary' : 'badge-neutral'
+                  )}
+                >
                   {sus.suspect_name}
                 </span>
                 <img
@@ -65,77 +67,100 @@ const NotesPage = ({ params }: any) => {
 export default NotesPage
 
 function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
-  const [hasExistingNote, setHasExistingNote] = useState(false)
-  
-  const existingNoteRef = useRef(null)
-  const newNoteRef = useRef(null)
 
   const suspectNote = useQuery(api.notes.getFromSessionByUser, {
     suspect_id: suspect._id
   })
-  
-  const [existingNoteContent, setExistingNoteContent] = useState(suspectNote?.note)
+
+  // notification controls.
+  const [showNotification, setShowNotification] = useState(false)
+  const handleShowNotification = () => {
+    setShowNotification(true)
+    setTimeout(() => {
+      setShowNotification(false)
+    }, 3000)
+  }
+
+  // control "if existing" state.
+  const [hasExistingNote, setHasExistingNote] = useState(false)
+  useEffect(() => {
+    setExistingNoteContent(suspectNote?.note)
+  }, [suspectNote?.note])
+
+  // existing note controls.
+  const [existingNoteContent, setExistingNoteContent] = useState(
+    suspectNote?.note
+  )
   const updateExistingNote = useMutation(api.notes.update)
   const handleUpdateExisting = () => {
     updateExistingNote({
       note_id: suspectNote?._id!,
       note_content: existingNoteContent!
     })
+    handleShowNotification()
   }
 
-  useEffect(() => {
-    setExistingNoteContent(suspectNote?.note)
-  }, [suspectNote?.note])
-  
-  
-  
-  const [newNoteContent, setNewNoteContent] = useState('Record your notes here...')
+  // new note controls.
+  const [newNoteContent, setNewNoteContent] = useState(
+    'Record your notes here...'
+  )
   const saveNewNote = useMutation(api.notes.create)
   const handleSaveNew = () => {
-    if (newNoteRef.current !== null) {
-      const noteContent = newNoteRef?.current['value']
-
-      const savedNoteId = saveNewNote({
-        suspect_id: suspect._id,
-        note_content: noteContent
-      })
-      console.log('savedNoteId: ', savedNoteId)
-    }
+    saveNewNote({
+      suspect_id: suspect._id,
+      note_content: newNoteContent
+    })
+    handleShowNotification()
   }
 
   useEffect(() => {
     setHasExistingNote(!!suspectNote)
   }, [suspectNote, suspect._id])
 
-  return hasExistingNote ? (
-    <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
-      <div className='flex w-full justify-between items-center'>
-        <h4 className='font-bold'>Notes on {suspect.suspect_name}</h4>
-        <button onClick={handleUpdateExisting} className='btn btn-primary'>
-          Save
-        </button>
-      </div>
-      <textarea
-        ref={existingNoteRef}
-        value={existingNoteContent}
-        onChange={(e) => setExistingNoteContent(e.target.value)}
-        className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
-      />
-    </div>
-  ) : (
-    <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
-      <div className='flex w-full justify-between items-center'>
-        <h4 className='font-bold'>Notes on {suspect.suspect_name}</h4>
-        <button onClick={handleSaveNew} className='btn btn-primary'>
-          Save
-        </button>
-      </div>
-      <textarea
-        ref={newNoteRef}
-        className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
-        value={newNoteContent}
-        onChange={(e) => setNewNoteContent(e.target.value)}
-      />
+  return (
+    <div className='flex-col-tl relative w-full'>
+      {hasExistingNote ? (
+        <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
+          <div className='flex w-full justify-between items-end relative'>
+            <h4 className='font-bold'>Notes on {suspect.suspect_name}</h4>
+            <div className='flex items-end justify-center gap-4'>
+              {showNotification && (
+                <p className='text-primary font-bold'>Note Saved.</p>
+              )}
+              <button
+                onClick={handleUpdateExisting}
+                className='btn btn-primary'
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <textarea
+            value={existingNoteContent}
+            onChange={(e) => setExistingNoteContent(e.target.value)}
+            className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+          />
+        </div>
+      ) : (
+        <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
+          <div className='flex w-full justify-between items-center'>
+            <h4 className='font-bold'>Notes on {suspect.suspect_name}</h4>
+            <div className='flex items-end justify-center gap-4'>
+              {showNotification && (
+                <p className='text-primary font-bold'>Note Saved.</p>
+              )}
+              <button onClick={handleSaveNew} className='btn btn-primary'>
+                Save
+              </button>
+            </div>
+          </div>
+          <textarea
+            className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+            value={newNoteContent}
+            onChange={(e) => setNewNoteContent(e.target.value)}
+          />
+        </div>
+      )}
     </div>
   )
 }
