@@ -65,6 +65,7 @@ function UserInfoSection() {
 
 function RequestInfoSection() {
   const requests = useQuery(api.requests.getFromSessionByUser);
+
   const teams = useQuery(api.teams.getAll);
 
   const requestedTeamName = (request: any) =>
