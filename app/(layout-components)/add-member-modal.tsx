@@ -19,14 +19,14 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
 
   const invitePlayer = useMutation(api.invitations.create);
   const teamInvites = useQuery(api.invitations.getFromSessionByTeam);
-  console.log("teamInvites: ", teamInvites);
+  const invitedUserIds = new Set(
+    teamInvites?.map((invite: any) => invite.invited_user_id)
+  );
+  const hasBeenInvited = usersNotCurrentlyOnTeam?.some((user) =>
+    invitedUserIds.has(user._id)
+  );
 
-  const hasBeenInvited = (userToInvite: any) => {
-    return teamInvites?.find(
-      (invite: any) => invite.user_id === userToInvite._id
-    );
-  };
-
+  console.log("hasBeenInvited: ", hasBeenInvited);
   return (
     <div className="flex flex-col items-center justify-start h-full bg-black !fixed w-screen h-screen z-10 inset-0 p-4">
       {user && teamId && (
@@ -48,7 +48,14 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
                 className="flex items-center justify-between p-4 bg-slate-800 gap-2 w-full rounded-md"
               >
                 <span className="font-bold text-lg">{userToInvite.name}</span>
-                {hasBeenInvited(userToInvite) ? (
+                {hasBeenInvited ? (
+                  <button
+                    className="btn btn-primary text-sm sm:text-base"
+                    disabled
+                  >
+                    Invited
+                  </button>
+                ) : (
                   <button
                     className="btn btn-primary text-sm sm:text-base"
                     onClick={() =>
@@ -59,13 +66,6 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
                     }
                   >
                     Invite
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-primary text-sm sm:text-base"
-                    disabled
-                  >
-                    Invited
                   </button>
                 )}
               </li>
