@@ -10,6 +10,7 @@ import { JoinTeamModal } from "../(layout-components)/join-team-modal";
 import { CreateTeamModal } from "../(layout-components)/create-team-modal";
 import { AddMemberModal } from "../(layout-components)/add-member-modal";
 import { LeaveTeamModal } from "../(layout-components)/leave-team-modal";
+import { NotificationsSection } from "../(layout-components)/notifications-section";
 
 const UserProfilePage = () => {
   const { isSignedIn, isLoaded } = useSession();
@@ -59,7 +60,7 @@ const UserProfilePage = () => {
       {modalType === ModalType.LEAVE && (
         <LeaveTeamModal closeModal={closeModal} />
       )}
-      <RequestInfoSection />
+      <NotificationsSection />
     </div>
   );
 };
@@ -73,44 +74,6 @@ function UserInfoSection() {
       <h1 className="text-xl md:text-2xl font-bold">
         Welcome, <span className="text-accent">{user?.name}</span>
       </h1>
-    </div>
-  );
-}
-
-function RequestInfoSection() {
-  const requests = useQuery(api.requests.getFromSessionByUser);
-
-  const teams = useQuery(api.teams.getAll);
-
-  const requestedTeamName = (request: any) =>
-    teams?.find((team: any) => team._id === request.requested_team_id)
-      ?.team_name;
-
-  const renderRequests = (requests: any) => {
-    return requests?.length > 0 ? (
-      <ul className="flex-col gap-4 w-full overflow-y-auto">
-        {requests.map((request: any) => (
-          <li
-            key={request._id}
-            className="flex items-center justify-between p-4 bg-slate-800 gap-2 w-full rounded-md"
-          >
-            <span className="font-semibold text-lg">
-              {requestedTeamName(request)}
-            </span>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <h2 className="text-white text-lg font-semibold">
-        You have no pending requests.
-      </h2>
-    );
-  };
-
-  return (
-    <div className="p-4 bg-white rounded-lg shadow-md">
-      <h1 className="mb-2 font-bold text-gray-800">Pending Team Requests</h1>
-      {renderRequests(requests)}
     </div>
   );
 }
