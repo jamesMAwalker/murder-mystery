@@ -8,7 +8,6 @@ import { Navbar } from './(layout-components)/navbar'
 import { BottomNav } from './(layout-components)/bottom-nav'
 
 import './globals.css'
-import { BE_Test } from './(layout-components)/be-test'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -30,10 +29,9 @@ export default function RootLayout({
       >
         <Providers>
           <Navbar />
-          <main className='py-24 w-[90%] min-h-screen h-auto relative w-full flex flex-col items-center z-10'>
+          <main className='py-24 pb-32 w-[90%] min-h-screen h-auto relative w-full flex flex-col items-center z-10'>
             <div className='content-wrapper h-auto w-[90%] z-10'>{children}</div>
           </main>
-          <BE_Test />
           <BottomNav />
         </Providers>
       </body>
