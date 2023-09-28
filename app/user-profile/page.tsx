@@ -70,7 +70,7 @@ export default UserProfilePage;
 function UserInfoSection() {
   const user = useQuery(api.users.getFromSession);
   return (
-    <div>
+    <div className="flex flex-col w-full p-4 bg-slate-800 rounded-lg">
       <h1 className="text-xl md:text-2xl font-bold">
         Welcome, <span className="text-accent">{user?.name}</span>
       </h1>

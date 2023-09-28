@@ -31,7 +31,7 @@ export const TeamSelection: React.FC<TeamSelectionProps> = ({
 
   if (hasTeam) {
     return (
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-4 w-full pl-4 pr-4 pb-4 bg-slate-800 rounded-lg">
         <h2 className="text-white text-lg font-semibold">Team: {team}</h2>
         <div className="flex flex-col sm:flex-row gap-4">
           <button
@@ -51,11 +51,11 @@ export const TeamSelection: React.FC<TeamSelectionProps> = ({
     );
   } else {
     return (
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col flex-col-td gap-4 pl-4 pr-4 pb-4 bg-slate-800 rounded-lg">
         <h2 className="text-white text-lg font-semibold">
           You are not on a team. Join or create one to get started!
         </h2>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col gap-4 w-full bg-slate-800 rounded-lg">
           <button
             className="btn btn-primary cursor-pointer w-full sm:w-auto"
             onClick={() => showJoinModal()}
@@ -63,7 +63,7 @@ export const TeamSelection: React.FC<TeamSelectionProps> = ({
             Join Team
           </button>
           <button
-            className="btn btn-accent w-full sm:w-auto"
+            className="btn btn-accent cursor-pointer w-full sm:w-auto"
             onClick={() => showCreateModal()}
           >
             Create Team
