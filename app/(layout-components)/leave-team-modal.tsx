@@ -41,7 +41,10 @@ export const LeaveTeamModal: React.FC<LeaveTeamModalProps> = ({
             <div className="modal-action">
               <button
                 className="btn btn-primary w-full"
-                onClick={() => leaveTeam({ user_id: userId, team_id: teamId })}
+                onClick={() => {
+                  leaveTeam({ user_id: userId, team_id: teamId });
+                  closeModal();
+                }}
               >
                 Leave Team
               </button>
