@@ -1,0 +1,23 @@
+[
+  {
+    "round_number": 1,
+    "starting_time": 300,
+    "remaining_time": 300,
+    "completed": false,
+    "active": false
+  },
+  {
+    "round_number": 2,
+    "starting_time": 300,
+    "remaining_time": 300,
+    "completed": false,
+    "active": false
+  },
+  {
+    "round_number": 3,
+    "starting_time": 300,
+    "remaining_time": 300,
+    "completed": false,
+    "active": false
+  }
+]
