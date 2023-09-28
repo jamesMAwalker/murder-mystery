@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { api } from "@/convex/_generated/api";
 import { useConvexAuth, useMutation, useQuery } from "convex/react-internal";
 import { useAuth, useSession } from "@clerk/nextjs";
+import { usePrevious } from "../(hooks)/utility/usePrevious";
 
 import { TeamSelection } from "../(layout-components)/team-selection";
 import { JoinTeamModal } from "../(layout-components)/join-team-modal";
@@ -12,11 +13,11 @@ import { AddMemberModal } from "../(layout-components)/add-member-modal";
 import { LeaveTeamModal } from "../(layout-components)/leave-team-modal";
 import { NotificationsSection } from "../(layout-components)/notifications-section";
 import { TeamInfo } from "../(layout-components)/team-info";
+import { NotificationToast } from "../(layout-components)/notification-toast";
 
 const UserProfilePage = () => {
   const { isSignedIn, isLoaded } = useSession();
   const user = useQuery(api.users.getFromSession);
-  console.log("user: ", user);
 
   enum ModalType {
     JOIN = "join",
@@ -64,6 +65,7 @@ const UserProfilePage = () => {
       {modalType === ModalType.LEAVE && (
         <LeaveTeamModal closeModal={closeModal} />
       )}
+
       <NotificationsSection />
     </div>
   );

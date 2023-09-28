@@ -19,6 +19,7 @@ export const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ closeModal }) => {
   const user = useQuery(api.users.getFromSession);
   const teams = useQuery(api.teams.getAll);
   const requests = useQuery(api.requests.getFromSessionByUser);
+  console.log("requests: ", requests);
   const requestedTeamIds =
     requests?.map((request: Request) => request.requested_team_id) || [];
 
