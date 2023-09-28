@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation } from "convex/react-internal";
 import { api } from "@/convex/_generated/api";
+import { join } from "path";
 
 export const NotificationsSection: React.FC = () => {
   const user = useQuery(api.users.getFromSession);
@@ -115,8 +116,19 @@ const RequestsToJoin: React.FC = () => {
 const InvitationList: React.FC<{ invitations: any[] | undefined }> = ({
   invitations,
 }) => {
-  const destroy = useMutation(api.invitations.destroy);
   console.log("invitations: ", invitations);
+  const destroy = useMutation(api.invitations.destroy);
+  const joinTeam = useMutation(api.teams.addMember);
+
+  const handleAcceptInvite = (invite: any) => {
+    joinTeam({
+      user_id: invite.invited_user_id,
+      team_id: invite.inviting_team_id,
+    });
+    destroy({ invitation_id: invite._id });
+  };
+  console.log("invitations: ", invitations);
+
   return (
     <ul className="flex flex-col gap-4 w-full overflow-y-auto">
       {invitations?.map((invite) => (
@@ -131,6 +143,7 @@ const InvitationList: React.FC<{ invitations: any[] | undefined }> = ({
             <button
               className="btn btn-success btn-sm mb-2 md:mb-0"
               title="Accept this invitation"
+              onClick={() => handleAcceptInvite(invite)}
             >
               <FontAwesomeIcon icon={faCheck} />
             </button>
@@ -158,6 +171,15 @@ const RequestList: React.FC<{ requests: any[] | undefined }> = ({
 }) => {
   console.log("requests: ", requests);
   const destroyRequest = useMutation(api.requests.destroy);
+  const addPlayerToTeam = useMutation(api.teams.addMember);
+
+  function handleAcceptRequest(request: any) {
+    addPlayerToTeam({
+      user_id: request.requesting_user_id,
+      team_id: request.requested_team_id,
+    });
+    destroyRequest({ request_id: request._id });
+  }
 
   return (
     <ul className="flex flex-col gap-4 w-full overflow-y-auto">
@@ -173,6 +195,7 @@ const RequestList: React.FC<{ requests: any[] | undefined }> = ({
             <button
               className="btn btn-success btn-sm mb-2 md:mb-0"
               title="Accept this invitation"
+              onClick={() => handleAcceptRequest(request)}
             >
               <FontAwesomeIcon icon={faCheck} />
             </button>
