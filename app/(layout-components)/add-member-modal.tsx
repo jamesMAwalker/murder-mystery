@@ -17,9 +17,17 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
   const allUsers = useQuery(api.users.getAll);
   const usersNotCurrentlyOnTeam = allUsers?.filter((user) => !user.has_team);
   console.log("usersNotCurrentlyOnTeam: ", usersNotCurrentlyOnTeam);
+  console.log("usersNotCurrentlyOnTeam: ", usersNotCurrentlyOnTeam);
 
   const invitePlayer = useMutation(api.invitations.create);
+  const cancelInvite = useMutation(api.invitations.destroy);
+
   const teamInvites = useQuery(api.invitations.getFromSessionByTeam);
+  const inviteToCancel = (userToUninvite: any) =>
+    teamInvites?.find(
+      (invite: any) => invite.invited_user_id === userToUninvite?._id
+    );
+
   console.log("teamInvites: ", teamInvites);
   const invitedUserIds = new Set(
     teamInvites?.map((invite: any) => invite.invited_user_id)
@@ -57,12 +65,26 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
                       {userToInvite.name}
                     </span>
                     {hasBeenInvited(userToInvite) ? (
-                      <button
-                        className="btn btn-primary text-sm sm:text-base"
-                        disabled
-                      >
-                        Invited
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          className="btn btn-primary text-sm sm:text-base"
+                          disabled
+                        >
+                          Invited
+                        </button>
+                        <button
+                          className="btn btn-primary text-sm sm:text-base"
+                          onClick={() => {
+                            const invite = inviteToCancel(userToInvite);
+                            invite &&
+                              cancelInvite({
+                                invitation_id: invite._id,
+                              });
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     ) : (
                       <button
                         className="btn btn-primary text-sm sm:text-base"
