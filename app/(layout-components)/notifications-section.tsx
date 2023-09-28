@@ -18,8 +18,10 @@ export const NotificationsSection: React.FC = () => {
 
 const PendingInvites: React.FC = () => {
   const [showAllInvitations, setShowAllInvitations] = useState(false);
+  console.log("showAllInvitations: ", showAllInvitations);
 
   const pendingInvitations = useQuery(api.invitations.getFromSessionByUser);
+  console.log("pendingInvitations: ", pendingInvitations);
   const allTeams = useQuery(api.teams.getAll); // Fetch all teams at once.
 
   const teamNameById = allTeams?.reduce((acc: any, team: any) => {
@@ -37,6 +39,7 @@ const PendingInvites: React.FC = () => {
   const displayedInvitations = showAllInvitations
     ? invitationsWithTeamNames
     : invitationsWithTeamNames?.slice(0, 3);
+  console.log("displayedInvitations: ", displayedInvitations);
   return (
     <div className="flex flex-col flex-col-td gap-4 p-4 bg-slate-800 rounded-lg">
       <h1 className="mb-2 font-bold text-white">Invitations:</h1>
@@ -49,14 +52,17 @@ const PendingInvites: React.FC = () => {
           {displayedInvitations && (
             <InvitationList invitations={displayedInvitations} />
           )}
-          {!showAllInvitations && (
-            <button
-              className="btn btn-secondary w-full sm:w-auto"
-              onClick={() => setShowAllInvitations(true)}
-            >
-              Show More
-            </button>
-          )}
+
+          <button
+            className="btn btn-secondary"
+            onClick={() =>
+              !showAllInvitations
+                ? setShowAllInvitations(true)
+                : setShowAllInvitations(false)
+            }
+          >
+            {showAllInvitations ? "Show Less" : "Show More"}
+          </button>
         </>
       )}
     </div>
@@ -80,6 +86,7 @@ const RequestsToJoin: React.FC = () => {
       player_name: player?.name,
     };
   });
+  console.log("requestsWithPlayerData: ", requestsWithPlayerData);
 
   const displayedRequests = showAllRequests
     ? requestsWithPlayerData
@@ -99,12 +106,16 @@ const RequestsToJoin: React.FC = () => {
       ) : (
         <>
           <RequestList requests={requestsWithPlayerData} />
-          {!showAllRequests && (
+          {requestsWithPlayerData.length > 3 && (
             <button
               className="btn btn-secondary"
-              onClick={() => setShowAllRequests(true)}
+              onClick={() => {
+                showAllRequests
+                  ? setShowAllRequests(false)
+                  : setShowAllRequests(true);
+              }}
             >
-              Show More
+              {showAllRequests ? "Show Less" : "Show More"}
             </button>
           )}
         </>

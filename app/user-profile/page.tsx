@@ -16,6 +16,7 @@ import { TeamInfo } from "../(layout-components)/team-info";
 const UserProfilePage = () => {
   const { isSignedIn, isLoaded } = useSession();
   const user = useQuery(api.users.getFromSession);
+  console.log("user: ", user);
 
   enum ModalType {
     JOIN = "join",
