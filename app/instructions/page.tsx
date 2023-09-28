@@ -3,14 +3,17 @@ import React from 'react'
 const InstructionsPage = () => {
   return (
     <div className='flex-col-tl gap-6'>
-      <h1 className='text-2xl font-bold'>Game Instructions</h1>
+      <h1 className='text-2xl font-bold flex items-center justify-start gap-2'>
+        <span>How to Play</span>
+        <span className='text-red-700 italic'>Murder Mystery</span>
+      </h1>
       <img
         className='w-full aspect-square object-cover saturate-0'
         src='/background.jpg'
         alt='evidence board'
       />
       <div className='flex-col-tl '>
-        <h3 className='text-xl italic text-primary'>Overview</h3>
+        <h3 className='text-xl font-bold text-primary'>Overview</h3>
         <p>
           Get ready for an engaging and immersive way to enhance your English
           speaking and comprehension skills with our Murder Mystery English
@@ -20,7 +23,7 @@ const InstructionsPage = () => {
         </p>
       </div>
       <div className='flex-col-tl '>
-        <h3 className='text-lg italic text-accent'>The Rounds</h3>
+        <h3 className='text-lg font-bold text-accent'>The Rounds</h3>
         <p>
           You will participate in three rounds, each involving suspect
           interviews, note collection, and discussions with your teammates. As
@@ -59,7 +62,7 @@ const InstructionsPage = () => {
         <h5>Conclusion</h5>
       </div>
       <div className='flex-col-tl '>
-        <h5 className='text-lg italic text-secondary'>Conclusion</h5>
+        <h5 className='text-lg font-bold text-secondary'>Conclusion</h5>
         <p>
           After three rounds of investigative fun, your team will submit its
           final verdict on the guilty suspect. Get it right, and you&#39;ll earn
