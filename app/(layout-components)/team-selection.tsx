@@ -17,9 +17,10 @@ export const TeamSelection: React.FC<TeamSelectionProps> = ({
   showLeaveModal,
 }) => {
   const user = useQuery(api.users.getFromSession);
-
   const hasTeam = user?.has_team;
-  const team = user?.team_name;
+  const userTeam = useQuery(api.teams.getAll)?.find(
+    (team) => team._id === user?.team_id
+  );
 
   if (hasTeam === null || hasTeam === undefined) {
     return (
@@ -30,15 +31,18 @@ export const TeamSelection: React.FC<TeamSelectionProps> = ({
   }
 
   if (hasTeam) {
+    const teamIsFull = userTeam?.members?.length === 10;
+
     return (
       <div className="flex flex-col gap-4 w-full pl-4 pr-4 pb-4 bg-slate-800 rounded-lg">
-        <h2 className="text-white text-lg font-semibold">Team: {team}</h2>
+        {/* <h2 className="text-white text-lg font-semibold">Team: {team}</h2> */}
         <div className="flex flex-col sm:flex-row gap-4">
           <button
             className="btn btn-primary w-full sm:w-auto"
+            disabled={teamIsFull}
             onClick={() => showAddModal()}
           >
-            Add Member
+            {teamIsFull ? "Team is Full" : "Add Teammate"}
           </button>
           <button
             className="btn btn-accent w-full sm:w-auto"
