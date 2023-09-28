@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useQuery } from "convex/react-internal";
+import { useQuery, useMutation } from "convex/react-internal";
 import { api } from "@/convex/_generated/api";
 
 export const NotificationsSection: React.FC = () => {
@@ -17,17 +17,25 @@ export const NotificationsSection: React.FC = () => {
 
 const PendingInvites: React.FC = () => {
   const [showAllInvitations, setShowAllInvitations] = useState(false);
-  const pendingInvitations = useQuery(api.invitations.getFromSessionByUser);
-  const teams = useQuery(api.teams.getAll);
 
-  const invitingTeams = teams?.filter((team) =>
-    pendingInvitations?.some((invite) => invite.inviting_team_id === team._id)
-  );
+  const pendingInvitations = useQuery(api.invitations.getFromSessionByUser);
+  const allTeams = useQuery(api.teams.getAll); // Fetch all teams at once.
+
+  const teamNameById = allTeams?.reduce((acc: any, team: any) => {
+    acc[team._id] = team.team_name;
+    return acc;
+  }, {});
+
+  const invitationsWithTeamNames = pendingInvitations?.map((invite) => ({
+    ...invite,
+    team_name: teamNameById
+      ? teamNameById[invite.inviting_team_id]
+      : "Unknown Team",
+  }));
 
   const displayedInvitations = showAllInvitations
-    ? invitingTeams
-    : invitingTeams?.slice(0, 3);
-
+    ? invitationsWithTeamNames
+    : invitationsWithTeamNames?.slice(0, 3);
   return (
     <div className="flex flex-col flex-col-td gap-4 p-4 bg-slate-800 rounded-lg">
       <h1 className="mb-2 font-bold text-white">Invitations:</h1>
@@ -104,35 +112,44 @@ const RequestsToJoin: React.FC = () => {
 
 const InvitationList: React.FC<{ invitations: any[] | undefined }> = ({
   invitations,
-}) => (
-  <ul className="flex flex-col gap-4 w-full overflow-y-auto">
-    {invitations?.map((invite) => (
-      <li
-        key={invite._id}
-        className="flex flex-col-td md:flex-row items-start md:items-center justify-between p-4 bg-slate-700 gap-2 w-full rounded-md shadow-md"
-      >
-        <span className="font-semibold text-lg mb-2 md:mb-0 md:mr-2">
-          Team {invite.team_name} invites you to join them!
-        </span>
-        <div className="flex  md:flex-row gap-2">
-          <button
-            className="btn btn-success btn-sm mb-2 md:mb-0"
-            title="Accept this invitation"
-          >
-            <FontAwesomeIcon icon={faCheck} />
-          </button>
+}) => {
+  const destroy = useMutation(api.invitations.destroy);
+  console.log("invitations: ", invitations);
+  return (
+    <ul className="flex flex-col gap-4 w-full overflow-y-auto">
+      {invitations?.map((invite) => (
+        <li
+          key={invite._id}
+          className="flex flex-col-td md:flex-row items-start md:items-center justify-between p-4 bg-slate-700 gap-2 w-full rounded-md shadow-md"
+        >
+          <span className="font-semibold text-lg mb-2 md:mb-0 md:mr-2">
+            Team {invite.team_name} invites you to join them!
+          </span>
+          <div className="flex  md:flex-row gap-2">
+            <button
+              className="btn btn-success btn-sm mb-2 md:mb-0"
+              title="Accept this invitation"
+            >
+              <FontAwesomeIcon icon={faCheck} />
+            </button>
 
-          <button
-            className="btn btn-danger btn-sm mb-2 md:mb-0"
-            title="Decline this invitation"
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
-        </div>
-      </li>
-    ))}
-  </ul>
-);
+            <button
+              className="btn btn-danger btn-sm mb-2 md:mb-0"
+              title="Decline this invitation"
+              onClick={() =>
+                destroy({
+                  invitation_id: invite._id,
+                })
+              }
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 const RequestList: React.FC<{ requestingPlayers: any[] | undefined }> = ({
   requestingPlayers,
