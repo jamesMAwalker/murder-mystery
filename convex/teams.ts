@@ -261,7 +261,11 @@ export const removeMember = mutation({
       await db.patch(team._id, {
         team_captain: teamWithoutUser[0],
       });
+      await db.patch(teamWithoutUser[0], {
+        is_captain: true,
+      });
     }
+    console.log(teamWithoutUser);
 
     // Update the team members list.
     await db.patch(team._id, {
