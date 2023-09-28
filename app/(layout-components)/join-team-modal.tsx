@@ -48,6 +48,10 @@ export const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ closeModal }) => {
     </li>
   );
 
+  if (user?.has_team) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col items-center justify-start h-full bg-black !fixed w-screen h-screen z-10 inset-0 p-4">
       <div className="modal-box bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-md mt-20">
