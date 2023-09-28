@@ -11,6 +11,7 @@ import { CreateTeamModal } from "../(layout-components)/create-team-modal";
 import { AddMemberModal } from "../(layout-components)/add-member-modal";
 import { LeaveTeamModal } from "../(layout-components)/leave-team-modal";
 import { NotificationsSection } from "../(layout-components)/notifications-section";
+import { TeamInfo } from "../(layout-components)/team-info";
 
 const UserProfilePage = () => {
   const { isSignedIn, isLoaded } = useSession();
@@ -25,6 +26,7 @@ const UserProfilePage = () => {
   }
 
   const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
+  console.log("modalType: ", modalType);
   const showJoinModal = () => setModalType(ModalType.JOIN);
   const showCreateModal = () => setModalType(ModalType.CREATE);
   const showAddModal = () => setModalType(ModalType.ADD);
@@ -42,6 +44,7 @@ const UserProfilePage = () => {
   return (
     <div className="my-4 md:my-8 space-y-4 md:space-y-6 bg-slate-800 rounded-lg shadow-md p-2 md:p-4">
       <UserInfoSection />
+      {user.has_team && <TeamInfo />}
       <TeamSelection
         showJoinModal={showJoinModal}
         showCreateModal={showCreateModal}
