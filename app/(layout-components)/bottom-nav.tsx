@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
+import { RoundTimer } from './round-timer'
 
 interface IDropdownContent {
   [key: string]: string
@@ -56,6 +57,7 @@ export const BottomNav = () => {
             )
         })}
       </ul>
+      <RoundTimer />
     </div>
   )
 }
