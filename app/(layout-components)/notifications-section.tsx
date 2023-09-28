@@ -29,7 +29,7 @@ const PendingInvites: React.FC = () => {
     return acc;
   }, {});
 
-  const invitationsWithTeamNames = pendingInvitations?.map((invite) => ({
+  const invitationsWithTeamNames = (pendingInvitations || []).map((invite) => ({
     ...invite,
     team_name: teamNameById
       ? teamNameById[invite.inviting_team_id]
@@ -49,20 +49,22 @@ const PendingInvites: React.FC = () => {
         </h2>
       ) : (
         <>
-          {displayedInvitations && (
+          {invitationsWithTeamNames && (
             <InvitationList invitations={displayedInvitations} />
           )}
 
-          <button
-            className="btn btn-secondary"
-            onClick={() =>
-              !showAllInvitations
-                ? setShowAllInvitations(true)
-                : setShowAllInvitations(false)
-            }
-          >
-            {showAllInvitations ? "Show Less" : "Show More"}
-          </button>
+          {invitationsWithTeamNames?.length > 3 && (
+            <button
+              className="btn btn-secondary"
+              onClick={() =>
+                !showAllInvitations
+                  ? setShowAllInvitations(true)
+                  : setShowAllInvitations(false)
+              }
+            >
+              {showAllInvitations ? "Show Less" : "Show More"}
+            </button>
+          )}
         </>
       )}
     </div>
@@ -105,7 +107,7 @@ const RequestsToJoin: React.FC = () => {
         </h2>
       ) : (
         <>
-          <RequestList requests={requestsWithPlayerData} />
+          <RequestList requests={displayedRequests} />
           {requestsWithPlayerData.length > 3 && (
             <button
               className="btn btn-secondary"
@@ -128,15 +130,28 @@ const InvitationList: React.FC<{ invitations: any[] | undefined }> = ({
   invitations,
 }) => {
   console.log("invitations: ", invitations);
-  const destroy = useMutation(api.invitations.destroy);
+  const destroyInvite = useMutation(api.invitations.destroy);
+  const destroyRequest = useMutation(api.requests.destroy);
   const joinTeam = useMutation(api.teams.addMember);
+  const requests = useQuery(api.requests.getFromSessionByUser);
 
   const handleAcceptInvite = (invite: any) => {
-    joinTeam({
-      user_id: invite.invited_user_id,
-      team_id: invite.inviting_team_id,
-    });
-    destroy({ invitation_id: invite._id });
+    const request = requests?.find(
+      (request: any) =>
+        request.requesting_user_id === invite.invited_user_id &&
+        request.requested_team_id === invite.inviting_team_id
+    );
+    console.log("request: ", request);
+    if (requests) {
+      joinTeam({
+        user_id: invite.invited_user_id,
+        team_id: invite.inviting_team_id,
+      });
+      destroyInvite({ invitation_id: invite._id });
+      if (request) {
+        destroyRequest({ request_id: request._id });
+      }
+    }
   };
   console.log("invitations: ", invitations);
 
@@ -163,7 +178,7 @@ const InvitationList: React.FC<{ invitations: any[] | undefined }> = ({
               className="btn btn-danger btn-sm mb-2 md:mb-0"
               title="Decline this invitation"
               onClick={() =>
-                destroy({
+                destroyInvite({
                   invitation_id: invite._id,
                 })
               }
