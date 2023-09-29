@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation"; // Use "next/router" instead of "next/navigation"
 
 import { cn } from "@/lib/utils";
 import { RoundTimer } from "./round-timer";
@@ -9,6 +9,7 @@ import { RoundTimer } from "./round-timer";
 interface IDropdownContent {
   page: string;
   path: string;
+  hidden?: boolean;
 }
 
 const pages: IDropdownContent[] = [
@@ -17,19 +18,22 @@ const pages: IDropdownContent[] = [
   { page: "Instructions", path: "/instructions" },
   { page: "Notes", path: "/notes" },
   { page: "Suspects", path: "/suspects" },
+  { page: "Profile", path: "/user-profile", hidden: true },
 ];
 
 export const BottomNav = () => {
-  const { push } = useRouter();
-  const pathname = usePathname();
-
+  const { push } = useRouter(); // Directly destructure `pathname` from `useRouter()`
+  const pathname = usePathname(); // Use `usePathname()` instead of `useRouter().pathname`
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     const updatedCurrent = pages.findIndex((p) => p.path === pathname);
-    if (current !== updatedCurrent) {
+    if (current !== updatedCurrent && pathname !== "/user-profile") {
       setCurrent(updatedCurrent);
+    }
+    if (pathname === "/user-profile") {
+      setCurrent(5);
     }
   }, [pathname]);
 
@@ -48,10 +52,10 @@ export const BottomNav = () => {
         <span className={cn(rotated)}>▲</span>
       </p>
       <ul className="w-full collapse-content flex-col-center p-0">
-        {pages.map(({ page, path }, idx) => {
+        {pages.map(({ page, path, hidden }, idx) => {
           const active = idx === current;
 
-          if (!active)
+          if (!active && !hidden) {
             return (
               <li
                 className={cn(
@@ -63,6 +67,7 @@ export const BottomNav = () => {
                 {page}
               </li>
             );
+          }
         })}
       </ul>
       <RoundTimer />
