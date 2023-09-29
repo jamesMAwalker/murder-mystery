@@ -18,6 +18,7 @@ const pages: IDropdownContent[] = [
   { page: "Instructions", path: "/instructions" },
   { page: "Notes", path: "/notes" },
   { page: "Suspects", path: "/suspects" },
+  { page: "Evidence Reports", path: "reports" },
   { page: "Profile", path: "/user-profile", hidden: true },
 ];
 
