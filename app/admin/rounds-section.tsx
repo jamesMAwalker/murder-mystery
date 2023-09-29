@@ -71,8 +71,8 @@ function TimerBlock({ round, startingSeconds, nextRound, isFinalRound }: any) {
     startingSeconds,
     roundId: round._id
   })
-  console.log('minutes: ', minutes)
-  console.log('seconds: ', seconds)
+  
+  
 
   const handleTimerButton = () => {
     if (!isRunning && notStarted) {
@@ -179,7 +179,7 @@ function useUpdateDbRoundTimer({ startingSeconds, roundId }: any) {
   // create timer.
   const timer = useTimer({
     expiryTimestamp: time,
-    onExpire: () => console.log('all done!'),
+    onExpire: () => ,
     autoStart: false
   })
 
