@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import React, { useEffect } from 'react'
-import { api } from '@/convex/_generated/api'
-import { useConvexAuth, useMutation, useQuery } from 'convex/react-internal'
-import { useAuth } from '@clerk/nextjs'
-import { WithoutSystemFields } from 'convex/server'
-import { Doc } from '@/convex/_generated/dataModel'
+import React, { useEffect } from "react";
+import { api } from "@/convex/_generated/api";
+import { useConvexAuth, useMutation, useQuery } from "convex/react-internal";
+import { useAuth } from "@clerk/nextjs";
+import { WithoutSystemFields } from "convex/server";
+import { Doc } from "@/convex/_generated/dataModel";
 
 /*
   * NOTES *
@@ -19,59 +19,63 @@ import { Doc } from '@/convex/_generated/dataModel'
 
 const ProfileConvex = () => {
   // for detecting valid clerk user
-  const convexAuthState = useConvexAuth()
+  const convexAuthState = useConvexAuth();
+  console.log("convexAuthState: ", convexAuthState);
 
   // for using user data from clerk
-  const clerkAuthState = useAuth()
+  const clerkAuthState = useAuth();
+  console.log("clerkAuthState: ", clerkAuthState);
 
   return (
-    <div className='my-8 flex-col-tl gap-6'>
+    <div className="my-8 flex-col-tl gap-6">
       <UserInfoSection />
       <TeamSelectionSection />
       <RequestInfoSection />
     </div>
-  )
-}
+  );
+};
 
-export default ProfileConvex
+export default ProfileConvex;
 
 function UserInfoSection() {
   // get current user object from db
-  const user = useQuery(api.users.getFromSession)
+  const user = useQuery(api.users.getFromSession);
+  console.log("user: ", user);
 
   return (
-    <div className='USER_INFO flex-=col-tl'>
-      <h1 className='text-2xl font-bold'>
-        Welcome, <span className='text-accent'>{user?.name}</span>
+    <div className="USER_INFO flex-=col-tl">
+      <h1 className="text-2xl font-bold">
+        Welcome, <span className="text-accent">{user?.name}</span>
       </h1>
     </div>
-  )
+  );
 }
 
 function TeamSelectionSection() {
   // get all teams from db
-  const teams = useQuery(api.teams.getAll)
+  const teams = useQuery(api.teams.getAll);
+  console.log("teams: ", teams);
 
   return (
-    <ul className='flex-col-tl gap-4'>
-      <h4 className='font-bold'>Available Teams</h4>
+    <ul className="flex-col-tl gap-4">
+      <h4 className="font-bold">Available Teams</h4>
       {teams?.map((team: any) => {
-        return <li key={team._id}>- {team.team_name}</li>
+        return <li key={team._id}>- {team.team_name}</li>;
       })}
     </ul>
-  )
+  );
 }
 
 function RequestInfoSection() {
   // get any requests user has made.
-  const requests = useQuery(api.requests.getFromSessionByUser)
+  const requests = useQuery(api.requests.getFromSessionByUser);
 
   return (
-    <ul className='flex-col-tl gap-4'>
+    <ul className="flex-col-tl gap-4">
       <h1>Current Requests</h1>
       {requests?.map((request: any) => {
-        return <li key={request._id}>{request._id}</li>
+        return <li key={request._id}>{request._id}</li>;
       })}
     </ul>
-  )
+  );
 }

@@ -1,198 +1,202 @@
-import { mutation, query } from './_generated/server'
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-import { getUserFromAuthSession } from './lib/getUserFromAuthSession';
+import { getUserFromAuthSession } from "./lib/getUserFromAuthSession";
 
 // TODO: Error handling.
 
 export const create = mutation({
   args: {
-    team_id: v.id('teams'),
-    user_id: v.id('users')
+    team_id: v.id("teams"),
+    user_id: v.id("users"),
   },
   handler: async ({ db }, { team_id, user_id }) => {
-
     // get user.
-    const user = await db.get(user_id)
+    const user = await db.get(user_id);
 
     // check if user exists in db.
-    if (!user) throw Error('User not found in database!')
+    if (!user) throw Error("User not found in database!");
 
     // check if user is already attached to a team.
-    if (user.has_team) throw Error('User already on a team!')
+    if (user.has_team) throw Error("User already on a team!");
 
     // get invitations by this team to this user.
-    const existingInvitations = await db.query('invitations')
-      .filter(invite => {
-        return (
-          invite.eq(invite.field("invited_user_id"), user_id) &&
+    const existingInvitations = await db
+      .query("invitations")
+      .filter((invite) =>
+        invite.and(
+          invite.eq(invite.field("invited_user_id"), user?._id),
           invite.eq(invite.field("inviting_team_id"), team_id)
         )
-      })
-      .collect()
+      )
+      .collect();
 
     // check if user has already been invited.
     if (existingInvitations.length > 0) {
-      throw Error('User already invited to this team!')
+      throw Error("User already invited to this team!");
     }
 
     // get team.
-    const team = await db.get(team_id)
+    const team = await db.get(team_id);
 
     // check if team exists
-    if (!team) throw Error('Error finding team!')
+    if (!team) throw Error("Error finding team!");
 
     // check if team has capacity
-    if (team?.members.length >= 10) throw Error('Team already has max members!')
+    if (team?.members.length >= 10)
+      throw Error("Team already has max members!");
 
     // create invitation.
-    const invitationId = await db.insert('invitations', {
+    const invitationId = await db.insert("invitations", {
       invited_user_id: user._id,
       inviting_team_id: team._id,
-      accepted: false
-    })
+      accepted: false,
+    });
 
-    const invitation = await db.get(invitationId)
+    const invitation = await db.get(invitationId);
 
-    return { message: 'Invitation successful!', ...invitation };
-  }
-})
+    return { message: "Invitation successful!", ...invitation };
+  },
+});
 
 export const createFromSession = mutation({
   args: {
-    team_id: v.id('teams'),
+    team_id: v.id("teams"),
   },
   handler: async (ctx, { team_id }) => {
-    const { db } = ctx
+    const { db } = ctx;
 
     // get user from session.
-    const user = await getUserFromAuthSession(ctx)
+    const user = await getUserFromAuthSession(ctx);
 
     // check if user exists in db.
-    if (!user) throw Error('User not found in database!')
+    if (!user) throw Error("User not found in database!");
 
     // check if user is already attached to a team.
-    if (user.has_team) throw Error('User already on a team!')
+    if (user.has_team) throw Error("User already on a team!");
 
     // get invitations by this team to this user.
-    const existingInvitations = await db.query('invitations')
-      .filter(invite => {
-        return (
-          invite.eq(invite.field("invited_user_id"), user?._id) &&
+    const existingInvitations = await db
+      .query("invitations")
+      .filter((invite) =>
+        invite.and(
+          invite.eq(invite.field("invited_user_id"), user?._id),
           invite.eq(invite.field("inviting_team_id"), team_id)
         )
-      })
-      .collect()
+      )
+      .collect();
 
     // check if user has already been invited.
     if (existingInvitations.length > 0) {
-      throw Error('User already invited to this team!')
+      throw Error("User already invited to this team!");
     }
 
     // get team.
-    const team = await db.get(team_id)
+    const team = await db.get(team_id);
 
     // check if team exists
-    if (!team) throw Error('Error finding team!')
+    if (!team) throw Error("Error finding team!");
 
     // check if team has capacity
-    if (team?.members.length >= 10) throw Error('Team already has max members!')
+    if (team?.members.length >= 10)
+      throw Error("Team already has max members!");
 
     // create invitation.
-    const invitationId = await db.insert('invitations', {
+    const invitationId = await db.insert("invitations", {
       invited_user_id: user._id,
       inviting_team_id: team._id,
-      accepted: false
-    })
+      accepted: false,
+    });
 
-    const invitation = await db.get(invitationId)
+    const invitation = await db.get(invitationId);
 
-    return { message: 'Invitation successful!', ...invitation };
-  }
-})
+    return { message: "Invitation successful!", ...invitation };
+  },
+});
 
 export const getFromSessionByUser = query({
   handler: async (ctx) => {
-    const { db } = ctx
+    const { db } = ctx;
 
     // get user from session.
-    const user = await getUserFromAuthSession(ctx)
+    const user = await getUserFromAuthSession(ctx);
 
-    const userInvitations = await db.query('invitations')
-      .filter(invite => invite.eq(invite.field("invited_user_id"), user?._id))
-      .collect()
+    const userInvitations = await db
+      .query("invitations")
+      .filter((invite) => invite.eq(invite.field("invited_user_id"), user?._id))
+      .collect();
 
-    if (!userInvitations) throw Error('No invitations found!')
+    if (!userInvitations) throw Error("No invitations found!");
 
     return userInvitations;
-
-  }
-})
+  },
+});
 
 export const getFromSessionByTeam = query({
   handler: async (ctx) => {
-    const { db } = ctx
+    const { db } = ctx;
 
     // get user from session.
-    const user = await getUserFromAuthSession(ctx)
+    const user = await getUserFromAuthSession(ctx);
 
-    const userInvitations = await db.query('invitations')
-      .filter(invite => invite.eq(invite.field("inviting_team_id"), user?.team_id))
-      .collect()
+    const userInvitations = await db
+      .query("invitations")
+      .filter((invite) =>
+        invite.eq(invite.field("inviting_team_id"), user?.team_id)
+      )
+      .collect();
 
-    if (!userInvitations) throw Error('No invitations found!')
+    if (!userInvitations) throw Error("No invitations found!");
 
     return userInvitations;
-
-  }
-})
+  },
+});
 
 export const getByUserId = query({
   args: {
-    user_id: v.id('users')
+    user_id: v.id("users"),
   },
   handler: async ({ db }, { user_id }) => {
-    const userInvitations = await db.query('invitations')
-      .filter(invite => invite.eq(invite.field("invited_user_id"), user_id))
-      .collect()
+    const userInvitations = await db
+      .query("invitations")
+      .filter((invite) => invite.eq(invite.field("invited_user_id"), user_id))
+      .collect();
 
-    if (!userInvitations) throw Error('No invitations found!')
+    if (!userInvitations) throw Error("No invitations found!");
 
     return userInvitations;
-
-  }
-})
+  },
+});
 
 export const getByTeamId = query({
   args: {
-    team_id: v.id('teams')
+    team_id: v.id("teams"),
   },
   handler: async ({ db }, { team_id }) => {
-    const teamInvitations = await db.query('invitations')
-      .filter(invite => invite.eq(invite.field("inviting_team_id"), team_id))
-      .collect()
+    const teamInvitations = await db
+      .query("invitations")
+      .filter((invite) => invite.eq(invite.field("inviting_team_id"), team_id))
+      .collect();
 
-    if (!teamInvitations) throw Error('No invitations found!')
+    if (!teamInvitations) throw Error("No invitations found!");
 
     return teamInvitations;
-
-  }
-})
+  },
+});
 
 export const destroy = mutation({
   args: {
-    invitation_id: v.id('invitations'),
+    invitation_id: v.id("invitations"),
   },
   handler: async ({ db }, { invitation_id }) => {
-
     // get invitation.
-    const invitationToDestroy = await db.get(invitation_id)
+    const invitationToDestroy = await db.get(invitation_id);
 
     // check if inivitation exists in db.
-    if (!invitationToDestroy) throw Error('Invitation not found!')
+    if (!invitationToDestroy) throw Error("Invitation not found!");
 
     // delete invitation.
-    await db.delete(invitation_id)
+    await db.delete(invitation_id);
 
-    return 'Invitation deleted!';
-  }
-})
+    return "Invitation deleted!";
+  },
+});

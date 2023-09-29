@@ -1,99 +1,85 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSession } from "@clerk/nextjs";
-import { useUserContext } from "../(context)/user.context";
-import { useGameContext } from "../(context)/game.context";
+import { api } from "@/convex/_generated/api";
+import { useConvexAuth, useMutation, useQuery } from "convex/react-internal";
+import { useAuth, useSession } from "@clerk/nextjs";
+import { usePrevious } from "../(hooks)/utility/usePrevious";
 
-import { TeamButtons } from "../(layout-components)/team-buttons";
+import { TeamSelection } from "../(layout-components)/team-selection";
 import { JoinTeamModal } from "../(layout-components)/join-team-modal";
 import { CreateTeamModal } from "../(layout-components)/create-team-modal";
-// import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
+import { AddMemberModal } from "../(layout-components)/add-member-modal";
+import { LeaveTeamModal } from "../(layout-components)/leave-team-modal";
+import { NotificationsSection } from "../(layout-components)/notifications-section";
+import { TeamInfo } from "../(layout-components)/team-info";
+import { NotificationToast } from "../(layout-components)/notification-toast";
 
 const UserProfilePage = () => {
-  // user data from convex db
-  const {
-    user,
-    loggedUser,
-    activeProfileModal,
-    showProfileModal,
-    hideProfileModal,
-    setLoggedUser,
-  } = useUserContext();
+  const { isSignedIn, isLoaded } = useSession();
+  const user = useQuery(api.users.getFromSession);
 
-  // users and teams data from convex db
-  const { users, teams } = useGameContext();
+  enum ModalType {
+    JOIN = "join",
+    CREATE = "create",
+    ADD = "add",
+    LEAVE = "leave",
+    NONE = "none",
+  }
 
-  // session data from clerk
-  const { isLoaded, isSignedIn } = useSession();
+  const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
+  console.log("modalType: ", modalType);
+  const showJoinModal = () => setModalType(ModalType.JOIN);
+  const showCreateModal = () => setModalType(ModalType.CREATE);
+  const showAddModal = () => setModalType(ModalType.ADD);
+  const showLeaveModal = () => setModalType(ModalType.LEAVE);
+  const closeModal = () => setModalType(ModalType.NONE);
 
-  // modal function to satisfy typescript
-
-  // const fetchedUser = useGetUserFromDB();
-
-  // const [hasTeam, setHasTeam] = useState<boolean | null>(
-  //   user?.has_team || null
-  // );
-
-  // useEffect(() => {
-  //   if (fetchedUser) {
-  //     console.log("fetchedUser: ", fetchedUser);
-  //     setLoggedUser(fetchedUser);
-  //     setHasTeam(fetchedUser.has_team);
-  //   }
-  // }, [fetchedUser]);
-
-  useEffect(() => {
-    // check for returned user data from convex db
-    if (user) {
-      // set local state with user data
-      setLoggedUser(user);
-
-      // setHasTeam(user.has_team);
-    }
-  }, [user]);
-
-  // check that clerk session is loaded and user is signed in
-  if (!isLoaded || !isSignedIn || !loggedUser) {
+  if (!isSignedIn || !isLoaded || !user) {
     return (
-      <div className="flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
+      <div className="flex-center h-40">
+        <span className="loading loading-ring loading-lg scale-150"></span>
       </div>
     );
   }
 
-  /*
-    * User Profile UI Elements
-    # User Info: Should show user's: name, email, team name (if on team).
-    # Action Buttons:
-    - If not on team: Should show buttons: Join Team, Create Team
-      > Each of these opens a dropdown with a list of joinable teams (not full).
-    - If on team: Should show buttons: Add Member, Leave Team
-      > Add member shows a dropdown with a list of unattached participants.
-
-    # If you think of anything else, feel free to add!
-  */
-
   return (
-    <div className="relative bg-slate-800 p-4 sm:p-6 rounded-lg shadow-md">
-      {loggedUser && (
-        <div className="flex flex-col gap-6 items-center">
-          <div className="flex flex-col gap-2 w-full">
-            <p className="text-white text-xl sm:text-2xl font-semibold">
-              {loggedUser.name}
-            </p>
-            <p className="text-white text-base sm:text-lg">
-              {loggedUser.email}
-            </p>
-            <TeamButtons />
-          </div>
-
-          {teams && Array.isArray(teams) && <JoinTeamModal />}
-          <CreateTeamModal />
-        </div>
+    <div className="my-4 md:my-8 space-y-4 md:space-y-6 bg-slate-800 rounded-lg shadow-md p-2 md:p-4">
+      <UserInfoSection />
+      {user.has_team && <TeamInfo />}
+      <TeamSelection
+        showJoinModal={showJoinModal}
+        showCreateModal={showCreateModal}
+        showAddModal={showAddModal}
+        showLeaveModal={showLeaveModal}
+      />
+      {modalType === ModalType.JOIN && (
+        <JoinTeamModal closeModal={closeModal} />
       )}
+      {modalType === ModalType.CREATE && (
+        <CreateTeamModal closeModal={closeModal} />
+      )}
+      {modalType === ModalType.ADD && (
+        <AddMemberModal closeModal={closeModal} />
+      )}
+      {modalType === ModalType.LEAVE && (
+        <LeaveTeamModal closeModal={closeModal} />
+      )}
+
+      <NotificationsSection />
     </div>
   );
 };
 
 export default UserProfilePage;
+
+function UserInfoSection() {
+  const user = useQuery(api.users.getFromSession);
+  return (
+    <div className="flex flex-col w-full p-4 bg-slate-800 rounded-lg">
+      <h1 className="text-xl md:text-2xl font-bold">
+        Welcome, <span className="text-accent">{user?.name}</span>
+      </h1>
+    </div>
+  );
+}
