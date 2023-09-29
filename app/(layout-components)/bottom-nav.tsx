@@ -33,7 +33,7 @@ export const BottomNav = () => {
 
   useEffect(() => {
     const updatedCurrent = pages.findIndex((p) => p.path === pathname);
-    if (current !== updatedCurrent) {
+    if (updatedCurrent !== -1 && current !== updatedCurrent) {
       setCurrent(updatedCurrent);
     }
   }, [pathname]);

@@ -42,7 +42,7 @@ export const TeamSelection: React.FC<TeamSelectionProps> = ({
             disabled={teamIsFull}
             onClick={() => showAddModal()}
           >
-            {teamIsFull ? "Team is Full" : "Add Teammate"}
+            {teamIsFull ? "Team is Full" : "Invite Player"}
           </button>
           <button
             className="btn btn-accent w-full sm:w-auto"
