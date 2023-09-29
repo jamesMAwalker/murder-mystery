@@ -62,23 +62,23 @@ export const resetRounds = mutation({
     const rounds = await db.query('rounds').collect()
 
     // filter for 1st round.
-    const roundOne = await db.query('rounds')
+    const roundZero = await db.query('rounds')
       .filter(round => {
-        return round.eq(round.field('round_number'), 1)
+        return round.eq(round.field('round_number'), 0)
       })
       .unique()
 
     // error if not found.
-    if (!roundOne?._id) throw Error('Error resetting!');
+    if (!roundZero?._id) throw Error('Error resetting!');
 
     // set all other rounds to inactive
     rounds.forEach(round => {
-      if (round._id !== roundOne._id) {
+      if (round._id !== roundZero._id) {
         db.patch(round._id, {
           active: false
         })
       } else {
-        db.patch(roundOne._id, {
+        db.patch(roundZero._id, {
           active: true
         })
       }
