@@ -34,7 +34,8 @@ export const BottomNav = () => {
       setCurrent(updatedCurrent);
     }
     if (pathname === "/user-profile") {
-      setCurrent(pages.length - 1);
+      const findProfile = pages.findIndex((p) => p.path === "/user-profile");
+      setCurrent(findProfile);
     }
   }, [pathname]);
 
