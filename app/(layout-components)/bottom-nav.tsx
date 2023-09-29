@@ -34,7 +34,7 @@ export const BottomNav = () => {
       setCurrent(updatedCurrent);
     }
     if (pathname === "/user-profile") {
-      setCurrent(5);
+      setCurrent(pages.length - 1);
     }
   }, [pathname]);
 
