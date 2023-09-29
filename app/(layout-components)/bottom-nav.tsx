@@ -18,23 +18,23 @@ const pages: IDropdownContent[] = [
   { page: "Instructions", path: "/instructions" },
   { page: "Notes", path: "/notes" },
   { page: "Suspects", path: "/suspects" },
-  { page: "Evidence Reports", path: "reports" },
-  { page: "Profile", path: "/user-profile", hidden: true },
+  { page: "Evidence Reports", path: "/reports" },
+  { page: "Profile", path: "/user-profile" },
 ];
 
 export const BottomNav = () => {
   const { push } = useRouter(); // Directly destructure `pathname` from `useRouter()`
   const pathname = usePathname(); // Use `usePathname()` instead of `useRouter().pathname`
+  console.log("pathname: ", pathname);
   const [open, setOpen] = useState(false);
+  console.log("open: ", open);
   const [current, setCurrent] = useState(0);
+  console.log("current: ", current);
 
   useEffect(() => {
     const updatedCurrent = pages.findIndex((p) => p.path === pathname);
-    if (current !== updatedCurrent && pathname !== "/user-profile") {
+    if (current !== updatedCurrent) {
       setCurrent(updatedCurrent);
-    }
-    if (pathname === "/user-profile") {
-      setCurrent(5);
     }
   }, [pathname]);
 
@@ -43,6 +43,7 @@ export const BottomNav = () => {
   const handleClick = (idx: number, path: string) => {
     setCurrent(idx);
     push(path);
+    setOpen(false);
   };
 
   return (
@@ -52,6 +53,7 @@ export const BottomNav = () => {
         <span>{pages[current].page}</span>
         <span className={cn(rotated)}>▲</span>
       </p>
+
       <ul className="w-full collapse-content flex-col-center p-0">
         {pages.map(({ page, path, hidden }, idx) => {
           const active = idx === current;
