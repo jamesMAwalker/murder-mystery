@@ -46,10 +46,11 @@ export function ReportSection() {
                 disabled={report?.released}
                 onClick={() => handleReleaseReport(report?._id)}
                 className='w-full btn btn-warning'
-              >
+                >
                 Release Report
               </button>
               <button
+                disabled={!report?.released}
                 onClick={() => handleRetractReport(report?._id)}
                 className='w-full btn btn-warning btn-outline'
               >
