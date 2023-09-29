@@ -30,6 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </main>
           <ToastHandler />
           <BottomNav />
+          <img src="/site-bg.png" alt="darkened murder evidence board" className="absolute inset-0 full" />
         </Providers>
       </body>
     </html>
