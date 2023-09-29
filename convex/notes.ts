@@ -9,7 +9,7 @@ export const create = mutation({
     note_content: v.string()
   },
   handler: async (ctx, { suspect_id, note_content }) => {
-    
+
     const { db } = ctx
 
     // get user.
@@ -77,12 +77,12 @@ export const getFromSessionByUser = query({
     suspect_id: v.id('suspects')
   },
   handler: async (ctx, { suspect_id }) => {
-    console.log('suspect_id: ', suspect_id);
+
     const { db } = ctx
 
     // get user from db using clerk auth session.
     const user = await getUserFromAuthSession(ctx)
-    // console.log('user: ', user);
+    // 
 
     // get notes using user id and suspect id.
     const note = await db
@@ -95,7 +95,7 @@ export const getFromSessionByUser = query({
       })
       .unique()
 
-    console.log('note: ', note);
+
     return note
   }
 })

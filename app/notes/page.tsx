@@ -6,11 +6,13 @@
   # How should we display suspects? I'll first try a dropdown with images, but also considering a 4 column grid, or possible a series of stacked tabs. In any case, it should be compact enough to allow the notes content to be at least 50% of the vertical viewport. This way users still understand where they are in the app. 
 */
 
+import { useEffect, useRef, useState } from 'react'
+import { useConvexAuth, useMutation, useQuery } from 'convex/react-internal'
+
 import { api } from '@/convex/_generated/api'
 import { Doc, Id } from '@/convex/_generated/dataModel'
+
 import { cn } from '@/lib/utils'
-import { useConvexAuth, useMutation, useQuery } from 'convex/react-internal'
-import { useEffect, useRef, useState } from 'react'
 
 const NotesPage = ({ params }: any) => {
   const [selectedSuspect, setSelectedSuspect] = useState(0)
@@ -67,7 +69,6 @@ const NotesPage = ({ params }: any) => {
 export default NotesPage
 
 function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
-
   const suspectNote = useQuery(api.notes.getFromSessionByUser, {
     suspect_id: suspect._id
   })
@@ -109,13 +110,20 @@ function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
     saveNewNote({
       suspect_id: suspect._id,
       note_content: newNoteContent
-    })
+    });
+    
+    (document?.activeElement as HTMLTextAreaElement)?.blur() // unfocus input so it shifts from create to update
     handleShowNotification()
   }
 
   useEffect(() => {
     setHasExistingNote(!!suspectNote)
   }, [suspectNote, suspect._id])
+
+  useStoppedTyping(newNoteContent, 3000, () => console.log('new note created!'))
+  useStoppedTyping(existingNoteContent!, 1000, () =>
+    console.log('existing note updated!')
+  )
 
   return (
     <div className='flex-col-tl relative w-full'>
@@ -163,4 +171,16 @@ function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
       )}
     </div>
   )
+}
+
+// refactor to only start timer after typing has started.
+const useStoppedTyping = (
+  value: string,
+  timeout: number = 1000,
+  onStop: () => void
+) => {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => onStop(), timeout)
+    return () => clearTimeout(timeoutId)
+  }, [value, onStop, timeout])
 }
