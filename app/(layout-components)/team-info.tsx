@@ -31,7 +31,7 @@ export const TeamInfo: React.FC = () => {
       <h2 className="text-white text-2xl font-bold">Team Details</h2>
 
       <div className="text-white">
-        <h3 className="text-xl font-semibold">Name: {team?.team_name}</h3>
+        <h3 className="text-xl font-semibold">Team Name: {team?.team_name}</h3>
         <p>Membership: {displayedTeammates?.length}/10</p>
         <p>Captain: {captain?.name}</p>
       </div>
