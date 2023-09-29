@@ -28,6 +28,7 @@ export const RoundsSection = () => {
     setResetButtonText('Game Reset!')
 
     setTimeout(() => {
+      console.log('gameAtStart: ', gameAtStart);
       setResetButtonText('Reset All Rounds')
     }, 2000)
   }, [gameAtStart])
@@ -37,19 +38,21 @@ export const RoundsSection = () => {
   return (
     <div className='flex-col-tl gap-8 w-full'>
       <h2 className='text-xl font-bold'>Manage Rounds</h2>
-      {rounds?.map((round, idx) => {
-        const isFinalRound = idx === rounds.length - 1
+      {rounds
+        ?.sort((ra, rb) => ra.round_number - rb.round_number)
+        ?.map((round, idx) => {
+          const isFinalRound = idx === rounds.length - 1
 
-        return (
-          <TimerBlock
-            key={round._id}
-            round={round}
-            startingSeconds={600}
-            isFinalRound={isFinalRound}
-            nextRound={rounds[idx + 1]}
-          />
-        )
-      })}
+          return (
+            <TimerBlock
+              key={round._id}
+              round={round}
+              startingSeconds={round.starting_time}
+              isFinalRound={isFinalRound}
+              nextRound={rounds[idx + 1]}
+            />
+          )
+        })}
       <button {...longPress} className='btn btn-error full'>
         {resetButtonText}
       </button>
