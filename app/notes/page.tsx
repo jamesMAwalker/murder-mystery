@@ -6,11 +6,13 @@
   # How should we display suspects? I'll first try a dropdown with images, but also considering a 4 column grid, or possible a series of stacked tabs. In any case, it should be compact enough to allow the notes content to be at least 50% of the vertical viewport. This way users still understand where they are in the app. 
 */
 
+import { useEffect, useRef, useState } from 'react'
+import { useConvexAuth, useMutation, useQuery } from 'convex/react-internal'
+
 import { api } from '@/convex/_generated/api'
 import { Doc, Id } from '@/convex/_generated/dataModel'
+
 import { cn } from '@/lib/utils'
-import { useConvexAuth, useMutation, useQuery } from 'convex/react-internal'
-import { useEffect, useRef, useState } from 'react'
 
 const NotesPage = ({ params }: any) => {
   const [selectedSuspect, setSelectedSuspect] = useState(0)
@@ -30,25 +32,29 @@ const NotesPage = ({ params }: any) => {
         <h2>Choose a Suspect</h2>
         <ul className='w-full grid grid-cols-3 gap-4'>
           {suspects?.map((sus, idx) => {
-            const selectedStyle =
-              idx === selectedSuspect ? 'border-secondary' : 'border-neutral'
+            const selectedStyle = idx === selectedSuspect
 
             return (
               <li
                 key={sus._id}
                 onClick={() => setSelectedSuspect(idx)}
                 className={cn(
-                  'relative rounded-md w-full flex-col-bl aspect-square border border-4 p-2',
-                  selectedStyle
+                  'SUSPECT_PORTRAIT relative rounded-md w-full flex-col-bl aspect-square border border-4 p-2',
+                  selectedStyle ? 'border-secondary' : 'border-neutral'
                 )}
               >
-                <span className='relative z-10 badge badge-neutral'>
+                <span
+                  className={cn(
+                    'relative z-10 badge badge-neutral',
+                    selectedStyle ? 'badge-secondary' : 'badge-neutral'
+                  )}
+                >
                   {sus.suspect_name}
                 </span>
                 <img
                   src={sus.image_url!}
                   alt={sus.suspect_name}
-                  className='absolute object-cover full inset-0'
+                  className='absolute object-cover full inset-0 rounded-sm'
                 />
               </li>
             )
@@ -63,70 +69,118 @@ const NotesPage = ({ params }: any) => {
 export default NotesPage
 
 function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
-  const [hasExistingNote, setHasExistingNote] = useState(false)
-  
-  const existingNoteRef = useRef(null)
-  const newNoteRef = useRef(null)
-
   const suspectNote = useQuery(api.notes.getFromSessionByUser, {
     suspect_id: suspect._id
   })
-  
-  const [existingNoteContent, setExistingNoteContent] = useState(suspectNote?.note)
+
+  // notification controls.
+  const [showNotification, setShowNotification] = useState(false)
+  const handleShowNotification = () => {
+    setShowNotification(true)
+    setTimeout(() => {
+      setShowNotification(false)
+    }, 3000)
+  }
+
+  // control "if existing" state.
+  const [hasExistingNote, setHasExistingNote] = useState(false)
+  useEffect(() => {
+    setExistingNoteContent(suspectNote?.note)
+  }, [suspectNote?.note])
+
+  // existing note controls.
+  const [existingNoteContent, setExistingNoteContent] = useState(
+    suspectNote?.note
+  )
   const updateExistingNote = useMutation(api.notes.update)
   const handleUpdateExisting = () => {
     updateExistingNote({
       note_id: suspectNote?._id!,
       note_content: existingNoteContent!
     })
+    handleShowNotification()
   }
-  
-  
-  const [newNoteContent, setNewNoteContent] = useState('Record your notes here...')
+
+  // new note controls.
+  const [newNoteContent, setNewNoteContent] = useState(
+    'Record your notes here...'
+  )
   const saveNewNote = useMutation(api.notes.create)
   const handleSaveNew = () => {
-    if (newNoteRef.current !== null) {
-      const noteContent = newNoteRef?.current['value']
-
-      const savedNoteId = saveNewNote({
-        suspect_id: suspect._id,
-        note_content: noteContent
-      })
-      console.log('savedNoteId: ', savedNoteId)
-    }
+    saveNewNote({
+      suspect_id: suspect._id,
+      note_content: newNoteContent
+    });
+    
+    (document?.activeElement as HTMLTextAreaElement)?.blur() // unfocus input so it shifts from create to update
+    handleShowNotification()
   }
 
   useEffect(() => {
     setHasExistingNote(!!suspectNote)
-  }, [suspectNote])
+  }, [suspectNote, suspect._id])
 
-  return hasExistingNote ? (
-    <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
-      <div className='flex w-full justify-between items-center'>
-        <h4 className='font-bold'>Notes on {suspect.suspect_name}</h4>
-        <button onClick={handleUpdateExisting} className='btn btn-primary'>Save</button>
-      </div>
-      <textarea
-        ref={existingNoteRef}
-        value={existingNoteContent}
-        onChange={(e) => setExistingNoteContent(e.target.value)}
-        className='border border-accent w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
-      />
-    </div>
-  ) : (
-    <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
-      <div className='flex w-full justify-between items-center'>
-        <h4 className='font-bold'>Notes on {suspect.suspect_name}</h4>
-        <button onClick={handleSaveNew} className='btn btn-primary'>
-          Save
-        </button>
-      </div>
-      <textarea
-        ref={newNoteRef}
-        className='border border-secondary w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
-        value={newNoteContent}
-        onChange={(e) => setNewNoteContent(e.target.value)}
-      />
+  useStoppedTyping(newNoteContent, 3000, () => console.log('new note created!'))
+  useStoppedTyping(existingNoteContent!, 1000, () =>
+    console.log('existing note updated!')
+  )
+
+  return (
+    <div className='flex-col-tl relative w-full'>
+      {hasExistingNote ? (
+        <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
+          <div className='flex w-full justify-between items-end relative'>
+            <h4 className='font-bold'>Notes on {suspect.suspect_name}</h4>
+            <div className='flex items-end justify-center gap-4'>
+              {showNotification && (
+                <p className='text-primary font-bold'>Note Saved.</p>
+              )}
+              <button
+                onClick={handleUpdateExisting}
+                className='btn btn-primary'
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <textarea
+            value={existingNoteContent}
+            onChange={(e) => setExistingNoteContent(e.target.value)}
+            className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+          />
+        </div>
+      ) : (
+        <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
+          <div className='flex w-full justify-between items-center'>
+            <h4 className='font-bold'>Notes on {suspect.suspect_name}</h4>
+            <div className='flex items-end justify-center gap-4'>
+              {showNotification && (
+                <p className='text-primary font-bold'>Note Saved.</p>
+              )}
+              <button onClick={handleSaveNew} className='btn btn-primary'>
+                Save
+              </button>
+            </div>
+          </div>
+          <textarea
+            className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+            value={newNoteContent}
+            onChange={(e) => setNewNoteContent(e.target.value)}
+          />
+        </div>
+      )}
     </div>
   )
+}
+
+// refactor to only start timer after typing has started.
+const useStoppedTyping = (
+  value: string,
+  timeout: number = 1000,
+  onStop: () => void
+) => {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => onStop(), timeout)
+    return () => clearTimeout(timeoutId)
+  }, [value, onStop, timeout])
 }

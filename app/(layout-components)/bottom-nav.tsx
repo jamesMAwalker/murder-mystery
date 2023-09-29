@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
+import { RoundTimer } from './round-timer'
+
 
 interface IDropdownContent {
   [key: string]: string;
@@ -32,9 +34,10 @@ export const BottomNav = () => {
   };
 
   return (
-    <div className="fixed z-50 bottom-0 left-0 rounded-none collapse bg-primary w-full">
-      <input onClick={() => setOpen(!open)} type="checkbox" className="peer" />
-      <p className="collapse-title font-bold flex items-center justify-between bg-primary peer-checked:text-secondary-content">
+
+    <div className='fixed z-50 bottom-0 left-0 rounded-none collapse bg-primary w-full'>
+      <input onClick={() => setOpen(!open)} type='checkbox' className='peer' />
+      <p className='collapse-title font-bold flex items-center justify-between bg-primary peer-checked:text-secondary-content'>
         <span>{pages[current].page}</span>
         <span className={cn(rotated)}>▲</span>
       </p>
@@ -56,6 +59,7 @@ export const BottomNav = () => {
             );
         })}
       </ul>
+      <RoundTimer />
     </div>
   );
 };

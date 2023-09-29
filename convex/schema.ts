@@ -44,4 +44,17 @@ export default defineSchema({
     user_id: v.id("users"),
     user_name: v.string(),
   }),
+  rounds: defineTable({
+    remaining_time: v.float64(),
+    round_number: v.float64(),
+    starting_time: v.float64(),
+    completed: v.boolean(),
+    active: v.boolean(),
+  }),
+  clues: defineTable({
+    content: v.string(),
+    order: v.float64(),
+    released: v.boolean(),
+    title: v.string(),
+  }),
 });
