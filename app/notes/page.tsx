@@ -131,6 +131,7 @@ function NoteForm({ suspect }: { suspect: Doc<"suspects"> }) {
     setHasExistingNote(!!suspectNote);
   }, [suspectNote, suspect._id]);
 
+  // save on stop typing WIP.
   useStoppedTyping(newNoteContent, 3000, () =>
     console.log("new note created!")
   );
@@ -139,18 +140,21 @@ function NoteForm({ suspect }: { suspect: Doc<"suspects"> }) {
   );
 
   return (
-    <div className="flex-col-tl relative w-full">
+    <div className='flex-col-tl relative w-full'>
       {hasExistingNote ? (
-        <div className="NOTE_TEST flex-col-tl gap-4 w-full">
-          <div className="flex w-full justify-between items-end relative">
-            <h4 className="font-bold">Notes on {suspect.suspect_name}</h4>
-            <div className="flex items-end justify-center gap-4">
+        <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
+          <div className='flex w-full justify-between items-end relative'>
+            <h4 className='font-bold'>
+              Notes on{' '}
+              <span className='text-secondary'>{suspect.suspect_name}</span>
+            </h4>
+            <div className='flex items-end justify-center gap-4'>
               {showNotification && (
-                <p className="text-primary font-bold">Note Saved.</p>
+                <p className='text-primary font-bold'>Note Saved.</p>
               )}
               <button
                 onClick={handleUpdateExisting}
-                className="btn btn-primary"
+                className='btn btn-primary'
               >
                 Save
               </button>
@@ -159,31 +163,34 @@ function NoteForm({ suspect }: { suspect: Doc<"suspects"> }) {
           <textarea
             value={existingNoteContent}
             onChange={(e) => setExistingNoteContent(e.target.value)}
-            className="border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square"
+            className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
           />
         </div>
       ) : (
-        <div className="NOTE_TEST flex-col-tl gap-4 w-full">
-          <div className="flex w-full justify-between items-center">
-            <h4 className="font-bold">Notes on {suspect.suspect_name}</h4>
-            <div className="flex items-end justify-center gap-4">
+        <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
+          <div className='flex w-full justify-between items-center'>
+            <h4 className='font-bold'>
+              Notes on{' '}
+              <span className='text-secondary'>{suspect.suspect_name}</span>
+            </h4>
+            <div className='flex items-end justify-center gap-4'>
               {showNotification && (
-                <p className="text-primary font-bold">Note Saved.</p>
+                <p className='text-primary font-bold'>Note Saved.</p>
               )}
-              <button onClick={handleSaveNew} className="btn btn-primary">
+              <button onClick={handleSaveNew} className='btn btn-primary'>
                 Save
               </button>
             </div>
           </div>
           <textarea
-            className="border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square"
+            className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
             value={newNoteContent}
             onChange={(e) => setNewNoteContent(e.target.value)}
           />
         </div>
       )}
     </div>
-  );
+  )
 }
 
 // refactor to only start timer after typing has started.
