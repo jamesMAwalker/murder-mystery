@@ -1,21 +1,29 @@
-'use client';
+'use client'
 
 import React from 'react'
 import { useQuery, useMutation } from 'convex/react'
 
 import { api } from '@/convex/_generated/api'
-
+import { Id } from '@/convex/_generated/dataModel'
 
 export function ReportSection() {
   const reports = useQuery(api.clues.getAll)
 
+  // Release
   const releaseReport = useMutation(api.clues.release)
-
-  function handleReleaseReport() {
-    // releaseReport()
+  async function handleReleaseReport(reportId: Id<'clues'>) {
+    console.log('releasing report...')
+    const res = await releaseReport({ clue_id: reportId })
+    console.log('release response: ', res)
   }
 
-    // const longPress = useLongPress(handleResetGame, { delay: 1000 })
+  // Retraction
+  const retractReport = useMutation(api.clues.retract)
+  async function handleRetractReport(reportId: Id<'clues'>) {
+    console.log('retracting report...')
+    const res = await retractReport({ clue_id: reportId })
+    console.log('retract res: ', res)
+  }
 
   return (
     <div className='w-full rounded-md flex-col-tl gap-8'>
@@ -28,14 +36,23 @@ export function ReportSection() {
               key={report?._id}
             >
               <div className='TEXT_CONTENT flex-col-tl gap-2'>
-                <label className='text-sm tracking-widest uppercase'>
+                <label className='text-warning text-sm tracking-widest uppercase'>
                   Report #{report.order}
                 </label>
                 <h4 className='font-bold text-lg'>{report.title}</h4>
                 <p>{report.content}</p>
               </div>
-              <button className='w-full btn btn-warning'>Release Report (Long Press)</button>
-              <button className='w-full btn btn-warning btn-outline'>
+              <button
+                disabled={report?.released}
+                onClick={() => handleReleaseReport(report?._id)}
+                className='w-full btn btn-warning'
+              >
+                Release Report
+              </button>
+              <button
+                onClick={() => handleRetractReport(report?._id)}
+                className='w-full btn btn-warning btn-outline'
+              >
                 Retract Report
               </button>
             </li>
