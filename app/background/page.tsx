@@ -22,11 +22,11 @@ function IntroSection() {
       />
       <p>
         In the vibrant coastal city of Danang, an exclusive party has been
-        organized at an atmospheric location known as the "Dragon&#39;s Lair."
-        The occasion is the celebration of the successful collaboration between
-        Đen Vâu, the famous Vietnamese rapper, and Myles, the charismatic
-        language teacher. The event is attended by a select group of
-        individuals, each with their own secrets and motives.
+        organized at an atmospheric location known as the &quot;Dragon&#39;s
+        Lair.&quot; The occasion is the celebration of the successful
+        collaboration between Đen Vâu, the famous Vietnamese rapper, and Myles,
+        the charismatic language teacher. The event is attended by a select
+        group of individuals, each with their own secrets and motives.
       </p>
     </div>
   )

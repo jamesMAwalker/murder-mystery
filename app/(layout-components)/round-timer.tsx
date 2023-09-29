@@ -1,24 +1,17 @@
 'use client';
 
-import { useConvexAuth, useMutation, useQuery } from 'convex/react-internal'
+import { useEffect, useState } from 'react'
+import { useQuery } from 'convex/react-internal'
 
 import { api } from '@/convex/_generated/api'
-import { useTimer } from 'react-timer-hook'
 import { cn } from '@/lib/utils'
-import { useEffect, useState } from 'react'
 
 export const RoundTimer = () => {
   const currentRound = useQuery(api.rounds.getActive)
-  console.log('currentRound: ', currentRound)
 
   const { minutes, seconds } = secondsToMinutesAndSeconds(
     currentRound?.remaining_time!
   )
-
-  const roundEndingIn5 = minutes > 5
-  const roundEndingIn2 = minutes > 2
-  const roundEndingIn1 = minutes > 2
-
 
   const [bgColor, setBgColor] = useState('bg-success')
   useEffect(() => {
