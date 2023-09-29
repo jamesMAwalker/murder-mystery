@@ -1,0 +1,20 @@
+[
+  {
+    "order": 1,
+    "title": "Autopsy Report",
+    "content": "The autopsy report reveals that Đen Vâu was poisoned. The poison was found in a glass of whiskey he had been drinking, making it clear that this was a deliberate act. However, the identity of the poisoner remains a mystery.",
+    "released": false
+  },
+  {
+    "order": 2,
+    "title": "Blood Toxicology Report",
+    "content": "Further investigation reveals that Đen Vâu's blood contained traces of a rare poison only accessible to someone with a deep knowledge of chemistry. This clue implicates someone with expertise in the field, such as Josh, who works in IT.",
+    "released": false
+  },
+  {
+    "order": 3,
+    "title": "Incriminating Evidence",
+    "content": "The autopsy report reveals that Đen Vâu was poisoned. The poison was found in a glass of whiskey he had been drinking, making it clear that this was a deliberate act. However, the identity of the poisoner remains a mystery.",
+    "released": false
+  }
+]

@@ -51,4 +51,10 @@ export default defineSchema({
     completed: v.boolean(),
     active: v.boolean(),
   }),
+  clues: defineTable({
+    content: v.string(),
+    order: v.float64(),
+    released: v.boolean(),
+    title: v.string(),
+  }),
 });
