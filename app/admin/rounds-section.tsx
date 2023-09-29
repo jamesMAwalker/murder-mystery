@@ -179,7 +179,6 @@ function useUpdateDbRoundTimer({ startingSeconds, roundId }: any) {
   // create timer.
   const timer = useTimer({
     expiryTimestamp: time,
-    onExpire: () => ,
     autoStart: false
   })
 
