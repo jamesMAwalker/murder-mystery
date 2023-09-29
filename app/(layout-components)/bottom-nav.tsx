@@ -18,6 +18,7 @@ const pages: IDropdownContent[] = [
   { page: "Instructions", path: "instructions" },
   { page: "Notes", path: "notes" },
   { page: "Suspects", path: "suspects" },
+  { page: "Evidence Reports", path: "reports" },
 ];
 
 export const BottomNav = () => {
