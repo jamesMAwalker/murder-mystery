@@ -47,7 +47,7 @@ function SubmitGuessSection() {
 
   const suspects = useQuery(api.suspects.getAll)
 
-  const teamGuess = useQuery(api.guesses.)
+  const teamGuess = useQuery(api.guesses.getFromSessionByTeam)
 
   if (!isAuthenticated) return null;
 
