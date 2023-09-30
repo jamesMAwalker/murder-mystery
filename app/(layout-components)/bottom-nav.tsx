@@ -20,6 +20,7 @@ const pages: IDropdownContent[] = [
   { page: "Suspects", path: "/suspects" },
   { page: "Evidence Reports", path: "/reports" },
   { page: "Profile", path: "/user-profile" },
+  { page: "Submit Guess", path: "/submit-guess" },
 ];
 
 export const BottomNav = () => {
