@@ -2,13 +2,26 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+  game: defineTable({
+    concluded: v.boolean(),
+    guilty_suspect_id: v.id("suspects"),
+    guilty_suspect_name: v.string(),
+    votes_locked: v.boolean()
+  }),
+  guesses: defineTable({
+    guesses: v.array(v.id("suspects")),
+    suspect_guess_id: v.id("suspects"),
+    suspect_guess_name: v.string(),
+    team_id: v.id("teams"),
+    team_name: v.string(),
+  }),
   users: defineTable({
     user_id: v.string(),
     name: v.string(),
     email: v.string(),
     has_team: v.boolean(),
     is_captain: v.boolean(),
-    team_id: v.union(v.string(), v.null()),
+    team_id: v.union(v.id("users"), v.string(), v.null()),
     team_name: v.union(v.string(), v.null()),
   }),
   teams: defineTable({
