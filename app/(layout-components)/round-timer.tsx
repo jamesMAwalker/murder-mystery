@@ -23,6 +23,9 @@ export const RoundTimer = () => {
     if (remainingTime <= 10)  setBgColor('bg-error animate-pulse');
   }, [currentRound?.remaining_time])
 
+  const isRoundZero = currentRound?.round_number === 0
+  const roundsStarted = currentRound?.round_number! > 0
+
   return (
     <div
       className={cn(
@@ -30,10 +33,15 @@ export const RoundTimer = () => {
         bgColor
       )}
     >
-      <span>Round {currentRound?.round_number || ''}</span>
-      <span>
-        {minutes || '00'}:{seconds || '00'}{' '}
-      </span>
+      {isRoundZero && (
+        <>
+          <span>Game starting in: </span>
+          <span>
+            {minutes || '00'}:{seconds || '00'}{' '}
+          </span>
+        </>
+      )}
+      {roundsStarted && <span>Round {currentRound?.round_number || ''}</span>}
     </div>
   )
 }
