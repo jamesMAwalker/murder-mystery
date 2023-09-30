@@ -15,7 +15,8 @@ export const RoundsSection = () => {
 
   const rounds = useQuery(api.rounds.getAll)
 
-  const resetGame = useMutation(api.rounds.resetRounds)
+  const resetGame = useMutation(api.game.resetGame)
+  const endGame = useMutation(api.game.endGame)
 
   const handleResetGame = () => {
     setResetButtonText('Game Resetting...')
@@ -33,11 +34,30 @@ export const RoundsSection = () => {
     }, 2000)
   }, [gameAtStart])
 
-  const longPress = useLongPress(handleResetGame, { delay: 1000 })
+  const longPressReset = useLongPress(handleResetGame, { delay: 1000 })
+  const longPressEnd = useLongPress(() => endGame(), { delay: 1000 })
 
   return (
     <div className='flex-col-tl gap-8 w-full'>
-      <h2 className='text-xl font-bold'>Manage Rounds</h2>
+      <div className='HEADER flex-col-tl gap-2'>
+        <h2 className='text-xl font-bold'>Manage Game</h2>
+        <p>These buttons must be long pressed to actuate.</p>
+      </div>
+      <button {...longPressReset} className='btn btn-success w-full'>
+        Start Game
+      </button>
+      <button {...longPressReset} className='btn btn-warning full'>
+        {/* {resetButtonText} */}
+        Reset Game
+      </button>
+      <div className='flex-col-tl w-full'>
+        <button {...longPressEnd} className='btn btn-error full'>
+          End Game
+        </button>
+        <p className='pt-2 text-red-500'>
+          This will reveal the answer to all players.
+        </p>
+      </div>
       {rounds
         ?.sort((ra, rb) => ra.round_number - rb.round_number)
         ?.map((round, idx) => {
@@ -53,9 +73,6 @@ export const RoundsSection = () => {
             />
           )
         })}
-      <button {...longPress} className='btn btn-error full'>
-        {resetButtonText}
-      </button>
     </div>
   )
 }
