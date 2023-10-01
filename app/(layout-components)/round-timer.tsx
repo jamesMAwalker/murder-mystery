@@ -20,7 +20,7 @@ export const RoundTimer = () => {
     if (remainingTime >= 301)  setBgColor('bg-success');
     if (remainingTime <= 300)  setBgColor('bg-warning');
     if (remainingTime <= 120)  setBgColor('bg-error');
-    if (remainingTime <= 10)  setBgColor('bg-error animate-pulse');
+    if (remainingTime <= 10)   setBgColor('bg-error animate-pulse');
   }, [currentRound?.remaining_time])
 
   const isRoundZero = currentRound?.round_number === 0
