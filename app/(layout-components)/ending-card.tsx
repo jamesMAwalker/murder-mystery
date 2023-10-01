@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +9,8 @@ import { faTrophy, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 export const EndingCard = () => {
   const [visible, setVisible] = useState(false);
   const game = useQuery(api.game.getGameObject);
-  const guess = useQuery(api.guesses.getFromSessionByTeam);
+
+  const getTeamGuess = useMutation(api.guesses.getFunctionFromSessionByTeam);
 
   const hardCodedGuess = {
     suspect_id: "55zgs7cfqt63krxvcccggc6e9jmqg38",
@@ -23,8 +24,15 @@ export const EndingCard = () => {
   const winningGuess = hardCodedGuess.suspect_id === game?.guilty_suspect_id;
 
   useEffect(() => {
-    if (game) {
-      setVisible(game?.concluded);
+    if (game?.concluded) {
+      // get team guess
+      const guess = getTeamGuess()
+
+      // compare guess suspect id with guilty suspect id.
+
+      // set winning to comparison result
+
+      setVisible(true);
     }
   }, [game]);
 

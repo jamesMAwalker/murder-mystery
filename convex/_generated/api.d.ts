@@ -25,6 +25,7 @@ import type * as rounds from "../rounds";
 import type * as suspects from "../suspects";
 import type * as teams from "../teams";
 import type * as users from "../users";
+import type * as user_guesses from "../user_guesses";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -46,6 +47,7 @@ declare const fullApi: ApiFromModules<{
   suspects: typeof suspects;
   teams: typeof teams;
   users: typeof users;
+  user_guesses: typeof user_guesses;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

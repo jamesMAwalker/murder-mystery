@@ -137,7 +137,26 @@ export const getFromSessionByTeam = query({
       )
       .unique();
 
-    if (!teamGuess) return { status: 200, message: "No guess found." };
+    console.log('teamGuess: ', teamGuess);
+
+    return teamGuess;
+  },
+});
+
+export const getFunctionFromSessionByTeam = mutation({
+  handler: async (ctx) => {
+    const { db } = ctx;
+
+    // get user from session.
+    const user = await getUserFromAuthSession(ctx);
+
+    // get requests by team id.
+    const teamGuess = await db
+      .query("guesses")
+      .filter((guess) =>
+        guess.eq(guess.field("team_id"), user?.team_id as Id<'teams'>)
+      )
+      .unique();
 
     return teamGuess;
   },
