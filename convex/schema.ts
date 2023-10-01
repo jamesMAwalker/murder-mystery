@@ -38,18 +38,6 @@ export default defineSchema({
     requested_team_id: v.id("teams"),
     requesting_user_id: v.id("users"),
   }),
-  rounds: defineTable({
-    phases: v.array(
-      v.object({
-        active: v.boolean(),
-        completed: v.boolean(),
-        phase_ending_time: v.float64(),
-        phase_starting_time: v.float64(),
-        phase_title: v.string(),
-      })
-    ),
-    round_number: v.float64(),
-  }),
   suspects: defineTable({
     age: v.string(),
     bio: v.string(),
