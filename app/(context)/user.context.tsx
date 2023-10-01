@@ -2,10 +2,10 @@
 
 import { createContext, ReactNode, useContext, useState } from "react";
 
-import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
-import { useGetTeamFromDB } from "../(hooks)/convex/teams/useGetTeamFromDB";
-import { useGetRequestsByUserID } from "../(hooks)/convex/requests/useGetRequestsByUserID";
-import { useGetInvitationsByUserID } from "../(hooks)/convex/invitations/useGetInvitationsByUserID";
+// import { useGetUserFromDB } from "../(hooks)/convex/users/useGetUserFromDB";
+// import { useGetTeamFromDB } from "../(hooks)/convex/teams/useGetTeamFromDB";
+// import { useGetRequestsByUserID } from "../(hooks)/convex/requests/useGetRequestsByUserID";
+// import { useGetInvitationsByUserID } from "../(hooks)/convex/invitations/useGetInvitationsByUserID";
 
 const defaults: {
   user: IConvexUser | null;
@@ -35,42 +35,42 @@ const UserContext = createContext<typeof defaults | null>(defaults);
 
 export const useUserContext = () => useContext(UserContext)!;
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const user = useGetUserFromDB() || null;
-  const team = useGetTeamFromDB(user?.team_id) || null;
+// export const UserProvider = ({ children }: { children: ReactNode }) => {
+//   const user = useGetUserFromDB() || null;
+//   const team = useGetTeamFromDB(user?.team_id) || null;
 
-  const [loggedUser, setLoggedUser] = useState<IConvexUser | null>(null);
-  const [activeProfileModal, setActiveProfileModal] = useState<string | null>(
-    null
-  );
+//   const [loggedUser, setLoggedUser] = useState<IConvexUser | null>(null);
+//   const [activeProfileModal, setActiveProfileModal] = useState<string | null>(
+//     null
+//   );
 
-  const requests = useGetRequestsByUserID(user?._id) || null;
-  const invitations = useGetInvitationsByUserID(user?._id) || null;
+//   const requests = useGetRequestsByUserID(user?._id) || null;
+//   const invitations = useGetInvitationsByUserID(user?._id) || null;
 
-  function showProfileModal(id: string) {
-    setActiveProfileModal(id);
-  }
+//   function showProfileModal(id: string) {
+//     setActiveProfileModal(id);
+//   }
 
-  function hideProfileModal() {
-    setActiveProfileModal(null);
-  }
+//   function hideProfileModal() {
+//     setActiveProfileModal(null);
+//   }
 
-  return (
-    <UserContext.Provider
-      value={{
-        user,
-        team,
-        requests,
-        invitations,
-        loggedUser,
-        activeProfileModal,
-        setActiveProfileModal,
-        setLoggedUser,
-        showProfileModal,
-        hideProfileModal,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
-  );
-};
+//   return (
+//     <UserContext.Provider
+//       value={{
+//         user,
+//         team,
+//         requests,
+//         invitations,
+//         loggedUser,
+//         activeProfileModal,
+//         setActiveProfileModal,
+//         setLoggedUser,
+//         showProfileModal,
+//         hideProfileModal,
+//       }}
+//     >
+//       {children}
+//     </UserContext.Provider>
+//   );
+// };

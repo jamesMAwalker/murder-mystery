@@ -39,16 +39,11 @@ export default defineSchema({
     requesting_user_id: v.id("users"),
   }),
   rounds: defineTable({
-    phases: v.array(
-      v.object({
-        active: v.boolean(),
-        completed: v.boolean(),
-        phase_ending_time: v.float64(),
-        phase_starting_time: v.float64(),
-        phase_title: v.string(),
-      })
-    ),
+    active: v.boolean(),
+    completed: v.boolean(),
+    remaining_time: v.float64(),
     round_number: v.float64(),
+    starting_time: v.float64(),
   }),
   suspects: defineTable({
     age: v.string(),
