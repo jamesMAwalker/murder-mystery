@@ -23,7 +23,8 @@ export const RoundsSection = () => {
     resetGame()
   }
 
-  const gameAtStart = rounds?.at(0)?.active
+  const gameAtStart = rounds?.at(0)?.active || false
+  
 
   useEffect(() => {
     setResetButtonText('Game Reset!')
