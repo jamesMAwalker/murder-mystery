@@ -1,23 +1,83 @@
 [
   {
+    "round_number": 0,
+    "phases": [
+      {
+        "phase_title": "Game Starting Soon",
+        "phase_starting_time": 300,
+        "phase_ending_time": 300,
+        "completed": false,
+        "active": false
+      }
+    ]
+  },
+  {
     "round_number": 1,
-    "starting_time": 300,
-    "remaining_time": 300,
-    "completed": false,
-    "active": false
+    "phases": [
+      {
+        "phase_title": "Interview Phase",
+        "phase_starting_time": 900,
+        "phase_ending_time": 900,
+        "completed": false,
+        "active": false
+      },
+      {
+        "phase_title": "Discussion Phase",
+        "phase_starting_time": 600,
+        "phase_ending_time": 600,
+        "completed": false,
+        "active": false
+      }
+    ]
   },
   {
     "round_number": 2,
-    "starting_time": 300,
-    "remaining_time": 300,
-    "completed": false,
-    "active": false
+    "phases": [
+      {
+        "phase_title": "Interview Phase",
+        "phase_starting_time": 900,
+        "phase_ending_time": 900,
+        "completed": false,
+        "active": false
+      },
+      {
+        "phase_title": "Discussion Phase",
+        "phase_starting_time": 600,
+        "phase_ending_time": 600,
+        "completed": false,
+        "active": false
+      }
+    ]
   },
   {
     "round_number": 3,
-    "starting_time": 300,
-    "remaining_time": 300,
-    "completed": false,
-    "active": false
+    "phases": [
+      {
+        "phase_title": "Interview Phase",
+        "phase_starting_time": 900,
+        "phase_ending_time": 900,
+        "completed": false,
+        "active": false
+      },
+      {
+        "phase_title": "Discussion Phase",
+        "phase_starting_time": 600,
+        "phase_ending_time": 600,
+        "completed": false,
+        "active": false
+      }
+    ]
+  },
+  {
+    "round_number": 4,
+    "phases": [
+      {
+        "phase_title": "Cast you final vote!",
+        "phase_starting_time": 300,
+        "phase_ending_time": 300,
+        "completed": false,
+        "active": false
+      }
+    ]
   }
 ]
