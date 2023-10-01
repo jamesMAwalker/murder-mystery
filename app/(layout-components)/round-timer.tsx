@@ -42,6 +42,11 @@ export const RoundTimer = () => {
         </>
       )}
       {roundsStarted && <span>Round {currentRound?.round_number || ''}</span>}
+      {roundsStarted && (
+        <span>
+          {minutes || '00'}:{seconds || '00'}{' '}
+        </span>
+      )}
     </div>
   )
 }

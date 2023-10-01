@@ -8,6 +8,9 @@ export default {
   ],
   presets: [],
   darkMode: 'media', // or 'class'
+  daisyui: {
+    themes: ["dark"],
+  },
   theme: {
     accentColor: ({ theme }) => ({
       ...theme('colors'),
