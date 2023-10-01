@@ -49,8 +49,9 @@ export const Navbar = () => {
     <div className="nav-wrapper z-20 fixed top-0 p-4 flex w-full items-center">
       <nav className="navbar p-2 w-full rounded-md bg-slate-800 text-white">
         <span className="navbar-start">
-          <Link href="/" className="btn btn-ghost normal-case text-xl">
-            LOGO
+          <Link href="/" className="btn btn-ghost normal-case text-xl flex">
+            <span>M</span>
+            <span className="text-red-500 ml-[-10px]">M</span>
           </Link>
         </span>
         {isSignedIn ? (
