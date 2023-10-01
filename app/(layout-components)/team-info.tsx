@@ -30,9 +30,8 @@ export const TeamInfo: React.FC = () => {
     <div className="flex flex-col gap-4 w-full p-4 bg-slate-800 rounded-lg">
       <h2 className="text-white text-2xl font-bold">Team Details</h2>
 
-      <div className="text-white">
+      <div className="text-white overflow-hidden">
         <h3 className="text-xl font-semibold">Team Name: {team?.team_name}</h3>
-        <p>Membership: {displayedTeammates?.length}/10</p>
         <p>Captain: {captain?.name}</p>
       </div>
       <div
@@ -40,7 +39,9 @@ export const TeamInfo: React.FC = () => {
         onClick={toggleOpen}
       >
         <h3 className="text-white text-lg font-semibold ml-2">
-          {user?.is_captain ? "Manage Team" : "See Teammates"}
+          {user?.is_captain
+            ? `Manage Team (${teammates?.length}/10)`
+            : `See Teammates (${teammates?.length}/10)`}
         </h3>
         <span className="text-lg transform transition-transform duration-300 mr-2">
           {!isOpen ? "+" : "-"}

@@ -12,18 +12,28 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
   const user = useQuery(api.users.getFromSession);
   const createTeam = useMutation(api.teams.createFromSession);
   const [teamName, setTeamName] = useState("");
-  console.log("teamName: ", teamName);
+  const [error, setError] = useState("");
   const modalRef = useRef<HTMLInputElement | null>(null);
 
   const handleTeamNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTeamName(e.target.value);
+    const newName = e.target.value;
+    if (newName.length <= 20) {
+      setTeamName(newName);
+      setError("");
+    } else {
+      setError("Team name is too long. Keep it under 20 characters.");
+    }
   };
 
   const handleCreateTeamSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user?._id) return;
 
-    // createTeam(teamName, loggedUser._id);
+    if (teamName.length > 20) {
+      setError("Team name is too long. Keep it under 20 characters.");
+      return;
+    }
+
     createTeam({ team_name: teamName, user_id: user._id });
     closeModal();
   };
@@ -56,6 +66,7 @@ export const CreateTeamModal: React.FC<CreateTeamModalProps> = ({
                 onChange={handleTeamNameInput}
                 ref={modalRef}
               />
+              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             </div>
             <div className="modal-action">
               <button className="btn btn-primary text-lg" type="submit">
