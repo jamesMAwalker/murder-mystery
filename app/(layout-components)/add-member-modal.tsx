@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation } from "convex/react-internal";
+import { ModalWrapper } from "./modal-wrapper";
 
 interface AddMemberModalProps {
   closeModal: () => void;
@@ -36,9 +39,9 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
   console.log("invitedUserIds: ", invitedUserIds);
 
   return (
-    <div className="flex flex-col items-center justify-start h-full bg-black !fixed w-screen h-screen z-10 inset-0 p-4">
-      {user && teamId && (
-        <div className="modal-box bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-md mt-20 relative">
+    <ModalWrapper>
+      {teamId && user && (
+        <div>
           <button
             className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 p-2"
             onClick={closeModal}
@@ -54,7 +57,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
               <div>Loading...</div>
             </div>
           ) : (
-            <ul className="flex-col gap-2 sm:gap-4 w-full overflow-y-auto">
+            <ul className="max-h-[60vh] overflow-y-auto">
               {teamInvites &&
                 usersNotCurrentlyOnTeam?.map((userToInvite: any) => (
                   <li
@@ -104,6 +107,6 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
           )}
         </div>
       )}
-    </div>
+    </ModalWrapper>
   );
 };
