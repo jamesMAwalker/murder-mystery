@@ -5,6 +5,7 @@ import { api } from "@/convex/_generated/api";
 import { useConvexAuth, useMutation, useQuery } from "convex/react-internal";
 import { useAuth, useSession } from "@clerk/nextjs";
 import { usePrevious } from "../(hooks)/utility/usePrevious";
+import { useModal, ModalType } from "../(context)/modal.context";
 
 import { TeamSelection } from "../(layout-components)/team-selection";
 import { JoinTeamModal } from "../(layout-components)/join-team-modal";
@@ -18,22 +19,23 @@ import { NotificationToast } from "../(layout-components)/notification-toast";
 const UserProfilePage = () => {
   const { isSignedIn, isLoaded } = useSession();
   const user = useQuery(api.users.getFromSession);
+  const { showModal } = useModal();
 
-  enum ModalType {
-    JOIN = "join",
-    CREATE = "create",
-    ADD = "add",
-    LEAVE = "leave",
-    NONE = "none",
-  }
+  // enum ModalType {
+  //   JOIN = "join",
+  //   CREATE = "create",
+  //   ADD = "add",
+  //   LEAVE = "leave",
+  //   NONE = "none",
+  // }
 
-  const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
-  console.log("modalType: ", modalType);
-  const showJoinModal = () => setModalType(ModalType.JOIN);
-  const showCreateModal = () => setModalType(ModalType.CREATE);
-  const showAddModal = () => setModalType(ModalType.ADD);
-  const showLeaveModal = () => setModalType(ModalType.LEAVE);
-  const closeModal = () => setModalType(ModalType.NONE);
+  // const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
+  // console.log("modalType: ", modalType);
+  // const showJoinModal = () => setModalType(ModalType.JOIN);
+  // const showCreateModal = () => setModalType(ModalType.CREATE);
+  // const showAddModal = () => setModalType(ModalType.ADD);
+  // const showLeaveModal = () => setModalType(ModalType.LEAVE);
+  // const closeModal = () => setModalType(ModalType.NONE);
 
   if (!isSignedIn || !isLoaded || !user) {
     return (
@@ -48,23 +50,11 @@ const UserProfilePage = () => {
       <UserInfoSection />
       {user.has_team && <TeamInfo />}
       <TeamSelection
-        showJoinModal={showJoinModal}
-        showCreateModal={showCreateModal}
-        showAddModal={showAddModal}
-        showLeaveModal={showLeaveModal}
+        showJoinModal={() => showModal(ModalType.JOIN)}
+        showCreateModal={() => showModal(ModalType.CREATE)}
+        showAddModal={() => showModal(ModalType.ADD)}
+        showLeaveModal={() => showModal(ModalType.LEAVE)}
       />
-      {modalType === ModalType.JOIN && (
-        <JoinTeamModal closeModal={closeModal} />
-      )}
-      {modalType === ModalType.CREATE && (
-        <CreateTeamModal closeModal={closeModal} />
-      )}
-      {modalType === ModalType.ADD && (
-        <AddMemberModal closeModal={closeModal} />
-      )}
-      {modalType === ModalType.LEAVE && (
-        <LeaveTeamModal closeModal={closeModal} />
-      )}
 
       <NotificationsSection />
     </div>
