@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation } from "convex/react-internal";
+import { ModalWrapper } from "./modal-wrapper";
 
 interface JoinTeamModalProps {
   closeModal: () => void;
@@ -54,25 +57,23 @@ export const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ closeModal }) => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-start h-full bg-black !fixed w-screen h-screen z-10 inset-0 p-4">
-      <div className="modal-box bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-md mt-20">
-        <button
-          className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 p-2"
-          onClick={closeModal}
-        >
-          &times;
-        </button>
-        <h3 className="font-bold text-xl mb-4">Available Teams</h3>
-        {teams && user && requests ? (
-          <ul className="flex-col gap-4 w-full overflow-y-auto">
-            {teams?.map(renderTeam)}
-          </ul>
-        ) : (
-          <div className="flex items-left justify-left w-full">
-            <div>Loading...</div>{" "}
-          </div>
-        )}
-      </div>
-    </div>
+    <ModalWrapper>
+      <button
+        className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 p-2"
+        onClick={closeModal}
+      >
+        &times;
+      </button>
+      <h3 className="font-bold text-xl mb-4">Available Teams</h3>
+      {teams && user && requests ? (
+        <ul className="max-h-[50vh] overflow-y-auto">
+          {teams?.map(renderTeam)}
+        </ul>
+      ) : (
+        <div className="flex items-left justify-left w-full">
+          <div>Loading...</div>{" "}
+        </div>
+      )}
+    </ModalWrapper>
   );
 };
