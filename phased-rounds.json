@@ -1,0 +1,137 @@
+[
+  {
+    "round_number": 0,
+    "active": false,
+    "completed": false,
+    "phases": [
+      {
+        "phase_id": "prologue",
+        "phase_type": "prologue",
+        "phase_title": "Game Starting Soon",
+        "phase_starting_time": 300,
+        "phase_current_time": 300,
+        "completed": false,
+        "active": false
+      }
+    ]
+  },
+  {
+    "round_number": 1,  
+    "active": false,
+    "completed": false,
+    "phases": [
+      {
+        "phase_id": "interview1",
+        "phase_type": "interview",
+        "phase_title": "Interview pt.1 - Listening",
+        "phase_starting_time": 120,
+        "phase_current_time": 120,
+        "completed": false,
+        "active": false
+      },
+      {
+        "phase_id": "interview2",
+        "phase_type": "interview",
+        "phase_title": "Interview pt.2 - Speaking",
+        "phase_starting_time": 120,
+        "phase_current_time": 120,
+        "completed": false,
+        "active": false
+      },
+      {
+        
+        "phase_id": "interview2","phase_id": "discuss",
+        "phase_type": "discuss",
+        "phase_title": "Team Discussion",
+        "phase_starting_time": 60,
+        "phase_current_time": 60,
+        "completed": false,
+        "active": false
+      }
+    ]
+  },
+  {
+    "round_number": 2,
+    "active": false,
+    "completed": false,
+    "phases": [
+      {
+        "phase_id": "interview1",
+        "phase_type": "interview",
+        "phase_title": "Interview pt.1 - Listening",
+        "phase_starting_time": 120,
+        "phase_current_time": 120,
+        "completed": false,
+        "active": false
+      },
+      {
+        "phase_id": "interview2",
+        "phase_type": "interview",
+        "phase_title": "Interview pt.2 - Speaking",
+        "phase_starting_time": 120,
+        "phase_current_time": 120,
+        "completed": false,
+        "active": false
+      },
+      {
+        "phase_id": "interview2",
+        "phase_type": "discuss",
+        "phase_title": "Discussion Phase",
+        "phase_starting_time": 60,
+        "phase_current_time": 60,
+        "completed": false,
+        "active": false
+      }
+    ]
+  },
+  {
+    "round_number": 3,
+    "active": false,
+    "completed": false,
+    "phases": [
+      {
+        "phase_id": "interview1",
+        "phase_type": "interview",
+        "phase_title": "Interview pt.1 - Listening",
+        "phase_starting_time": 120,
+        "phase_current_time": 120,
+        "completed": false,
+        "active": false
+      },
+      {
+        "phase_id": "interview2",
+        "phase_type": "interview",
+        "phase_title": "Interview pt.2 - Speaking",
+        "phase_starting_time": 120,
+        "phase_current_time": 120,
+        "completed": false,
+        "active": false
+      },
+      {
+        "phase_id": "discuss",
+        "phase_type": "discuss",
+        "phase_title": "Discussion Phase",
+        "phase_starting_time": 60,
+        "phase_current_time": 60,
+        "completed": false,
+        "active": false
+      }
+    ]
+  },
+  {
+    "round_number": 4,
+    "active": false,
+    "completed": false,
+    "phases": [
+      {
+        "phase_id": "finale",
+        "phase_type": "finale",
+        "phase_title": "Cast your final vote!",
+        "phase_starting_time": 300,
+        "phase_current_time": 300,
+        "completed": false,
+        "active": false
+      }
+    ]
+  }
+]
