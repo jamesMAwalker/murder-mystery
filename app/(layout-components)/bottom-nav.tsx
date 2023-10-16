@@ -15,6 +15,7 @@ import {
   StoryIcon,
   SuspectIcon
 } from '../(components)/index'
+import { PhasedRoundTimer } from './round-timer-phased'
 
 interface IDropdownContent {
   page: string
@@ -35,25 +36,24 @@ const pages: IDropdownContent[] = [
 ]
 
 export const BottomNav = () => {
-  const checkBoxRef = useRef<HTMLInputElement>(null)
+  // navigation set up.
+  const { push } = useRouter()
+  const pathname = usePathname()
 
-  const { push } = useRouter() // Directly destructure `pathname` from `useRouter()`
-  const pathname = usePathname() // Use `usePathname()` instead of `useRouter().pathname`
-  console.log('pathname: ', pathname)
-  const [open, setOpen] = useState(false)
-  console.log('open: ', open)
+  // set up page navigation logic.
   const [current, setCurrent] = useState(0)
-  console.log('current: ', current)
-
+  
   useEffect(() => {
     const updatedCurrent = pages.findIndex((p) => p.path === pathname)
     if (updatedCurrent !== -1 && current !== updatedCurrent) {
       setCurrent(updatedCurrent)
     }
   }, [pathname])
-
-  const rotated = open ? 'rotate-180' : 'rotate-0'
-
+  
+  // Set up drawer open/close logic
+  const checkBoxRef = useRef<HTMLInputElement>(null)
+  const [open, setOpen] = useState(false)
+  
   const handleClick = (idx: number, path: string) => {
     setCurrent(idx)
     push(path)
@@ -98,7 +98,7 @@ export const BottomNav = () => {
           )
         })}
       </ul>
-      <RoundTimer />
+      <PhasedRoundTimer />
     </div>
   )
 }
