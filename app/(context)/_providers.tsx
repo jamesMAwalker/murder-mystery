@@ -3,12 +3,15 @@ import { ClerkConvexProvider } from "./clerk-convex.context";
 // import { GameProvider } from "./game.context";
 import { SuspectProvider } from "./suspect.context";
 // import { UserProvider } from './user.context'
+import { ModalProvider } from "./modal.context";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ClerkConvexProvider>
+    <ModalProvider>
+      <ClerkConvexProvider>
         <SuspectProvider>{children}</SuspectProvider>
-    </ClerkConvexProvider>
+      </ClerkConvexProvider>
+    </ModalProvider>
   );
 };
 
