@@ -20,6 +20,35 @@ export const lockVoting = mutation({
   }
 })
 
+export const startGame = mutation({
+  handler: async ({ db }) => {
+    const game = await db.query("game").unique();
+
+    // set all rounds to inactive
+    if (!game?._id) throw Error('Game object not found!');
+
+    // ensure game is not concluded.
+    db.patch(game?._id, {
+      concluded: false
+    })
+
+    // get rounds.
+    const rounds = await db.query("phased_rounds").collect();
+
+    // set all rounds to inactive
+    rounds.forEach(round => {
+      db.patch(round._id, {
+        active: false
+      })
+    })
+
+    // set first round to active.
+    db.patch(rounds[0]._id, {
+      active: true
+    })
+  }
+})
+
 export const endGame = mutation({
   handler: async ({ db }) => {
     const game = await db.query("game").unique();
@@ -33,8 +62,8 @@ export const endGame = mutation({
     })
 
     // get rounds.
-    const rounds = await db.query("rounds").collect();
-    
+    const rounds = await db.query("phased_rounds").collect();
+
     // set all rounds to inactive
     rounds.forEach(round => {
       db.patch(round._id, {
@@ -57,8 +86,8 @@ export const resetGame = mutation({
     })
 
     // get rounds.
-    const rounds = await db.query("rounds").collect();
-    
+    const rounds = await db.query("phased_rounds").collect();
+
     // set all rounds to inactive
     rounds.forEach(round => {
       db.patch(round._id, {
