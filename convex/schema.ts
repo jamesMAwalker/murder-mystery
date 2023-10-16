@@ -17,14 +17,9 @@ export default defineSchema({
   guesses: defineTable({
     guesses: v.array(v.id("suspects")),
     suspect_guess_id: v.union(v.id("suspects"), v.null()),
-    suspect_guess_name: v.union(v.string(), v.null()),
+    suspect_guess_name: v.null(),
     team_id: v.id("teams"),
     team_name: v.string(),
-  }),
-  invitations: defineTable({
-    accepted: v.boolean(),
-    invited_user_id: v.id("users"),
-    inviting_team_id: v.id("teams"),
   }),
   notes: defineTable({
     note: v.string(),
@@ -32,6 +27,22 @@ export default defineSchema({
     suspect_name: v.string(),
     user_id: v.id("users"),
     user_name: v.string(),
+  }),
+  phased_rounds: defineTable({
+    active: v.boolean(),
+    completed: v.boolean(),
+    phases: v.array(
+      v.object({
+        active: v.boolean(),
+        completed: v.boolean(),
+        phase_current_time: v.float64(),
+        phase_id: v.optional(v.string()),
+        phase_starting_time: v.float64(),
+        phase_title: v.string(),
+        phase_type: v.optional(v.string()),
+      })
+    ),
+    round_number: v.float64(),
   }),
   requests: defineTable({
     accepted: v.boolean(),
@@ -62,10 +73,10 @@ export default defineSchema({
     team_name: v.string(),
   }),
   user_guesses: defineTable({
-    user_name: v.string(),
-    user_id: v.id("users"),
     suspect_guess_id: v.id("suspects"),
     suspect_guess_name: v.string(),
+    user_id: v.id("users"),
+    user_name: v.string(),
     user_team_id: v.id("teams"),
   }),
   users: defineTable({
