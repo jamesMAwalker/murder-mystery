@@ -80,7 +80,7 @@ export default defineSchema({
     is_guilty: v.boolean(),
     occupation: v.string(),
     suspect_name: v.string(),
-    user_id: v.null(),
+    user_id: v.union(v.id('users'), v.null()),
   }),
   teams: defineTable({
     members: v.array(v.id("users")),
