@@ -1,0 +1,132 @@
+[
+  {
+    "user_id": "4b3j7w9x9zdnqgk5ggvcx9ay9jx7f48",
+    "suspect_id": "553sxjs7a3qpv8g8e2ftpgpb9jmh510",
+    "user_name": "Josh Mayhew",
+    "suspect_name": "Jack",
+    "instructions": [
+      {
+        "round_number": 1,
+        "general_instructions": "You find yourself in the midst of a murder investigation at the Dragon's Lair in Danang. As a suspect, your goal is to navigate through the questions and scrutiny while unraveling the mystery.",
+        "target_suspect": "You are suspected of being involved in Đen Vâu's murder. Keep a watchful eye on your interactions and choices to clear your name or divert suspicion elsewhere.",
+        "dos": [
+          "Do cooperate with the investigators and provide truthful information when questioned.",
+          "Do observe the surroundings and take note of any potential clues or suspicious activities.",
+          "Do interact with other suspects and gather information to understand their motives and alibis.",
+          "Do pay attention to the timeline of events leading up to Đen Vâu's death. Your actions and whereabouts may be crucial.",
+          "Do consider forming alliances or strategies with other suspects to collectively uncover the truth."
+        ],
+        "donts": [
+          "Don't reveal all information immediately. Be strategic in what you share to protect your interests.",
+          "Don't trust everyone. Suspects may have their own agendas, and alliances can shift.",
+          "Don't act overly defensive, as it might draw unnecessary attention. Maintain composure under pressure.",
+          "Don't ignore the importance of the language skills challenge. Solve puzzles and linguistic tasks to progress in the investigation.",
+          "Don't forget to manage your own backstory. Consistency in your statements is key to avoiding suspicion."
+        ]
+      },
+      {
+        "round_number": 2,
+        "general_instructions": "As the investigation intensifies, suspicion may shift. You're still a suspect, but new revelations are unfolding. Stay sharp and adapt to the changing dynamics.",
+        "target_suspect": "You remain under suspicion, but others may become targets too. Keep an eye on the evolving situation.",
+        "dos": [
+          "Do pay attention to the investigators' questions and adapt your responses based on the information revealed during the investigation.",
+          "Do explore new areas of the Dragon's Lair to discover hidden clues or encounters that may shed light on the mystery.",
+          "Do engage in strategic conversations with other suspects to gain insights into their motives and potential involvement.",
+          "Do participate actively in the language skills challenges. Solving these tasks can unlock new leads and opportunities for defense.",
+          "Do be cautious of alliances breaking down. Loyalties may shift, and new alliances might form."
+        ],
+        "donts": [
+          "Don't be overly confident. New evidence might surface, changing the perception of everyone involved.",
+          "Don't overlook the importance of timing. The sequence of events can be critical to understanding the unfolding story.",
+          "Don't underestimate the value of language skills challenges. They can provide crucial hints and advantages in the investigation.",
+          "Don't reveal too much too soon. Strategic sharing of information is key to navigating the evolving narrative.",
+          "Don't forget to maintain consistency in your statements. Changing stories could increase suspicion."
+        ]
+      },
+      {
+        "round_number": 3,
+        "general_instructions": "As the investigation reaches its climax, the pressure is mounting. The truth is on the verge of being unveiled. Your actions now will determine your fate.",
+        "target_suspect": "The focus intensifies on one or a few suspects. Whether you're the prime suspect or not, be prepared for a dramatic resolution.",
+        "dos": [
+          "Do carefully analyze the accumulated evidence and use it strategically to defend yourself or cast doubt on others.",
+          "Do engage in last-minute conversations with other suspects to gather any remaining information and assess their intentions.",
+          "Do be proactive in solving the final language skills challenges. The last clues may be the key to revealing the true culprit.",
+          "Do consider unexpected twists. The murderer might not be who everyone initially suspected.",
+          "Do prepare for a dramatic climax. The final moments will determine the outcome of the investigation."
+        ],
+        "donts": [
+          "Don't underestimate the importance of the final language skills challenges. They could hold the key to solving the entire mystery.",
+          "Don't disregard any remaining clues. The smallest detail might change the course of the investigation.",
+          "Don't act recklessly. Every move counts, and hasty decisions could lead to unexpected consequences.",
+          "Don't reveal your final strategy too soon. Keep your cards close to your chest for the ultimate revelation.",
+          "Don't forget the emotional aspect. Consider the motives and emotions that could drive someone to commit murder."
+        ]
+      }
+    ]
+  },
+  {
+    "user_id": "4a2qdcsjjqgken32hy8s36we9jqkm8g",
+    "suspect_id": "55zgs7cfqt63krxvcccggc6e9jmqg38",
+    "user_name": "James Walker",
+    "suspect_name": "Myles",
+    "instructions": [
+      {
+        "round_number": 1,
+        "general_instructions": "You find yourself in the midst of a murder investigation at the Dragon's Lair in Danang. As a suspect, your goal is to navigate through the questions and scrutiny while unraveling the mystery.",
+        "target_suspect": "You are suspected of being involved in Đen Vâu's murder. Keep a watchful eye on your interactions and choices to clear your name or divert suspicion elsewhere.",
+        "dos": [
+          "Do cooperate with the investigators and provide truthful information when questioned.",
+          "Do observe the surroundings and take note of any potential clues or suspicious activities.",
+          "Do interact with other suspects and gather information to understand their motives and alibis.",
+          "Do pay attention to the timeline of events leading up to Đen Vâu's death. Your actions and whereabouts may be crucial.",
+          "Do consider forming alliances or strategies with other suspects to collectively uncover the truth."
+        ],
+        "donts": [
+          "Don't reveal all information immediately. Be strategic in what you share to protect your interests.",
+          "Don't trust everyone. Suspects may have their own agendas, and alliances can shift.",
+          "Don't act overly defensive, as it might draw unnecessary attention. Maintain composure under pressure.",
+          "Don't ignore the importance of the language skills challenge. Solve puzzles and linguistic tasks to progress in the investigation.",
+          "Don't forget to manage your own backstory. Consistency in your statements is key to avoiding suspicion."
+        ]
+      },
+      {
+        "round_number": 2,
+        "general_instructions": "As the investigation intensifies, suspicion may shift. You're still a suspect, but new revelations are unfolding. Stay sharp and adapt to the changing dynamics.",
+        "target_suspect": "You remain under suspicion, but others may become targets too. Keep an eye on the evolving situation.",
+        "dos": [
+          "Do pay attention to the investigators' questions and adapt your responses based on the information revealed during the investigation.",
+          "Do explore new areas of the Dragon's Lair to discover hidden clues or encounters that may shed light on the mystery.",
+          "Do engage in strategic conversations with other suspects to gain insights into their motives and potential involvement.",
+          "Do participate actively in the language skills challenges. Solving these tasks can unlock new leads and opportunities for defense.",
+          "Do be cautious of alliances breaking down. Loyalties may shift, and new alliances might form."
+        ],
+        "donts": [
+          "Don't be overly confident. New evidence might surface, changing the perception of everyone involved.",
+          "Don't overlook the importance of timing. The sequence of events can be critical to understanding the unfolding story.",
+          "Don't underestimate the value of language skills challenges. They can provide crucial hints and advantages in the investigation.",
+          "Don't reveal too much too soon. Strategic sharing of information is key to navigating the evolving narrative.",
+          "Don't forget to maintain consistency in your statements. Changing stories could increase suspicion."
+        ]
+      },
+      {
+        "round_number": 3,
+        "general_instructions": "As the investigation reaches its climax, the pressure is mounting. The truth is on the verge of being unveiled. Your actions now will determine your fate.",
+        "target_suspect": "The focus intensifies on one or a few suspects. Whether you're the prime suspect or not, be prepared for a dramatic resolution.",
+        "dos": [
+          "Do carefully analyze the accumulated evidence and use it strategically to defend yourself or cast doubt on others.",
+          "Do engage in last-minute conversations with other suspects to gather any remaining information and assess their intentions.",
+          "Do be proactive in solving the final language skills challenges. The last clues may be the key to revealing the true culprit.",
+          "Do consider unexpected twists. The murderer might not be who everyone initially suspected.",
+          "Do prepare for a dramatic climax. The final moments will determine the outcome of the investigation."
+        ],
+        "donts": [
+          "Don't underestimate the importance of the final language skills challenges. They could hold the key to solving the entire mystery.",
+          "Don't disregard any remaining clues. The smallest detail might change the course of the investigation.",
+          "Don't act recklessly. Every move counts, and hasty decisions could lead to unexpected consequences.",
+          "Don't reveal your final strategy too soon. Keep your cards close to your chest for the ultimate revelation.",
+          "Don't forget the emotional aspect. Consider the motives and emotions that could drive someone to commit murder."
+        ]
+      }
+    ]
+  }
+]
