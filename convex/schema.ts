@@ -56,6 +56,21 @@ export default defineSchema({
     round_number: v.float64(),
     starting_time: v.float64(),
   }),
+  suspect_instructions: defineTable({
+    instructions: v.array(
+      v.object({
+        donts: v.array(v.string()),
+        dos: v.array(v.string()),
+        general_instructions: v.string(),
+        round_number: v.float64(),
+        target_suspect: v.string(),
+      })
+    ),
+    suspect_id: v.id("suspects"),
+    suspect_name: v.string(),
+    user_id: v.id("users"),
+    user_name: v.string(),
+  }),
   suspects: defineTable({
     age: v.string(),
     bio: v.string(),
