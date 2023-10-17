@@ -1,11 +1,21 @@
 import { query } from "./_generated/server";
-import { v } from "convex/values";
+import { getUserFromAuthSession } from "./lib/getUserFromAuthSession";
 
-export const getByUserId = query({
-  args: {
-    instructions_id: v.id("suspect_instructions"),
-  },
-  handler: async ({ db }, { instructions_id }) => {
-    return await db.get(instructions_id)
+export const getFromUserSession = query({
+  handler: async (ctx) => {
+    const { db } = ctx;
+
+    // get user.
+    const user = await getUserFromAuthSession(ctx);
+    console.log('user: ', user);
+
+    const instructions = await db
+      .query("suspect_instructions")
+      .filter((instruction) =>
+        instruction.eq(instruction.field("user_id"), user?._id),
+      )
+      .unique();
+
+    return instructions;
   }
 })
