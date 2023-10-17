@@ -15,8 +15,10 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({ children }) => {
     };
   }, []);
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-start justify-center bg-black overflow-y-hidden p-4">
-      <div className="relative p-6 bg-slate-800 rounded-lg shadow-xl max-w-md w-full mt-20 overflow-y-hidden">
+    // <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-start justify-center bg-black overflow-y-hidden p-4">
+    <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-start justify-center bg-black overflow-y-hidden">
+      {/* <div className="MODALLLL relative p-6 bg-slate-800 rounded-lg shadow-xl max-w-md w-full mt-20 overflow-y-hidden"> */}
+      <div className="MODALLLL relative bg-slate-800 full p-6 overflow-y-hidden">
         {children}
       </div>
     </div>
