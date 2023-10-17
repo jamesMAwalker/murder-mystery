@@ -24,6 +24,7 @@ import type * as phased_rounds from "../phased_rounds";
 import type * as requests from "../requests";
 import type * as rounds from "../rounds";
 import type * as suspects from "../suspects";
+import type * as suspect_instructions from "../suspect_instructions";
 import type * as teams from "../teams";
 import type * as users from "../users";
 import type * as user_guesses from "../user_guesses";
@@ -47,6 +48,7 @@ declare const fullApi: ApiFromModules<{
   requests: typeof requests;
   rounds: typeof rounds;
   suspects: typeof suspects;
+  suspect_instructions: typeof suspect_instructions;
   teams: typeof teams;
   users: typeof users;
   user_guesses: typeof user_guesses;
