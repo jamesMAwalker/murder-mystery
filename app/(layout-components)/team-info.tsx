@@ -18,7 +18,7 @@ export const TeamInfo: React.FC = () => {
     team?.members?.includes(user._id)
   );
   const displayedTeammates = teammates?.sort(
-    (a, b) => a._creationTime - b._creationTime
+    (a, b) => b._creationTime - a._creationTime
   );
   console.log("displayedTeammates: ", displayedTeammates);
 
