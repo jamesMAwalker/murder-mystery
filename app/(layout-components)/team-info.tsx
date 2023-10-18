@@ -4,9 +4,12 @@ import { useMutation, useQuery } from "convex/react-internal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-export const TeamInfo: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface TeamInfoProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
+export const TeamInfo: React.FC<TeamInfoProps> = ({ isOpen, setIsOpen }) => {
   const user = useQuery(api.users.getFromSession);
   const team = useQuery(api.teams.getFromSession);
   const members = team?.members;
@@ -18,13 +21,21 @@ export const TeamInfo: React.FC = () => {
     team?.members?.includes(user._id)
   );
   const displayedTeammates = teammates?.sort(
-    (a, b) => a._creationTime - b._creationTime
+    (a, b) => b._creationTime - a._creationTime
   );
   console.log("displayedTeammates: ", displayedTeammates);
 
   const removeMember = useMutation(api.teams.removeMember);
 
   const toggleOpen = () => setIsOpen(!isOpen);
+
+  if (!user || !team || !teammates) {
+    return (
+      <div className="flex-center h-40">
+        <span className="loading loading-ring loading-lg scale-150"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 w-full p-4 bg-slate-800 rounded-lg">
