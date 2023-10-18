@@ -17,9 +17,22 @@ export const TeamInfo: React.FC = () => {
   const teammates = allUsers?.filter((user) =>
     team?.members?.includes(user._id)
   );
-  const [showTeamDetails, setShowTeamDetails] = useState(false);
-  const displayTeamDetails = () => setShowTeamDetails(true);
-  const closeDetailModal = () => setShowTeamDetails(false);
+  const displayedTeammates = teammates?.sort(
+    (a, b) => a._creationTime - b._creationTime
+  );
+  console.log("displayedTeammates: ", displayedTeammates);
+
+  const removeMember = useMutation(api.teams.removeMember);
+
+  const toggleOpen = () => setIsOpen(!isOpen);
+
+  if (!user || !team || !teammates) {
+    return (
+      <div className="flex-center h-40">
+        <span className="loading loading-ring loading-lg scale-150"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 w-full p-4 bg-slate-800 rounded-lg">
