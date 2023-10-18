@@ -46,12 +46,12 @@ export const ViewTeamMembersModal: React.FC<ViewTeamMembersMicroModalProps> = ({
     <div className="microModalBackdrop absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
       <div className="microModal relative p-6 bg-slate-800 rounded-lg shadow-lg w-3/4 max-w-lg">
         <button
-          onClick={close}
           className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 p-2 text-2xl"
+          onClick={close}
         >
           &times;
         </button>
-        <h4 className="text-2xl text-white font-bold mb-6">
+        <h4 className="text-2xl flex-col-tl text-white font-bold mb-6">
           Team Name:
           <span className="text-accent ml-2">{team.team_name}</span>
         </h4>
