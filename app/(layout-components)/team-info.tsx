@@ -4,9 +4,12 @@ import { useMutation, useQuery } from "convex/react-internal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-export const TeamInfo: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface TeamInfoProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
+export const TeamInfo: React.FC<TeamInfoProps> = ({ isOpen, setIsOpen }) => {
   const user = useQuery(api.users.getFromSession);
   const team = useQuery(api.teams.getFromSession);
   const members = team?.members;
