@@ -35,7 +35,7 @@ export const ViewTeamMembersModal: React.FC<ViewTeamMembersMicroModalProps> = ({
       <div className="microModalBackdrop absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
         <div className="microModal relative p-6 bg-slate-800 rounded-lg shadow-lg w-3/4 max-w-lg">
           <div className="flex-center h-40">
-            <span className="loading loading-ring loading-lg scale-150"></span>
+            <p className="text-white mt-4">Loading team members...</p>
           </div>
         </div>
       </div>
@@ -51,12 +51,12 @@ export const ViewTeamMembersModal: React.FC<ViewTeamMembersMicroModalProps> = ({
         >
           &times;
         </button>
-        <h4 className="text-2xl text-white font-bold mb-4">
+        <h4 className="text-2xl text-white font-bold mb-6">
           Team Name:
-          <span className="text-accent"> {team.team_name}</span>
+          <span className="text-accent ml-2">{team.team_name}</span>
         </h4>
         <div className="membersSection mt-4 border-t border-slate-600 pt-4">
-          <h3 className="text-xl font-semibold text-white mb-2">
+          <h3 className="text-xl font-semibold text-white mb-4">
             Team Members:
           </h3>
           <ul className="flex flex-col gap-2 w-full overflow-y-auto">
