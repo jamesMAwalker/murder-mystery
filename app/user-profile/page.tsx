@@ -18,20 +18,26 @@ import { TeamInfo } from "../(layout-components)/team-info";
 import { NotificationToast } from "../(layout-components)/notification-toast";
 
 const UserProfilePage = () => {
-  const { isSignedIn, isLoaded } = useSession();
   const user = useQuery(api.users.getFromSession);
-  const { showModal } = useModal();
-  const [activeTab, setActiveTab] = useState(0);
-  const hasInvites = useQuery(api.invitations.getFromSessionByUser)
-    ?.length as number;
-  console.log("hasInvites: ", hasInvites);
-  const hasRequests = useQuery(api.requests.getFromSessionByTeam)
-    ?.length as number;
+  const { isSignedIn, isLoaded } = useSession();
 
-  console.log("hasRequests: ", hasRequests);
+  const [activeTab, setActiveTab] = useState(0);
+  const [isTeamInfoOpen, setIsTeamInfoOpen] = useState(false);
+
+  const invitations = useQuery(api.invitations.getFromSessionByUser);
+  const hasInvites = Array.isArray(invitations) ? invitations.length : 0;
+
+  const requests = useQuery(api.requests.getFromSessionByTeam);
+  const hasRequests = Array.isArray(requests) ? requests.length : 0;
 
   const hasNotifications = hasInvites + hasRequests > 0;
-  console.log("hasNotifications: ", hasNotifications);
+
+  const { showModal } = useModal();
+
+  const handleModal = (modalType: ModalType) => {
+    showModal(modalType);
+    setIsTeamInfoOpen(false);
+  };
 
   // enum ModalType {
   //   JOIN = "join",
@@ -66,22 +72,20 @@ const UserProfilePage = () => {
         setActiveTab={setActiveTab}
         hasNotifications={hasNotifications}
       />
-
       {activeTab === 0 && (
         <>
-          {user?.has_team && <TeamInfo />}
+          {user?.has_team && (
+            <TeamInfo isOpen={isTeamInfoOpen} setIsOpen={setIsTeamInfoOpen} />
+          )}
           <TeamSelection
-            showJoinModal={() => showModal(ModalType.JOIN)}
-            showCreateModal={() => showModal(ModalType.CREATE)}
-            showAddModal={() => showModal(ModalType.ADD)}
-            showLeaveModal={() => showModal(ModalType.LEAVE)}
+            showJoinModal={() => handleModal(ModalType.JOIN)}
+            showCreateModal={() => handleModal(ModalType.CREATE)}
+            showAddModal={() => handleModal(ModalType.ADD)}
+            showLeaveModal={() => handleModal(ModalType.LEAVE)}
           />
         </>
       )}
       {activeTab === 1 && <NotificationsSection />}
-
-      {/*
-      // <NotificationsSection /> */}
     </div>
   );
 };
@@ -123,48 +127,49 @@ function ProfileTabs({ activeTab, setActiveTab, hasNotifications }: any) {
   const baseTabStyles =
     "tab tab-lg flex-1 text-center cursor-pointer px-2 py-1 w-1/2 truncate";
 
-  return (
-    <div className="flex w-full tabs tabs-boxed">
-      {hasTeam ? (
-        <a
-          onClick={() => setActiveTab(0)}
-          className={cn(
-            baseTabStyles,
-            activeTab === 0 && "tab-active text-accent"
-          )}
-        >
-          My Team
-        </a>
-      ) : (
-        <a
-          onClick={() => setActiveTab(0)}
-          className={cn(
-            baseTabStyles,
-            activeTab === 0 && "tab-active text-accent"
-          )}
-        >
-          Get Started
-        </a>
-      )}
+  function renderTab(
+    tabContent: any,
+    tabIndex: any,
+    notificationCount = undefined
+  ) {
+    return (
       <a
-        onClick={() => setActiveTab(1)}
+        onClick={() => setActiveTab(tabIndex)}
         className={cn(
           baseTabStyles,
-          "bg-blue-400 text-white shadow-md", // Color alteration and shadow for distinction
-          activeTab === 1 && "tab-active",
-          hasNotifications && "animate-pulse" // Animation for attention
+          activeTab === tabIndex && "tab-active text-accent",
+          tabIndex === 1 &&
+            notificationCount &&
+            "bg-blue-400 text-white shadow-md",
+          notificationCount && "animate-pulse"
         )}
       >
-        <i className="fas fa-bell"></i> {/* Iconography */}
-        <span className="ml-1">
-          {hasNotifications ? "New Notifications" : "Notifications"}
-        </span>
-        {hasNotifications && (
+        {tabContent}
+        {notificationCount && (
           <span className="ml-2 rounded-full bg-red-500 text-white px-2 py-0.5 text-xs animate-bounce">
-            {hasNotifications}
+            {notificationCount}
           </span>
         )}
       </a>
+    );
+  }
+
+  return (
+    <div className="flex w-full tabs tabs-boxed">
+      {hasTeam
+        ? renderTab("My Team", 0, undefined)
+        : renderTab("Get Started", 0, undefined)}
+
+      {renderTab(
+        <>
+          <i className="fas fa-bell"></i>
+          <span className="ml-1">
+            {hasNotifications ? "New Notifications" : "Notifications"}
+          </span>
+        </>,
+        1,
+        hasNotifications
+      )}
     </div>
   );
 }
