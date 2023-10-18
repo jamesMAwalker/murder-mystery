@@ -21,6 +21,8 @@ const UserProfilePage = () => {
   const user = useQuery(api.users.getFromSession);
   const { isSignedIn, isLoaded } = useSession();
 
+  const isSuspect = useQuery(api.suspects.getFromUserSession);
+
   const [activeTab, setActiveTab] = useState(0);
   const [isTeamInfoOpen, setIsTeamInfoOpen] = useState(false);
 
@@ -66,7 +68,7 @@ const UserProfilePage = () => {
   return (
     <div className="my-4 md:my-8 space-y-4 md:space-y-6 bg-slate-800 rounded-lg shadow-md p-2 md:p-4">
       <UserInfoSection />
-      <SuspectsDashboardButton />
+      {isSuspect && <SuspectsDashboardButton />}
       <ProfileTabs
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -104,12 +106,6 @@ function UserInfoSection() {
 }
 
 function SuspectsDashboardButton() {
-  const isSuspect = true;
-
-  if (!isSuspect) {
-    return null;
-  }
-
   return (
     <button
       className="btn btn-primary btn-lg w-full"
@@ -140,7 +136,7 @@ function ProfileTabs({ activeTab, setActiveTab, hasNotifications }: any) {
           activeTab === tabIndex && "tab-active text-accent",
           tabIndex === 1 &&
             notificationCount &&
-            "bg-blue-400 text-white shadow-md",
+            "bg-accent text-white shadow-md",
           notificationCount && "animate-pulse"
         )}
       >
