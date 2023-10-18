@@ -4,7 +4,7 @@ import React from "react";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react-internal";
 
-interface ViewTeamMicroModalProps {
+interface ViewTeamMembersMicroModalProps {
   team: Team | null;
   close: () => void;
 }
@@ -21,7 +21,7 @@ interface User {
   has_team: boolean;
 }
 
-export const ViewTeamModal: React.FC<ViewTeamMicroModalProps> = ({
+export const ViewTeamMembersModal: React.FC<ViewTeamMembersMicroModalProps> = ({
   team,
   close,
 }) => {
