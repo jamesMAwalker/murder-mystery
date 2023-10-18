@@ -1,8 +1,8 @@
 'use client'
 
 import { createContext, ReactNode, useContext } from 'react'
-import { useGetAllTeamsFromDB } from '../(hooks)/convex/teams/useGetAllTeamsFromDB'
-import { useGetAllUsersFromDB } from '../(hooks)/convex/users/useGetAllUsersFromDB'
+// import { useGetAllTeamsFromDB } from '../(hooks)/convex/teams/useGetAllTeamsFromDB'
+// import { useGetAllUsersFromDB } from '../(hooks)/convex/users/useGetAllUsersFromDB'
 
 
 const defaults = {
@@ -17,13 +17,13 @@ const GameContext = createContext<{
 
 export const useGameContext = () => useContext(GameContext)!
 
-export const GameProvider = ({ children }: { children: ReactNode }) => {
-  const teams: IConvexTeam[] = useGetAllTeamsFromDB();
-  const users: IConvexUser[] = useGetAllUsersFromDB();
+// export const GameProvider = ({ children }: { children: ReactNode }) => {
+//   // const teams: IConvexTeam[] = useGetAllTeamsFromDB();
+//   // const users: IConvexUser[] = useGetAllUsersFromDB();
   
-  return (
-    <GameContext.Provider value={{ teams, users }}>
-      {children}
-    </GameContext.Provider>
-  )
-}
+//   return (
+//     <GameContext.Provider value={}>
+//       {children}
+//     </GameContext.Provider>
+//   )
+// }

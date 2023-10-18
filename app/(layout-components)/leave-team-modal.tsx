@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation } from "convex/react-internal";
+import { ModalWrapper } from "./modal-wrapper";
 
 interface LeaveTeamModalProps {
   closeModal: () => void;
@@ -22,46 +25,37 @@ export const LeaveTeamModal: React.FC<LeaveTeamModalProps> = ({
   console.log("team: ", team);
   console.log("user: ", user);
 
-  const renderLeaveTeam = () => {
-    return (
-      <div className="flex flex-col items-center justify-start h-full bg-black !fixed w-screen h-screen z-10 inset-0 p-4">
-        {teamId && userId && (
-          <div className="modal-box bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-md mt-20 relative">
-            {" "}
-            {/* Added relative for the close button's absolute positioning */}
-            <button
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-              onClick={closeModal}
-            >
-              &times;
-            </button>
-            <h3 className="font-bold text-xl mb-4 w-[90%]">
-              Are you sure that you want to leave your team?
-            </h3>
-            <div className="modal-action">
-              <button
-                className="btn btn-primary w-full"
-                onClick={() => {
-                  leaveTeam({ user_id: userId, team_id: teamId });
-                  closeModal();
-                }}
-              >
-                Leave Team
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
   if (!teamId || !userId) {
     return null;
   }
 
   return (
-    <div className="flex flex-col items-center justify-start h-full bg-black !fixed w-screen h-screen z-10 inset-0 p-4">
-      {renderLeaveTeam()}
-    </div>
+    <ModalWrapper>
+      {teamId && userId && (
+        <div>
+          {/* Added relative for the close button's absolute positioning */}
+          <button
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            onClick={closeModal}
+          >
+            &times;
+          </button>
+          <h3 className="font-bold text-xl mb-4 w-[90%]">
+            Are you sure that you want to leave your team?
+          </h3>
+          <div className="modal-action">
+            <button
+              className="btn btn-primary w-full"
+              onClick={() => {
+                leaveTeam({ user_id: userId, team_id: teamId });
+                closeModal();
+              }}
+            >
+              Leave Team
+            </button>
+          </div>
+        </div>
+      )}
+    </ModalWrapper>
   );
 };

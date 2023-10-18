@@ -1,16 +1,5 @@
 [
-  {
-    "user_id": null,
-    "suspect_name": "Josh",
-    "image_url": "https://res.cloudinary.com/jameswalker-work/image/upload/v1695659067/murder-mystery/jimb-big_sm1qev.png",
-    "home_country": "USA",
-    "gender": "male",
-    "age": "mid-thirties",
-    "occupation": "IT Enthusiast",
-    "bio": "Josh is an IT specialist who recently entered the field. He's known for his intelligence and love for board games, which he shares with Myles.",
-    "is_guilty": false
-  },
-  {
+  { 
     "user_id": null,
     "suspect_name": "Jack",
     "image_url": "https://res.cloudinary.com/jameswalker-work/image/upload/v1695659067/murder-mystery/jimb-big_sm1qev.png",
@@ -18,7 +7,7 @@
     "gender": "male",
     "age": "late-twenties",
     "occupation": "University Professor",
-    "bio": "Jack grew up with a rough background in Ireland and learned to box with the gypsies. He is currently a professor at a local university, known for his Irish heritage, his love of beer being exceeded only by his love of family.",
+    "bio": "Jack grew up with a rough background in Ireland and learned to box with the gypsies. He is currently a professor at a local university, known for his Irish heritage, his love of beer being exceeded only by his love of family. He claims that his physical altercation where he knocked out Đen Vâu came because the rapper was shouting at Tien, but is that all there is? He has a history of negative interaction with Đen Vâu. Was he finally pushed too far, all the way to… murder?",
     "is_guilty": false
   },
   {
@@ -29,7 +18,7 @@
     "gender": "male",
     "age": "early-thirties",
     "occupation": "Lagnuage Teacher",
-    "bio": "Myles is a well-spoken British language teacher, known for his quick wit and love for board games. He is the host of the party, and Tien is his wife.",
+    "bio": "Myles is a well-spoken British language teacher, known for his quick wit, narcissistic tendencies, and love for board games. He is the host of the party and celebrating his recent successful expansion as a language teacher, and Tien is his wife. Their strained relationship is reflected through their constant bickering. ^^ She supports his hosting of the party and organizes the catering; he gets the accolades, but she is the glue holding it all together, especially coordinating the catering. But now his wife has been found in questionable circumstances and the death of Đen Vâu. Did Myles play any role in it? Could he have been involved in…the murder?",
     "is_guilty": false
   },
   {
@@ -40,7 +29,7 @@
     "gender": "female",
     "age": "late-twenties",
     "occupation": "Live Translator",
-    "bio": "Tien is Myles's wife, a Vietnamese woman. She works the graveyard shift as a live translator.",
+    "bio": "Tien works the graveyard shift as a Vietnamese live translator, lurking in the night. A natural inclination to playing games is one of her core characteristics, and Myles is her husband. She supports his hosting of the party and organizes the catering; he gets the accolades, but she is the glue holding it all together. Their strained relationship is reflected through their constant bickering. The poison in Đen Vâu’s whiskey glass and the vial of the poison strychnine found in her purse are certainly compelling. But is she being framed? What motive does she have…for murder? ",
     "is_guilty": false
   },
   {
@@ -51,7 +40,7 @@
     "gender": "male",
     "age": "mid-twenties",
     "occupation": "Student",
-    "bio": "Devastatingly handsome but bored and unchallenged by life, mysterious. Part of a noire partnership with Linh.",
+    "bio": "Huy, the mysterious and devastatingly handsome Vietnamese, manager to both Đen Vâu and Linh who is a struggling musical artist. He’s known to live a lavish lifestyle, a modern-day playboy. But Đen Vâu was Huy’s number 1 source of income. Could it be Huy was stealing from his clients? What possible reason could he have…for murder? ",
     "is_guilty": false
   },
   {
@@ -62,7 +51,7 @@
     "gender": "female",
     "age": "mid-twenties",
     "occupation": "Student",
-    "bio": "Emanating barely controlled anger and violence, shrewd and calculating. Part of a noire partnership with Huy.",
+    "bio": "Managed by Huy as well, Linh is struggling to be a star in the music industry and alleges Huy has been stealing from her. Despite being a talented artist, she feels overshadowed by Đen Vâu's fame and success - and can often be heard complaining that she is more deserving of Huy’s attention and marketing support. Elimination of a potential rival could be a powerful motive…for murder.",
     "is_guilty": false
   }
 ]

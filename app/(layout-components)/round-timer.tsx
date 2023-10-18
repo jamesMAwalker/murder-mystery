@@ -20,8 +20,11 @@ export const RoundTimer = () => {
     if (remainingTime >= 301)  setBgColor('bg-success');
     if (remainingTime <= 300)  setBgColor('bg-warning');
     if (remainingTime <= 120)  setBgColor('bg-error');
-    if (remainingTime <= 10)  setBgColor('bg-error animate-pulse');
+    if (remainingTime <= 10)   setBgColor('bg-error animate-pulse');
   }, [currentRound?.remaining_time])
+
+  const isRoundZero = currentRound?.round_number === 0
+  const roundsStarted = currentRound?.round_number! > 0
 
   return (
     <div
@@ -30,10 +33,20 @@ export const RoundTimer = () => {
         bgColor
       )}
     >
-      <span>Round {currentRound?.round_number || ''}</span>
-      <span>
-        {minutes || '00'}:{seconds || '00'}{' '}
-      </span>
+      {isRoundZero && (
+        <>
+          <span>Game starting in: </span>
+          <span>
+            {minutes || '00'}:{seconds || '00'}{' '}
+          </span>
+        </>
+      )}
+      {roundsStarted && <span>Round {currentRound?.round_number || ''}</span>}
+      {roundsStarted && (
+        <span>
+          {minutes || '00'}:{seconds || '00'}{' '}
+        </span>
+      )}
     </div>
   )
 }

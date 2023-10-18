@@ -1,6 +1,7 @@
 import React from "react";
 import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation } from "convex/react-internal";
+import { Id } from "@/convex/_generated/dataModel";
 
 interface AddMemberModalProps {
   closeModal: () => void;
@@ -78,7 +79,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
                             const invite = inviteToCancel(userToInvite);
                             invite &&
                               cancelInvite({
-                                invitation_id: invite._id,
+                                invitation_id: invite._id as any,
                               });
                           }}
                         >

@@ -5,7 +5,6 @@ import { UserButton } from "@clerk/nextjs/app-beta";
 import { useUser } from "@clerk/clerk-react";
 import { useQuery } from "convex/react";
 import Link from "next/link";
-import { useCreateUserInDB } from "../(hooks)/convex/users/useCreateUserInDB";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
@@ -19,13 +18,16 @@ export const Navbar = () => {
 
   const invites = useQuery(api.invitations.getFromSessionByUser);
   const requests = useQuery(api.requests.getFromSessionByTeam);
-  const isArray = (input: any): input is Array<any> => {
-    return !!input && typeof input === "object" && input.constructor === Array;
-  };
 
-  const totalNotifications =
-    (isArray(invites) ? invites.length : 0) +
-    (isArray(requests) ? requests.length : 0);
+  // const totalNotifications =
+  //   (Array.isArray(invites) ? invites.length : 0) +
+  //   (Array.isArray(requests) ? requests.length : 0);
+
+  const totalInvites = Array.isArray(invites) ? invites.length : 0;
+  const totalRequests =
+    Array.isArray(requests) && loggedUser?.is_captain ? requests.length : 0;
+
+  const totalNotifications = totalInvites + totalRequests;
 
   useEffect(() => {
     if (isSignedIn && user.id) {
@@ -47,8 +49,9 @@ export const Navbar = () => {
     <div className="nav-wrapper z-20 fixed top-0 p-4 flex w-full items-center">
       <nav className="navbar p-2 w-full rounded-md bg-slate-800 text-white">
         <span className="navbar-start">
-          <Link href="/" className="btn btn-ghost normal-case text-xl">
-            LOGO
+          <Link href="/" className="btn btn-ghost normal-case text-xl flex">
+            <span>M</span>
+            <span className="text-red-500 ml-[-10px]">M</span>
           </Link>
         </span>
         {isSignedIn ? (

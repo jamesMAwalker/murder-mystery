@@ -1,20 +1,22 @@
 [
   {
     "order": 1,
-    "title": "Autopsy Report",
-    "content": "The autopsy report reveals that Đen Vâu was poisoned. The poison was found in a glass of whiskey he had been drinking, making it clear that this was a deliberate act. However, the identity of the poisoner remains a mystery.",
+    "title": "Laboratory Report",
+    "content": "The Laboratory report reveals that Đen Vâu’s glass had poison in it. It was found in a glass of whiskey he had been drinking, making it clear that this was a deliberate act. This casts suspicion on Tien, who played a supporting role with the catering and would have had access to Đen Vâu’s glass. A deeper exploration reveals that Tien had a vial of strychnine poison in her locker; the effects of this poison result in asphyxiation 1st interview round:Tien insists on her innocence.
+",
     "released": false
   },
   {
     "order": 2,
     "title": "Blood Toxicology Report",
-    "content": "Further investigation reveals that Đen Vâu's blood contained traces of a rare poison only accessible to someone with a deep knowledge of chemistry. This clue implicates someone with expertise in the field, such as Josh, who works in IT.",
+    "content": "In a surprise twist, it was discovered from the Blood Toxicology Report that Đen Vâu had not been poisoned, and that there was no trace of Strychnine in his blood. ",
     "released": false
   },
   {
     "order": 3,
-    "title": "Incriminating Evidence",
-    "content": "The autopsy report reveals that Đen Vâu was poisoned. The poison was found in a glass of whiskey he had been drinking, making it clear that this was a deliberate act. However, the identity of the poisoner remains a mystery.",
+    "title": "Autopsy Report",
+    "content": "The autopsy report reveals that around Đen Vâu’s mouth were traces of chloroform - a well-known chemical which can be used to make someone unconscious. Further examination of his body showed slight bruising around his neck, with the cause of death being determined as strangulation; someone had knocked him out with a rag with chloroform over his mouth, then choked him to death when he was unconscious! The autopsy discovered traces of skin under Đen Vâu’s fingernails, which have been sent off for DNA testing.
+",
     "released": false
   }
 ]

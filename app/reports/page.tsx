@@ -49,7 +49,7 @@ function ReportsSection() {
       <h2 className='text-xl font-bold'>Reports</h2>
       {/* sort reports with latest on top */}
       {reports
-        .sort((ra, rb) => rb.order - ra.order)
+        ?.sort((ra, rb) => rb.order - ra.order)
         ?.map((report, idx) => {
           // only show released reports.
           if (!report.released) return

@@ -81,7 +81,7 @@ const SuspectsPage = () => {
               className="object-cover aspect-square"
             />
           </figure>
-          <div className="card-body gap-4">
+          <div className="card-body gap-4 max-h-[30vh] overflow-y-scroll">
             <h2 className="card-title">{modalContent?.suspect_name}</h2>
             <p>{modalContent?.bio}</p>
             <div className="card-actions justify-end">

@@ -2,10 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+} */
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,18 +23,24 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
+  background: linear-gradient(
+      to bottom,
       transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
-
 /* UTILITY CLASSES */
+
+/* SIZE */
 
 .full {
   height: 100%;
   width: 100%;
 }
+
+/* FLEX */
 
 .flex-center {
   display: flex;
@@ -58,7 +69,24 @@ body {
   justify-content: flex-end;
 }
 
-/* Global CSS */
+/* TYPOGRAPHY - MODIFIERS */
+.font-stroke-red {
+  -webkit-text-stroke: 1px rgb(239 68 68);
+}
+.font-outline-white {
+  -webkit-text-stroke: 2px white;
+}
+.font-outline-red {
+  color: transparent;
+  text-shadow:
+   -1px -1px 0 rgb(239 68 68),  
+    1px -1px 0 rgb(239 68 68),
+    -1px 1px 0 rgb(239 68 68),
+     1px 1px 0 rgb(239 68 68);
+}
+
+
+/* ELEMENTS */
 
 .modal-backdrop {
   position: fixed;

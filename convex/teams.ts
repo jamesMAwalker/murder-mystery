@@ -37,10 +37,20 @@ export const create = mutation({
     // Update team fields of all added members.
     await db.patch(user._id, {
       is_captain: true,
-      has_team: true,
+      has_team: true, 
       team_name,
       team_id: teamId,
     });
+
+
+    // create guess object for this team.
+    await db.insert("guesses", {
+      team_name: team_name,
+      team_id: teamId,
+      guesses: [],
+      suspect_guess_id: null,
+      suspect_guess_name: null,
+    })
 
     return user;
   },
@@ -88,6 +98,15 @@ export const createFromSession = mutation({
       team_name,
       team_id: teamId,
     });
+
+    // create guess object for this team.
+    await db.insert("guesses", {
+      team_name: team_name,
+      team_id: teamId,
+      guesses: [],
+      suspect_guess_id: null,
+      suspect_guess_name: null,
+    })
 
     return user;
   },
