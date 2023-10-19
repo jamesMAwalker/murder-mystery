@@ -145,7 +145,7 @@ function PhaseBlock({ phase, roundId }: any) {
     phaseId: phase.phase_id,
     roundId
   })
-  console.log('timer status: ', status);  
+  // console.log('timer status: ', status);  
   // TODO: Pulse timer when paused.
 
   return (
@@ -161,7 +161,8 @@ function PhaseBlock({ phase, roundId }: any) {
         </span>
       )}
       <div className='BTN_GRID grid grid-cols-2 auto-rows-auto gap-2 flow-column full'>
-        <DigitalTimer totalSeconds={phase.phase_current_time} />
+        {/* <DigitalTimer totalSeconds={phase.phase_current_time} /> */}
+        <DigitalTimer startingTime={phase.phase_starting_time} />
         <button
           className='col-span-2 btn btn-warning text-black'
           onClick={start}
