@@ -17,28 +17,41 @@ export function useDbCountdown({
   roundId,
   phaseId
 }: ICountDownProps) {
-  const updateDbCountdown = useMutation(
-    api.phased_rounds.updatePhaseCurrentTime
-  )
   const completePhase = useMutation(api.phased_rounds.setPhaseComplete)
+  const setPhaseActive = useMutation(api.phased_rounds.setPhaseActive)
+  const setCountInDb = useMutation(api.phased_rounds.setPhaseCurrentTime)
 
   // set up timer.
   const timer = useTimer({
     initialTime: dbInitTime,
     endTime: 0,
     timerType: 'DECREMENTAL',
+    // increment timer in db.
     onTimeUpdate(time) {
-      updateDbCountdown({
+      setCountInDb({
         round_id: roundId,
         phase_id: phaseId,
-        new_time: time,
-        is_active: true
+        new_time: time
       })
     },
+    // handle timer expiry process.
     onTimeOver() {
       completePhase({ round_id: roundId, phase_id: phaseId })
     }
   })
+
+  // handle active phase updates.
+  useEffect(() => {
+    console.log('timer.status: ', timer.status);
+    // if timer running, set phase active.
+    if (timer.status === 'RUNNING') {
+      setPhaseActive({ round_id: roundId, phase_id: phaseId, is_active: true })
+    }
+    // if timer stopped, set phase inactive.
+    if (timer.status === 'STOPPED') {
+      setPhaseActive({ round_id: roundId, phase_id: phaseId, is_active: false })
+    }
+  }, [timer.status])
 
   return timer
 }
