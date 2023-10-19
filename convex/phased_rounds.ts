@@ -51,35 +51,6 @@ export const getActivePhase = query({
 
 // MUTATIONS
 
-export const setPhaseActive = mutation({
-  args: {
-    round_id: v.id('phased_rounds'),
-    phase_id: v.string(),
-    is_active: v.boolean()
-  },
-  handler: async ({ db }, { round_id, phase_id, is_active }) => {
-
-    const activeRound = await db.get(round_id)
-
-    if (!activeRound) throw new Error('Error finding round!')
-
-    // get current phase
-    const updatedPhases = activeRound?.phases.map(phase => {
-      const isPhaseToUpdate = phase.phase_id === phase_id
-
-      return isPhaseToUpdate
-        ? { ...phase, active: is_active, }
-        : phase;
-
-    });
-
-    // set phase active flag
-    db.patch(activeRound._id, {
-      phases: updatedPhases
-    })
-  }
-});
-
 // sets given phase to complete.
 export const setPhaseComplete = mutation({
   args: {
@@ -170,14 +141,13 @@ export const startNextRound = mutation({
 })
 
 // updates the current time of a phase.
-export const updatePhaseCurrentTime = mutation({
+export const setPhaseCurrentTime = mutation({
   args: {
     round_id: v.id('phased_rounds'),
     phase_id: v.string(),
     new_time: v.float64(),
-    is_active: v.boolean()
   },
-  handler: async ({ db }, { round_id, phase_id, new_time, is_active }) => {
+  handler: async ({ db }, { round_id, phase_id, new_time }) => {
 
     const activeRound = await db.get(round_id)
 
@@ -186,7 +156,35 @@ export const updatePhaseCurrentTime = mutation({
       const isPhaseToUpdate = phase.phase_id === phase_id
 
       return isPhaseToUpdate
-        ? { ...phase, active: is_active, phase_current_time: new_time }
+        ? { ...phase, phase_current_time: new_time }
+        : phase;
+
+    });
+
+    // patch db with new time.
+    db.patch(round_id, {
+      phases: updatedPhases
+    })
+  }
+});
+
+// updates the current time of a phase.
+export const setPhaseActive = mutation({
+  args: {
+    round_id: v.id('phased_rounds'),
+    phase_id: v.string(),
+    is_active: v.boolean()
+  },
+  handler: async ({ db }, { round_id, phase_id, is_active }) => {
+
+    const activeRound = await db.get(round_id)
+
+    // update phase timer with args.
+    const updatedPhases = activeRound?.phases.map(phase => {
+      const isPhaseToUpdate = phase.phase_id === phase_id
+
+      return isPhaseToUpdate
+        ? { ...phase, active: is_active }
         : phase;
 
     });
@@ -199,7 +197,7 @@ export const updatePhaseCurrentTime = mutation({
 });
 
 // sets a given round to active (all others set to inactive).
-export const updateActive = mutation({
+export const updateActiveRound = mutation({
   args: {
     round_id: v.id('phased_rounds'),
   },
