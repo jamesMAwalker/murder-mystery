@@ -16,6 +16,8 @@ import {
   SuspectIcon
 } from '../(components)/index'
 import { PhasedRoundTimer } from './round-timer-phased'
+import { useQuery } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 interface IDropdownContent {
   page: string
@@ -36,24 +38,27 @@ const pages: IDropdownContent[] = [
 ]
 
 export const BottomNav = () => {
+  const activeRound = useQuery(api.phased_rounds.getActiveRound)
+  console.log('activeRound: ', activeRound)
+
   // navigation set up.
   const { push } = useRouter()
   const pathname = usePathname()
 
   // set up page navigation logic.
   const [current, setCurrent] = useState(0)
-  
+
   useEffect(() => {
     const updatedCurrent = pages.findIndex((p) => p.path === pathname)
     if (updatedCurrent !== -1 && current !== updatedCurrent) {
       setCurrent(updatedCurrent)
     }
   }, [pathname])
-  
+
   // Set up drawer open/close logic
   const checkBoxRef = useRef<HTMLInputElement>(null)
   const [open, setOpen] = useState(false)
-  
+
   const handleClick = (idx: number, path: string) => {
     setCurrent(idx)
     push(path)
@@ -81,13 +86,20 @@ export const BottomNav = () => {
       </p>
 
       <ul className='w-full px-8 collapse-content grid grid-cols-4 gap-1 p-0'>
-        {pages.map(({ page, path, icon, hidden }, idx) => {
+        {pages.map(({ page, path, icon }, idx) => {
           const active = idx === current
+          
+          // hide suspects until round 1.
+          const hidden =
+            activeRound?.round_number! <= 0 && path === '/suspects'
+              ? true
+              : false 
 
           return (
             <li
               className={cn(
-                'bg-white/5 hover:bg-secondary/30 text-white hover:text-secondary gap-2 aspect-square flex-col-center w-full text-primary-content peer-checked:text-secondary-content focus:text-secondary'
+                'bg-white/5 hover:bg-secondary/30 text-white hover:text-secondary gap-2 aspect-square flex-col-center w-full text-primary-content peer-checked:text-secondary-content focus:text-secondary',
+                hidden && '!hidden'
               )}
               onClick={() => handleClick(idx, path)}
               key={page}
