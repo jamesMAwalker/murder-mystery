@@ -88,10 +88,28 @@ export const resetGame = mutation({
     // get rounds.
     const rounds = await db.query("phased_rounds").collect();
 
-    // set all rounds to inactive
-    rounds.forEach(round => {
+    // reset phases.
+    const roundsWithResetPhases = rounds.map(round => {
+      const updatedPhases = round.phases.map(phase => {
+        return {
+         ...phase,
+          active: false,
+          completed: false
+        }
+      })
+
+      return {
+        ...round,
+        phases: updatedPhases
+      }
+    })
+
+    // set all rounds and phases to inactive
+    rounds.forEach((round, idx) => {
       db.patch(round._id, {
-        active: false
+        active: false,
+        completed: false,
+        phases: roundsWithResetPhases[idx].phases
       })
     })
   }
