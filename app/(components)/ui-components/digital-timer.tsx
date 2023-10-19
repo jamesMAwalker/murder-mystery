@@ -1,19 +1,23 @@
 'use client'
 
+import { api } from '@/convex/_generated/api'
 import { secondsToMinutesAndSeconds } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
+import { useQuery } from 'convex/react'
 
 export const DigitalTimer = ({
-  totalSeconds,
+  startingTime,
   style = 'standard'
 }: {
-  totalSeconds: number | null
+  startingTime?: number
   style?: string
 }) => {
+  const currentPhase = useQuery(api.phased_rounds.getActivePhase)
 
-  // get minutes and seconds if totalSeconds is not null
-  const { minutes, seconds } = totalSeconds
-    ? secondsToMinutesAndSeconds(totalSeconds)
+  const { minutes, seconds } = currentPhase?.phase_current_time
+    ? secondsToMinutesAndSeconds(currentPhase.phase_current_time)
+    : startingTime
+    ? secondsToMinutesAndSeconds(startingTime)
     : { minutes: 0, seconds: 0 }
 
   // timer styles
@@ -30,21 +34,17 @@ export const DigitalTimer = ({
         timerStyle[style as keyof typeof timerStyle]
       )}
     >
-      {totalSeconds ? (
-        <>
-          <span>
-            {minutes.toString().length === 1 && 0}
-            {minutes}
-          </span>
-          <span>:</span>
-          <span>
-            {seconds.toString().length === 1 && 0}
-            {seconds}
-          </span>
-        </>
-      ) : (
-        <span>--:--</span>
-      )}
+      <>
+        <span>
+          {minutes.toString().length === 1 && 0}
+          {minutes}
+        </span>
+        <span>:</span>
+        <span>
+          {seconds.toString().length === 1 && 0}
+          {seconds}
+        </span>
+      </>
     </span>
   )
 }
