@@ -29,12 +29,14 @@ const PendingInvites: React.FC = () => {
     return acc;
   }, {});
 
-  const invitationsWithTeamNames = (pendingInvitations || []).map((invite) => ({
-    ...invite,
-    team_name: teamNameById
-      ? teamNameById[invite.inviting_team_id]
-      : "Unknown Team",
-  }));
+  const invitationsWithTeamNames = ((pendingInvitations as any) || []).map(
+    (invite: any) => ({
+      ...invite,
+      team_name: teamNameById
+        ? teamNameById[invite.inviting_team_id]
+        : "Unknown Team",
+    })
+  );
 
   const displayedInvitations = showAllInvitations
     ? invitationsWithTeamNames
