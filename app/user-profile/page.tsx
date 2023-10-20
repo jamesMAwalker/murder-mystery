@@ -63,13 +63,7 @@ const UserProfilePage = () => {
     }
   }, [isUserASuspect]);
 
-  if (!isSignedIn || !isLoaded || !user) {
-    return (
-      <div className="flex-center h-40">
-        <span className="loading loading-ring loading-lg scale-150"></span>
-      </div>
-    );
-  } else if (isUserASuspect) {
+  if (!isSignedIn || !isLoaded || !user || isUserASuspect) {
     return (
       <div className="flex-center h-40">
         <span className="loading loading-ring loading-lg scale-150"></span>
