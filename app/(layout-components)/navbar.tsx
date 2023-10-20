@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { UserButton } from "@clerk/nextjs/app-beta";
 import { useUser } from "@clerk/clerk-react";
 import { useQuery } from "convex/react";
@@ -12,24 +12,23 @@ import { api } from "@/convex/_generated/api";
 
 export const Navbar = () => {
   const { isSignedIn, user } = useUser();
-  const [isSuspect, setIsSuspect] = useState(false);
-  const loggedUser = useQuery(api.users.getFromSession);
+  // const loggedUser = useQuery(api.users.getFromSession);
 
   const createUser = useMutation(api.users.create);
 
   const userIsSuspectCheck = useQuery(api.suspects.getFromUserSession);
-  const invites = useQuery(api.invitations.getFromSessionByUser);
-  const requests = useQuery(api.requests.getFromSessionByTeam);
+  // const invites = useQuery(api.invitations.getFromSessionByUser);
+  // const requests = useQuery(api.requests.getFromSessionByTeam);
 
   // const totalNotifications =
   //   (Array.isArray(invites) ? invites.length : 0) +
   //   (Array.isArray(requests) ? requests.length : 0);
 
-  const totalInvites = Array.isArray(invites) ? invites.length : 0;
-  const totalRequests =
-    Array.isArray(requests) && loggedUser?.is_captain ? requests.length : 0;
+  // const totalInvites = Array.isArray(invites) ? invites.length : 0;
+  // const totalRequests =
+  //   Array.isArray(requests) && loggedUser?.is_captain ? requests.length : 0;
 
-  const totalNotifications = totalInvites + totalRequests;
+  // const totalNotifications = totalInvites + totalRequests;
 
   useEffect(() => {
     if (isSignedIn && user.id) {
