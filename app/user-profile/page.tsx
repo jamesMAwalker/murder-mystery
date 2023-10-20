@@ -21,6 +21,7 @@ import { NotificationToast } from "../(layout-components)/notification-toast";
 const UserProfilePage = () => {
   const user = useQuery(api.users.getFromSession);
   const { isSignedIn, isLoaded } = useSession();
+  const isUserASuspect = useQuery(api.suspects.getFromUserSession);
 
   // const [activeTab, setActiveTab] = useState(0);
   const [isTeamInfoOpen, setIsTeamInfoOpen] = useState(false);
@@ -56,7 +57,19 @@ const UserProfilePage = () => {
   // const showLeaveModal = () => setModalType(ModalType.LEAVE);
   // const closeModal = () => setModalType(ModalType.NONE);
 
+  useEffect(() => {
+    if (isUserASuspect) {
+      window.location.href = "/suspect-dashboard";
+    }
+  }, [isUserASuspect]);
+
   if (!isSignedIn || !isLoaded || !user) {
+    return (
+      <div className="flex-center h-40">
+        <span className="loading loading-ring loading-lg scale-150"></span>
+      </div>
+    );
+  } else if (isUserASuspect) {
     return (
       <div className="flex-center h-40">
         <span className="loading loading-ring loading-lg scale-150"></span>
