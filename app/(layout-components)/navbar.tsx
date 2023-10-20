@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { UserButton } from "@clerk/nextjs/app-beta";
 import { useUser } from "@clerk/clerk-react";
 import { useQuery } from "convex/react";
@@ -12,10 +12,12 @@ import { api } from "@/convex/_generated/api";
 
 export const Navbar = () => {
   const { isSignedIn, user } = useUser();
+  const [isSuspect, setIsSuspect] = useState(false);
   const loggedUser = useQuery(api.users.getFromSession);
 
   const createUser = useMutation(api.users.create);
 
+  const userIsSuspectCheck = useQuery(api.suspects.getFromUserSession);
   const invites = useQuery(api.invitations.getFromSessionByUser);
   const requests = useQuery(api.requests.getFromSessionByTeam);
 
@@ -57,15 +59,16 @@ export const Navbar = () => {
         {isSignedIn ? (
           <div className="flex gap-4 navbar-end items-center">
             <Link
-              href="/user-profile"
+              href={userIsSuspectCheck ? "/suspect-dashboard" : "/user-profile"}
               className="hover:bg-primary cursor-pointer badge p-4 uppercase text-white relative"
             >
               Profile
-              {totalNotifications > 0 && (
+              {/* omit notificatio badge for time being per Dan's insistance that admin handle all team assignment
+             {totalNotifications > 0 && (
                 <span className="absolute top-0 right-0 mt-0.5 mr-0.5 transform translate-x-1/4 -translate-y-1/4 bg-accent text-white text-xs rounded-full w-4 h-4 flex items-center justify-center shadow-lg">
                   {totalNotifications}
                 </span>
-              )}
+              )} */}
             </Link>
 
             <UserButton afterSignOutUrl="/" />
