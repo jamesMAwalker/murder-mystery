@@ -3,14 +3,22 @@
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { useQuery } from "convex/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SuspectDashboard = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [userIsNotSuspect, setUserIsNotSuspect] = useState(false);
 
   const suspectCard = useQuery(api.suspects.getFromUserSession);
+
   const user = useQuery(api.users.getFromSession);
   const activeRound = useQuery(api.rounds.getActive) ?? 0;
+
+  useEffect(() => {
+    if (user && !suspectCard) {
+      window.location.href = "/user-profile";
+    }
+  }, [user, suspectCard]);
 
   if (!user || !suspectCard) {
     return (
