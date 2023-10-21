@@ -6,7 +6,7 @@ import { useQuery } from 'convex/react'
 import { useState } from 'react'
 
 const SuspectDashboard = () => {
-  const [activeTab, setActiveTab] = useState(1  )
+  const [activeTab, setActiveTab] = useState(1)
 
   const suspectCard = useQuery(api.suspects.getFromUserSession)
   const user = useQuery(api.users.getFromSession)
@@ -52,21 +52,25 @@ const SuspectDashboard = () => {
 export default SuspectDashboard
 
 function InstructionsDisplay({ instructionsSet }: { instructionsSet: number }) {
-
-  
   const instructionsData = useQuery(api.suspect_instructions.getFromUserSession)
-  
+
   // TODO: Refactor these conditionals.
 
   const instructions = instructionsData?.instructions
 
-  if (!instructions) return null;
-  
-  const rdInstructions = instructions[instructionsSet as keyof typeof instructions]!
+  if (!instructions) return null
 
-  return <div className='INSTRUCTIONS_DISPLAY flex-col-tl gap-4 full'>
-    <h4 className='text-xl font-bold'> Round - {rdInstructions?.round_number}: Instructions</h4>
-  </div>
+  const rdInstructions =
+    instructions[instructionsSet as keyof typeof instructions]!
+
+  return (
+    <div className='INSTRUCTIONS_DISPLAY flex-col-tl gap-4 full'>
+      <h4 className='text-xl font-bold'>
+        {' '}
+        Round - {rdInstructions?.round_number!}: Instructions
+      </h4>
+    </div>
+  )
 }
 
 function SuspectInfo({ suspectCard }: any) {
