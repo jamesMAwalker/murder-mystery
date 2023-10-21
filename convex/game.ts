@@ -46,6 +46,16 @@ export const startGame = mutation({
     db.patch(rounds[0]._id, {
       active: true
     })
+   
+    // set first phase to active.
+    const updatedPhases = rounds[0].phases.map((phase, idx) => {
+      return idx === 0 ? { ...phase, active: true } : phase
+    })
+
+    db.patch(rounds[0]._id, {
+      active: true,
+      phases: updatedPhases
+    })
   }
 })
 
