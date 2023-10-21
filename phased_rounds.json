@@ -7,7 +7,7 @@
       {
         "phase_id": "prologue",
         "phase_type": "prologue",
-        "phase_title": "Game Starting Soon",
+        "phase_title": "Mingle Ending",
         "phase_starting_time": 300,
         "phase_current_time": 300,
         "completed": false,
