@@ -5,8 +5,14 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { cn } from "@/lib/utils";
 
+import { useRoleBasedRedirect } from '../(hooks)/navigation/useRoleBasedRedirect'
+
 const SuspectDashboard = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1)
+
+  useRoleBasedRedirect({
+    allowed_role: 'suspect',
+  })
 
   const suspectCard = useQuery(api.suspects.getFromUserSession);
   const user = useQuery(api.users.getFromSession);
@@ -72,7 +78,7 @@ const InstructionsDisplay = ({ instructionsSet }) => {
   );
   const instructions = instructionsData?.instructions;
   const rdInstructions = instructions?.[instructionsSet];
-
+  
   return rdInstructions ? (
     <div className="INSTRUCTIONS_DISPLAY flex-col-tl gap-4 full">
       <h4 className="text-xl font-bold">
@@ -99,5 +105,20 @@ const SuspectInfo = ({ suspectCard }) => (
     <p className="font-normal">{suspectCard?.bio}</p>
   </div>
 );
+
+  if (!instructions) return null
+
+  const rdInstructions =
+    instructions[instructionsSet as keyof typeof instructions]!
+
+  return (
+    <div className='INSTRUCTIONS_DISPLAY flex-col-tl gap-4 full'>
+      <h4 className='text-xl font-bold'>
+        {' '}
+        Round - {rdInstructions?.round_number!}: Instructions
+      </h4>
+    </div>
+  )
+}
 
 export default SuspectDashboard;

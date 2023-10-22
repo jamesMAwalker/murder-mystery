@@ -1,14 +1,17 @@
-'use client';
+'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
 import { ReportSection } from './reporting-section'
-import { PhasedRoundsManager } from './phased-rounds-manager';
+import { PhasedRoundsManager } from './phased-rounds-manager'
+import { useRoleBasedRedirect } from '../(hooks)/navigation/useRoleBasedRedirect'
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('Rounds')
+
+  useRoleBasedRedirect({ allowed_role: 'admin', redirect_url: '/' })
 
   return (
     <div className='flex-col-tl gap-10   w-full'>

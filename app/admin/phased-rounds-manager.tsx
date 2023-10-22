@@ -15,7 +15,6 @@ export const PhasedRoundsManager = () => {
 
   return (
     <div className='flex-col-tl gap-8 w-full'>
-      
       <GameControlButtons />
       {rounds
         ?.sort((ra: any, rb: any) => ra.round_number - rb.round_number)
@@ -108,7 +107,9 @@ function RoundBlock({ _id, round_number, phases, active, completed }: any) {
 
   const controlBtnText = isFinalRound ? 'End Game' : 'Next Round'
 
-  const controlBtnStyle = isFinalRound ? 'btn-error w-full' : 'btn-secondary w-full'
+  const controlBtnStyle = isFinalRound
+    ? 'btn-error w-full'
+    : 'btn-secondary w-full'
 
   return (
     <div
@@ -126,6 +127,7 @@ function RoundBlock({ _id, round_number, phases, active, completed }: any) {
             )
           })}
         </ul>
+        {/* Next Round Button */}
         <ControlButton
           text={controlBtnText}
           action={controlBtnAction}
@@ -138,19 +140,27 @@ function RoundBlock({ _id, round_number, phases, active, completed }: any) {
 
 function PhaseBlock({ phase, roundId }: any) {
   const currentRound = useQuery(api.phased_rounds.getOne, { round_id: roundId })
+  const startNextRound = useMutation(api.phased_rounds.startNextPhase)
+
+  // TODO: Fix issue where timers all change to current round timer
 
   // set up timer fns (linked to db).
-  const { time, status, start, pause, reset, advanceTime } = useDbCountdown({
+  const { time, start, pause, reset, advanceTime } = useDbCountdown({
     dbInitTime: phase.phase_starting_time,
     phaseId: phase.phase_id,
     roundId
   })
-  // console.log('timer status: ', status);  
-  // TODO: Pulse timer when paused.
+
+  const handleStartNextPhase = () => {
+    startNextRound({ round_id: roundId, active_phase_id: phase.phase_id })
+  }
 
   return (
-    <li className='flex-col-tl full rounded-md bg-slate-900 p-4'>
-      <h6 className='pb-4 flex gap-4'>
+    <li className='flex-col-tl full gap-4 rounded-md bg-slate-900 p-4'>
+      <div className={cn('badge badge-neutral', phase.active && '!badge-info')}>
+        {phase.active ? 'ACTIVE' : 'INACTIVE'}
+      </div>
+      <h6 className='flex gap-4'>
         Phase:{' '}
         <span className='text-accent'>&#34;{phase.phase_title}&#34;</span>
       </h6>
@@ -197,7 +207,12 @@ function PhaseBlock({ phase, roundId }: any) {
 
         {/* Next Phase Btn: Only show when round has more than 1 phase. */}
         {currentRound?.phases.length! > 1 && (
-          <button className='btn btn-primary col-span-2'>Next Phase</button>
+          <button
+            className='btn btn-primary col-span-2'
+            onClick={handleStartNextPhase}
+          >
+            Next Phase
+          </button>
         )}
       </div>
     </li>

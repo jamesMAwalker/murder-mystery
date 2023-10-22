@@ -1,10 +1,32 @@
 [
   {
-    "user_id": "user_2ULTaZlKUPKmAJj9GrsCJT5nseo",
+    "email": "maxrobes66@gmail.com",
+    "name": "Max Robes",
+    "user_id": "user_2VeaPlUretHvOd1aYmseCIh0972",
+    "has_team": true,
+    "is_captain": false,
+    "team_id": "4kbeqdrhx8d13b1qpssfz6yv9k151s0",
+    "team_name": "wfzdgzdg",
+    "role": "suspect"
+  },
+  {
     "email": "jamesmawalker@gmail.com",
     "name": "James Walker",
+    "user_id": "user_2VhjyTvC3T12N47ZCtblTVxVDtJ",
     "has_team": false,
+    "is_captain": false,
+    "team_id": null,
     "team_name": null,
-    "team_id": null
+    "role": "admin"
+  },
+  {
+    "email": "joshsmayhew@gmail.com",
+    "has_team": true,
+    "is_captain": true,
+    "name": "Joshua Mayhew",
+    "team_id": "4kbeqdrhx8d13b1qpssfz6yv9k151s0",
+    "team_name": "wfzdgzdg",
+    "user_id": "user_2UWZ2MFETBoJZCYShYpS3HzmZo2",
+    "role": "admin"
   }
 ]

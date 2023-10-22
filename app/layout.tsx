@@ -5,12 +5,12 @@ import NextTopLoader from "nextjs-toploader";
 
 import { Providers } from "./(context)/_providers";
 import { Navbar } from "./(layout-components)/navbar";
-import { BottomNav } from "./(layout-components)/bottom-nav";
 import { ToastHandler } from "./(layout-components)/toast-handler";
 import { ModalsRenderer } from "./(layout-components)/render-modals";
 
 import "./globals.css";
 import { EndingCard } from "./(layout-components)/ending-card";
+import { BottomNav } from "./(layout-components)/bottom-nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
