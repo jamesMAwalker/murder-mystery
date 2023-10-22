@@ -12,22 +12,23 @@ import { api } from "@/convex/_generated/api";
 
 export const Navbar = () => {
   const { isSignedIn, user } = useUser();
-  const loggedUser = useQuery(api.users.getFromSession);
+  // const loggedUser = useQuery(api.users.getFromSession);
 
   const createUser = useMutation(api.users.create);
 
-  const invites = useQuery(api.invitations.getFromSessionByUser);
-  const requests = useQuery(api.requests.getFromSessionByTeam);
+  const userIsSuspectCheck = useQuery(api.suspects.getFromUserSession);
+  // const invites = useQuery(api.invitations.getFromSessionByUser);
+  // const requests = useQuery(api.requests.getFromSessionByTeam);
 
   // const totalNotifications =
   //   (Array.isArray(invites) ? invites.length : 0) +
   //   (Array.isArray(requests) ? requests.length : 0);
 
-  const totalInvites = Array.isArray(invites) ? invites.length : 0;
-  const totalRequests =
-    Array.isArray(requests) && loggedUser?.is_captain ? requests.length : 0;
+  // const totalInvites = Array.isArray(invites) ? invites.length : 0;
+  // const totalRequests =
+  //   Array.isArray(requests) && loggedUser?.is_captain ? requests.length : 0;
 
-  const totalNotifications = totalInvites + totalRequests;
+  // const totalNotifications = totalInvites + totalRequests;
 
   useEffect(() => {
     if (isSignedIn && user.id) {
@@ -57,15 +58,16 @@ export const Navbar = () => {
         {isSignedIn ? (
           <div className="flex gap-4 navbar-end items-center">
             <Link
-              href="/user-profile"
+              href={userIsSuspectCheck ? "/suspect-dashboard" : "/user-profile"}
               className="hover:bg-primary cursor-pointer badge p-4 uppercase text-white relative"
             >
               Profile
-              {totalNotifications > 0 && (
+              {/* omit notificatio badge for time being per Dan's insistance that admin handle all team assignment
+             {totalNotifications > 0 && (
                 <span className="absolute top-0 right-0 mt-0.5 mr-0.5 transform translate-x-1/4 -translate-y-1/4 bg-accent text-white text-xs rounded-full w-4 h-4 flex items-center justify-center shadow-lg">
                   {totalNotifications}
                 </span>
-              )}
+              )} */}
             </Link>
 
             <UserButton afterSignOutUrl="/" />
