@@ -4,9 +4,14 @@ import { api } from '@/convex/_generated/api'
 import { cn } from '@/lib/utils'
 import { useQuery } from 'convex/react'
 import { useState } from 'react'
+import { useRoleBasedRedirect } from '../(hooks)/navigation/useRoleBasedRedirect'
 
 const SuspectDashboard = () => {
   const [activeTab, setActiveTab] = useState(1)
+
+  useRoleBasedRedirect({
+    allowed_role: 'suspect',
+  })
 
   const suspectCard = useQuery(api.suspects.getFromUserSession)
   const user = useQuery(api.users.getFromSession)
