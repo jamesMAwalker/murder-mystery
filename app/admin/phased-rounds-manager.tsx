@@ -145,7 +145,7 @@ function PhaseBlock({ phase, roundId }: any) {
   // TODO: Fix issue where timers all change to current round timer
 
   // set up timer fns (linked to db).
-  const { time, status, start, pause, reset, advanceTime } = useDbCountdown({
+  const { time, start, pause, reset, advanceTime } = useDbCountdown({
     dbInitTime: phase.phase_starting_time,
     phaseId: phase.phase_id,
     roundId
