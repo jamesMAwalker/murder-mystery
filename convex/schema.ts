@@ -102,5 +102,6 @@ export default defineSchema({
     team_id: v.union(v.id("teams"), v.null()),
     team_name: v.union(v.null(), v.string()),
     user_id: v.string(),
+    role: v.string()
   }),
 });
