@@ -7,7 +7,6 @@ export const getFromUserSession = query({
 
     // get user.
     const user = await getUserFromAuthSession(ctx);
-    console.log('user: ', user);
 
     const instructions = await db
       .query("suspect_instructions")
