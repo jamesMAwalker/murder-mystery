@@ -40,6 +40,7 @@ export const Navbar = () => {
         is_captain: false,
         team_name: null,
         team_id: null,
+        role: "suspect",
       };
 
       createUser(newConvexUser);

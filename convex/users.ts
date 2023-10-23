@@ -11,6 +11,7 @@ export const create = mutation({
     is_captain: v.boolean(),
     team_id: v.null(),
     team_name: v.null(),
+    role: v.string(),
   },
   handler: async ({ db }, args) => {
 
