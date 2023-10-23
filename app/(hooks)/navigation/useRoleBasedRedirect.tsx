@@ -12,10 +12,12 @@ export function useRoleBasedRedirect({
   redirect_url?: string
 }) {
   const user = useQuery(api.users.getFromSession)
+  console.log('user: ', user)
 
   useEffect(() => {
-    if (user?.role !== allowed_role) {
+    if (user && user?.role !== allowed_role) {
       redirect(redirect_url)
     }
   }, [user, allowed_role, redirect_url])
+  
 }
