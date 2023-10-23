@@ -42,19 +42,28 @@ export const RevisedTeamInfo: React.FC<TeamInfoProps> = ({
   return (
     <div className="flex flex-col gap-4 w-full p-4 bg-slate-800 rounded-lg">
       <h2 className="text-white text-2xl font-bold">Team Details</h2>
-
-      <div
-        className="flex justify-between items-center cursor-pointer p-1 bg-gray-700 rounded-md hover:bg-gray-600"
-        onClick={toggleOpen}
-      >
-        <h3 className="text-white text-lg font-semibold ml-2">
-          View Teammates ({teammates?.length}/10)
-        </h3>
-        <FontAwesomeIcon
-          icon={isOpen ? faChevronUp : faChevronDown}
-          className="text-white text-lg mr-2"
-        />
-      </div>
+      {teammates && teammates.length > 0 ? (
+        <div
+          className="flex justify-between items-center cursor-pointer p-1 bg-gray-700 rounded-md hover:bg-gray-600"
+          onClick={toggleOpen}
+        >
+          <h3 className="text-white text-lg font-semibold ml-2">
+            View Teammates ({teammates?.length}/10)
+          </h3>
+          <FontAwesomeIcon
+            icon={isOpen ? faChevronUp : faChevronDown}
+            className="text-white text-lg mr-2"
+          />
+        </div>
+      ) : (
+        <div className="flex justify-between items-center  p-1 bg-gray-700 rounded-md ">
+          <h3 className="text-white text-lg font-semibold ml-2">
+            No Teammates at this time.
+            <br />
+            Please wait.
+          </h3>
+        </div>
+      )}
       {isOpen && (
         <ol className="flex flex-col gap-2 w-full mt-2">
           {displayedTeammates?.map((member) => (
