@@ -1,5 +1,5 @@
 export const SUSPECTS_DATA = {
-  heading: 'Suspects List',
+  heading: 'Top suspects so far...',
   list: [
     {
       id: '1',
