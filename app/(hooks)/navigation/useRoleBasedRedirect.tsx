@@ -12,7 +12,6 @@ export function useRoleBasedRedirect({
   redirect_url?: string
 }) {
   const user = useQuery(api.users.getFromSession)
-  console.log('user: ', user)
 
   useEffect(() => {
     if (user && user?.role !== allowed_role) {
