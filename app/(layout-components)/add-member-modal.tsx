@@ -17,7 +17,9 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
   const teamId = team?._id;
 
   const allUsers = useQuery(api.users.getAll);
-  const usersNotCurrentlyOnTeam = allUsers?.filter((user) => !user.has_team);
+  const usersNotCurrentlyOnTeam = allUsers?.filter(
+    (user: any) => !user.has_team
+  );
   console.log("usersNotCurrentlyOnTeam: ", usersNotCurrentlyOnTeam);
   console.log("usersNotCurrentlyOnTeam: ", usersNotCurrentlyOnTeam);
 
