@@ -17,6 +17,7 @@ export const RevisedTeamInfo: React.FC<TeamInfoProps> = ({
 }) => {
   const user = useQuery(api.users.getFromSession);
   const team = useQuery(api.teams.getFromSession);
+  console.log("team: ", team);
   const members = team?.members;
   console.log("members: ", members);
 
@@ -31,7 +32,7 @@ export const RevisedTeamInfo: React.FC<TeamInfoProps> = ({
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
-  if (!user || !team || !teammates) {
+  if (!user) {
     return (
       <div className="flex-center h-40">
         <span className="loading loading-ring loading-lg scale-150"></span>
@@ -41,20 +42,35 @@ export const RevisedTeamInfo: React.FC<TeamInfoProps> = ({
 
   return (
     <div className="flex flex-col gap-4 w-full p-4 bg-slate-800 rounded-lg">
-      <h2 className="text-white text-2xl font-bold">Team Details</h2>
+      {!team || !teammates ? (
+        <div>
+          <h2 className="text-white text-2xl font-bold">
+            You are not on a team.
+          </h2>
+          <h4 className="text-white text-lg font-semibold">
+            {" "}
+            Please wait a moment while the host assigns you to a team...
+          </h4>
+        </div>
+      ) : (
+        <>
+          <h2 className="text-white text-2xl font-bold">Team Details</h2>
 
-      <div
-        className="flex justify-between items-center cursor-pointer p-1 bg-gray-700 rounded-md hover:bg-gray-600"
-        onClick={toggleOpen}
-      >
-        <h3 className="text-white text-lg font-semibold ml-2">
-          View Teammates ({teammates?.length}/10)
-        </h3>
-        <FontAwesomeIcon
-          icon={isOpen ? faChevronUp : faChevronDown}
-          className="text-white text-lg mr-2"
-        />
-      </div>
+          <div
+            className="flex justify-between items-center cursor-pointer p-1 bg-gray-700 rounded-md hover:bg-gray-600"
+            onClick={toggleOpen}
+          >
+            <h3 className="text-white text-lg font-semibold ml-2">
+              View Teammates ({teammates?.length}/10)
+            </h3>
+            <FontAwesomeIcon
+              icon={isOpen ? faChevronUp : faChevronDown}
+              className="text-white text-lg mr-2"
+            />
+          </div>
+        </>
+      )}
+
       {isOpen && (
         <ol className="flex flex-col gap-2 w-full mt-2">
           {displayedTeammates?.map((member) => (
