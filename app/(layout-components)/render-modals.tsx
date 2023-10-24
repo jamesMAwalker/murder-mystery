@@ -8,7 +8,9 @@ import { LeaveTeamModal } from "./leave-team-modal";
 import { EvidenceModal } from "./evidence-modal";
 
 export function ModalsRenderer() {
-  const { modalType, closeModal } = useModal();
+  const { modalType, modalPayload, closeModal } = useModal();
+  console.log("modalPayload: ", modalPayload);
+  console.log("modalType: ", modalType);
 
   if (modalType === ModalType.JOIN) {
     return <JoinTeamModal closeModal={closeModal} />;
@@ -27,7 +29,7 @@ export function ModalsRenderer() {
   }
 
   if (modalType === ModalType.EVIDENCE) {
-    return <EvidenceModal closeModal={closeModal} />;
+    return <EvidenceModal report={modalPayload} closeModal={closeModal} />;
   }
 
   return null; // No modal to render.
