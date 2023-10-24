@@ -22,9 +22,11 @@ export const RevisedTeamInfo: React.FC<TeamInfoProps> = ({
   console.log("members: ", members);
 
   const allUsers = useQuery(api.users.getAll);
-  const teammates = allUsers?.filter((user) =>
-    team?.members?.includes(user._id)
-  );
+  console.log("allUsers: ", allUsers);
+
+  const teammates = allUsers?.filter((user) => members?.includes(user._id));
+
+  console.log("teammates: ", teammates);
   const displayedTeammates = teammates?.sort(
     (a, b) => b._creationTime - a._creationTime
   );
@@ -61,7 +63,7 @@ export const RevisedTeamInfo: React.FC<TeamInfoProps> = ({
             onClick={toggleOpen}
           >
             <h3 className="text-white text-lg font-semibold ml-2">
-              View Teammates ({teammates?.length}/10)
+              View Teammates ({displayedTeammates?.length}/10)
             </h3>
             <FontAwesomeIcon
               icon={isOpen ? faChevronUp : faChevronDown}
