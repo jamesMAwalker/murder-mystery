@@ -31,10 +31,10 @@ export const pages: IDropdownContent[] = [
   },
   { pageKey: 'guess', pageTitle: 'Guess! ', path: '/submit-guess', icon: <GuessIcon /> },
   { pageKey: 'admin', pageTitle: 'Admin', path: '/admin', icon: <GuessIcon /> },
-  {
-    pageKey: 'script',
-    pageTitle: 'Script',
-    path: '/suspect-dashboard',
-    icon: <GuessIcon />
-  }
+  // {
+  //   pageKey: 'script',
+  //   pageTitle: 'Script',
+  //   path: '/suspect-dashboard',
+  //   icon: <GuessIcon />
+  // }
 ]
