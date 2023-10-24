@@ -1,4 +1,3 @@
-// modalContext.tsx
 "use client";
 
 import { createContext, useContext, ReactNode, useState } from "react";
@@ -14,7 +13,8 @@ export enum ModalType {
 
 type ModalContextType = {
   modalType: ModalType;
-  showModal: (type: ModalType) => void;
+  modalPayload: any; // If you know the possible types, you can further type this
+  showModal: (type: ModalType, payload?: any) => void;
   closeModal: () => void;
 };
 
@@ -27,16 +27,27 @@ export const useModal = () => {
   }
   return context;
 };
+
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
+  const [modalPayload, setModalPayload] = useState<any>(null);
 
-  const showModal = (type: ModalType) => setModalType(type);
-  const closeModal = () => setModalType(ModalType.NONE);
+  const showModal = (type: ModalType, payload: any = null) => {
+    setModalType(type);
+    setModalPayload(payload);
+  };
+
+  const closeModal = () => {
+    setModalType(ModalType.NONE);
+    setModalPayload(null); // Clear the payload when closing the modal
+  };
 
   return (
-    <ModalContext.Provider value={{ modalType, showModal, closeModal }}>
+    <ModalContext.Provider
+      value={{ modalType, modalPayload, showModal, closeModal }}
+    >
       {children}
     </ModalContext.Provider>
   );
