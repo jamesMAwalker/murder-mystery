@@ -71,14 +71,28 @@ const NotesPage = ({ params }: any) => {
             })}
         </ul>
       </div>
-      {selectedSuspect && suspect && <NoteForm suspect={suspect} />}
+      {selectedSuspect && suspect && (
+        <NoteForm
+          suspect={suspect}
+          selectedSuspectId={selectedSuspectId}
+          selectedSuspect={selectedSuspect}
+        />
+      )}
     </div>
   )
 }
 
 export default NotesPage
 
-function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
+function NoteForm({
+  suspect,
+  selectedSuspect,
+  selectedSuspectId
+}: {
+  suspect: Doc<'suspects'>
+  selectedSuspect: string | null
+  selectedSuspectId: string | null
+}) {
   const suspectNote = useQuery(api.notes.getFromSessionByUser, {
     suspect_id: suspect?._id
   })
@@ -95,13 +109,15 @@ function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
   // control "if existing" state.
   const [hasExistingNote, setHasExistingNote] = useState(false)
   useEffect(() => {
-    setExistingNoteContent(suspectNote?.note)
-  }, [suspectNote?.note])
+    if (!suspectNote?.note) {
+      setExistingNoteContent('')
+    } else {
+      setExistingNoteContent(suspectNote.note)
+    }
+  }, [suspectNote?.note, selectedSuspect])
 
   // existing note controls.
-  const [existingNoteContent, setExistingNoteContent] = useState(
-    suspectNote?.note
-  )
+  const [existingNoteContent, setExistingNoteContent] = useState<string>('')
   const updateExistingNote = useMutation(api.notes.update)
   const handleUpdateExisting = () => {
     updateExistingNote({
@@ -111,75 +127,113 @@ function NoteForm({ suspect }: { suspect: Doc<'suspects'> }) {
     handleShowNotification()
   }
 
+  useEffect(() => {
+    console.log('existingNoteContent changed: ', existingNoteContent)
+  }, [existingNoteContent])
+
   // new note controls.
-  const [newNoteContent, setNewNoteContent] = useState(
-    'Record your notes here...'
-  )
+  const [newNoteContent, setNewNoteContent] = useState<string | null>(null)
   const saveNewNote = useMutation(api.notes.create)
   const handleSaveNew = () => {
     saveNewNote({
       suspect_id: suspect._id,
-      note_content: newNoteContent
+      note_content: newNoteContent || ''
     })
-
     ;(document?.activeElement as HTMLTextAreaElement)?.blur() // unfocus input so it shifts from create to update
     handleShowNotification()
   }
 
+  const handleSaveAction = (isNew: boolean) => {
+    if (isNew) {
+      console.log('creating new note!')
+      handleSaveNew()
+    } else {
+      console.log('saving udpated note!')
+      handleUpdateExisting()
+    }
+  }
+
+  // display either existing note or placeholder input
   useEffect(() => {
     setHasExistingNote(!!suspectNote)
-  }, [suspectNote, suspect._id])
+  }, [suspectNote, suspect.suspect_name, selectedSuspect, selectedSuspectId])
 
   return (
     <div className='flex-col-tl relative w-full'>
-      {hasExistingNote ? (
-        <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
-          <div className='flex w-full justify-between items-end relative'>
-            <h4 className='font-bold'>
-              Notes on{' '}
-              <span className='text-secondary'>{suspect.suspect_name}</span>
-            </h4>
-            <div className='flex items-end justify-center gap-4'>
-              {showNotification && (
-                <p className='text-primary font-bold'>Note Saved.</p>
-              )}
-              <button
-                onClick={handleUpdateExisting}
-                className='btn btn-primary'
-              >
-                Save
-              </button>
-            </div>
+      <div className='NOTE_EXISTING flex-col-tl gap-4 w-full'>
+        <div className='flex w-full justify-between items-end relative'>
+          <h4 className='font-bold'>
+            Notes on{' '}
+            <span className='text-secondary'>{suspect.suspect_name}</span>
+          </h4>
+          <div className='flex items-end justify-center gap-4'>
+            {showNotification && (
+              <p className='text-primary font-bold'>Note Saved.</p>
+            )}
+            <button onClick={() => handleSaveAction(!hasExistingNote)} className='btn btn-primary'>
+              Save
+            </button>
           </div>
-          <textarea
-            value={existingNoteContent}
-            onChange={(e) => setExistingNoteContent(e.target.value)}
-            className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
-          />
         </div>
-      ) : (
-        <div className='NOTE_TEST flex-col-tl gap-4 w-full'>
-          <div className='flex w-full justify-between items-center'>
-            <h4 className='font-bold'>
-              Notes on{' '}
-              <span className='text-secondary'>{suspect.suspect_name}</span>
-            </h4>
-            <div className='flex items-end justify-center gap-4'>
-              {showNotification && (
-                <p className='text-primary font-bold'>Note Saved.</p>
-              )}
-              <button onClick={handleSaveNew} className='btn btn-primary'>
-                Save
-              </button>
-            </div>
-          </div>
-          <textarea
-            className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
-            value={newNoteContent}
-            onChange={(e) => setNewNoteContent(e.target.value)}
-          />
-        </div>
-      )}
+        <textarea
+          placeholder='Record your notes here...'
+          value={existingNoteContent}
+          onChange={(e) => setExistingNoteContent(e.target.value)}
+          className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+        />
+      </div>
     </div>
+    // <div className='flex-col-tl relative w-full'>
+    //   {existingNoteContent ? (
+    //     <div className='NOTE_EXISTING flex-col-tl gap-4 w-full'>
+    //       <div className='flex w-full justify-between items-end relative'>
+    //         <h4 className='font-bold'>
+    //           Notes on{' '}
+    //           <span className='text-secondary'>{suspect.suspect_name}</span>
+    //         </h4>
+    //         <div className='flex items-end justify-center gap-4'>
+    //           {showNotification && (
+    //             <p className='text-primary font-bold'>Note Saved.</p>
+    //           )}
+    //           <button
+    //             onClick={handleUpdateExisting}
+    //             className='btn btn-primary'
+    //           >
+    //             Save
+    //           </button>
+    //         </div>
+    //       </div>
+    //       <textarea
+    //         placeholder='Record your notes here...'
+    //         value={existingNoteContent}
+    //         onChange={(e) => setExistingNoteContent(e.target.value)}
+    //         className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+    //       />
+    //     </div>
+    //   ) : (
+    //     <div className='NOTE_PLACEHOLDER flex-col-tl gap-4 w-full'>
+    //       <div className='flex w-full justify-between items-center'>
+    //         <h4 className='font-bold'>
+    //           Notes on{' '}
+    //           <span className='text-secondary'>{suspect.suspect_name}</span>
+    //         </h4>
+    //         <div className='flex items-end justify-center gap-4'>
+    //           {showNotification && (
+    //             <p className='text-primary font-bold'>Note Saved.</p>
+    //           )}
+    //           <button onClick={handleSaveNew} className='btn btn-primary'>
+    //             Save
+    //           </button>
+    //         </div>
+    //       </div>
+    //       <textarea
+    //         placeholder='Record your notes here...'
+    //         value={newNoteContent}
+    //         onChange={(e) => setNewNoteContent(e.target.value)}
+    //         className='border border-error focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+    //       />
+    //     </div>
+    //   )}
+    // </div>
   )
 }
