@@ -8,6 +8,7 @@ export enum ModalType {
   CREATE = "create",
   ADD = "add",
   LEAVE = "leave",
+  EVIDENCE = "evidence",
   NONE = "none",
 }
 
