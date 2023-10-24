@@ -1,14 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { use } from "react";
 import { useQuery, useMutation } from "convex/react";
+import { useModal, ModalType } from "../(context)/modal.context";
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 
+interface Report {
+  _id: Id<"clues">;
+  order: number;
+  title: string;
+  content: string;
+  released: boolean;
+  _creationTime: number;
+}
+
 export function ReportSection() {
   const reports = useQuery(api.clues.getAll);
+
+  const { showModal } = useModal();
+
+  const handleEvidenceModal = (report: Report) => {
+    showModal(ModalType.EVIDENCE, report);
+  };
+
   console.log("reports: ", reports);
+  // useDetectReportRelease();
 
   // Release
   const releaseReport = useMutation(api.clues.release);
@@ -16,6 +34,7 @@ export function ReportSection() {
     console.log("releasing report...");
     const res = await releaseReport({ clue_id: reportId });
     console.log("release response: ", res);
+    handleEvidenceModal(res as Report);
   }
 
   // Retraction
