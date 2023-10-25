@@ -14,6 +14,7 @@ import { Doc, Id } from '@/convex/_generated/dataModel'
 
 import { cn } from '@/lib/utils'
 import { GENERAL_NOTE } from './data'
+import { SectionLoader } from '../(components)/ui-components/loaders'
 
 const NotesPage = ({ params }: any) => {
   // get suspects.
@@ -21,14 +22,20 @@ const NotesPage = ({ params }: any) => {
 
   // handle displayed notes (by suspect).
   const { selectedSuspectId } = useSelectedSuspect()
-  const [selectedSuspect, setSelectedSuspect] = useState<null | string>(
-    selectedSuspectId
-  )
+  const [selectedSuspect, setSelectedSuspect] = useState<
+    string | null | undefined
+  >(suspects?.at(0)?._id)
+
+  useEffect(() => {
+    if (Array.isArray(suspects)) {
+      setSelectedSuspect(suspects[0]._id)
+    }
+  }, [suspects])
 
   const suspect = suspects?.find((s) => s._id === selectedSuspect)!
 
   return (
-    <div className='flex-col-tl gap-10'>
+    <div className='flex-col-tl h-full gap-10'>
       <div className='HEADING flex-col-tl gap-4'>
         <h1 className='text-2xl font-bold'>Detective&apos;s Notes</h1>
         <p>
@@ -39,9 +46,9 @@ const NotesPage = ({ params }: any) => {
 
       <div className='full flex-col-tl gap-4'>
         <h2>Choose a Suspect</h2>
-        <ul className='w-full grid grid-cols-3 gap-4'>
-          {Array.isArray(suspects) &&
-            [...suspects, GENERAL_NOTE]?.map((sus, idx) => {
+        {Array.isArray(suspects) ? (
+          <ul className='w-full grid grid-cols-3 lg:grid-cols-6 gap-4'>
+            {[...suspects, GENERAL_NOTE]?.map((sus, idx) => {
               const selectedStyle = sus._id === selectedSuspect
 
               return (
@@ -69,14 +76,19 @@ const NotesPage = ({ params }: any) => {
                 </li>
               )
             })}
-        </ul>
+          </ul>
+        ) : (
+          <SectionLoader classes='items-start' />
+        )}
       </div>
-      {selectedSuspect && suspect && (
+      {selectedSuspect && suspect ? (
         <NoteForm
           suspect={suspect}
           selectedSuspectId={selectedSuspectId}
           selectedSuspect={selectedSuspect}
         />
+      ) : (
+        <SectionLoader classes='items-start' />
       )}
     </div>
   )
@@ -170,7 +182,10 @@ function NoteForm({
             {showNotification && (
               <p className='text-primary font-bold'>Note Saved.</p>
             )}
-            <button onClick={() => handleSaveAction(!hasExistingNote)} className='btn btn-primary'>
+            <button
+              onClick={() => handleSaveAction(!hasExistingNote)}
+              className='btn btn-primary'
+            >
               Save
             </button>
           </div>
@@ -179,61 +194,9 @@ function NoteForm({
           placeholder='Record your notes here...'
           value={existingNoteContent}
           onChange={(e) => setExistingNoteContent(e.target.value)}
-          className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
+          className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square lg:aspect-video'
         />
       </div>
     </div>
-    // <div className='flex-col-tl relative w-full'>
-    //   {existingNoteContent ? (
-    //     <div className='NOTE_EXISTING flex-col-tl gap-4 w-full'>
-    //       <div className='flex w-full justify-between items-end relative'>
-    //         <h4 className='font-bold'>
-    //           Notes on{' '}
-    //           <span className='text-secondary'>{suspect.suspect_name}</span>
-    //         </h4>
-    //         <div className='flex items-end justify-center gap-4'>
-    //           {showNotification && (
-    //             <p className='text-primary font-bold'>Note Saved.</p>
-    //           )}
-    //           <button
-    //             onClick={handleUpdateExisting}
-    //             className='btn btn-primary'
-    //           >
-    //             Save
-    //           </button>
-    //         </div>
-    //       </div>
-    //       <textarea
-    //         placeholder='Record your notes here...'
-    //         value={existingNoteContent}
-    //         onChange={(e) => setExistingNoteContent(e.target.value)}
-    //         className='border border-secondary focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
-    //       />
-    //     </div>
-    //   ) : (
-    //     <div className='NOTE_PLACEHOLDER flex-col-tl gap-4 w-full'>
-    //       <div className='flex w-full justify-between items-center'>
-    //         <h4 className='font-bold'>
-    //           Notes on{' '}
-    //           <span className='text-secondary'>{suspect.suspect_name}</span>
-    //         </h4>
-    //         <div className='flex items-end justify-center gap-4'>
-    //           {showNotification && (
-    //             <p className='text-primary font-bold'>Note Saved.</p>
-    //           )}
-    //           <button onClick={handleSaveNew} className='btn btn-primary'>
-    //             Save
-    //           </button>
-    //         </div>
-    //       </div>
-    //       <textarea
-    //         placeholder='Record your notes here...'
-    //         value={newNoteContent}
-    //         onChange={(e) => setNewNoteContent(e.target.value)}
-    //         className='border border-error focus:border-primary focus:!bg-slate-900 w-full textarea textarea-bordered bg-transparent textarea-lg w-full aspect-square'
-    //       />
-    //     </div>
-    //   )}
-    // </div>
   )
 }
