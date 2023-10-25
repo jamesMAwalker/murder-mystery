@@ -5,7 +5,7 @@ import NextTopLoader from "nextjs-toploader";
 
 import { Providers } from "./(context)/_providers";
 import { Navbar } from "./(layout-components)/navbar";
-import { ToastHandler } from "./(layout-components)/toast-handler";
+// import { ToastHandler } from "./(layout-components)/toast-handler";
 import { ModalsRenderer } from "./(layout-components)/render-modals";
 
 import "./globals.css";
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main className='layout'>
             {children}
           </main>
-          <ToastHandler />
+          {/* <ToastHandler /> */}
           <BottomNav />
           <img
             src='/site-bg.png'
