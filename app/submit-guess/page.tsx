@@ -84,9 +84,9 @@ function SubmitGuessSection() {
   if (!isAuthenticated) return null
 
   return (
-    <div className='full flex-col-tl gap-4'>
+    <div className='full flex-col-tl gap-4 lg:gap-10'>
       <h2>Choose Your Prime Suspect</h2>
-      <ul className='SUSPECT_LIST w-full grid grid-cols-3 gap-4'>
+      <ul className='SUSPECT_LIST w-full grid grid-cols-3 gap-4 lg:grid-cols-5'>
         {Array.isArray(suspects) &&
           suspects?.map((suspect, idx) => {
             const selectedStyle = suspect._id === suspects[selectedSuspect]?._id
@@ -118,7 +118,7 @@ function SubmitGuessSection() {
           })}
       </ul>
       {selectedSuspect >= 0 && suspects && (
-        <div className='PRIME_SUSPECT_CARD card h-[25vh] card-side bg-base-100 shadow-xl'>
+        <div className='PRIME_SUSPECT_CARD card h-[25vh] lg:h-[35vh] card-side bg-base-100 shadow-xl'>
           <figure className='w-[40%] shrink-0'>
             <img
               className='w-full h-full object-cover'
@@ -129,7 +129,7 @@ function SubmitGuessSection() {
           <div className='card-body h-full flex-col-center  '>
             <h2 className='card-title flex-col-tl gap-2'>
               <span>Your Prime Suspect</span>
-              <span className='text-secondary font-bold'>
+              <span className='text-secondary font-bold lg:text-2xl'>
                 {suspects[selectedSuspect]?.suspect_name!}
               </span>
             </h2>

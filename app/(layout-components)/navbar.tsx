@@ -48,19 +48,23 @@ export const Navbar = () => {
   }, [isSignedIn, user]);
 
   return (
-    <div className="nav-wrapper z-20 fixed top-0 p-4 lg:p-0 flex w-full items-center">
-      <nav className="navbar p-2 w-full rounded-md lg:rounded-none bg-slate-800 lg:bg-slate-800/30 lg:backdrop-blur text-white">
-        <span className="navbar-start">
-          <Link href="/" className="btn btn-ghost normal-case text-xl flex">
+    <div className='nav-wrapper z-20 fixed top-0 p-4 lg:p-0 flex w-full items-center'>
+      <nav className='navbar p-2 w-full rounded-md lg:rounded-none bg-slate-800 lg:bg-slate-800/30 lg:backdrop-blur text-white'>
+        <span className='navbar-start'>
+          <Link href='/' className='btn btn-ghost normal-case text-xl flex'>
             <span>M</span>
-            <span className="text-red-500 ml-[-10px]">M</span>
+            <span className='text-red-500 ml-[-10px]'>M</span>
           </Link>
         </span>
+        <h1 className='hidden lg:flex text-2xl font-bold w-full flex-center'>
+          <span className='text-red-500'>Murder</span>
+          <span className='text-slate-100'>Mystery</span>
+        </h1>
         {isSignedIn ? (
-          <div className="flex gap-4 navbar-end items-center">
+          <div className='flex gap-4 navbar-end items-center'>
             <Link
-              href={userIsSuspectCheck ? "/suspect-dashboard" : "/user-profile"}
-              className="hover:bg-primary cursor-pointer badge p-4 uppercase text-white relative"
+              href={userIsSuspectCheck ? '/suspect-dashboard' : '/user-profile'}
+              className='hover:bg-primary cursor-pointer badge p-4 uppercase text-white relative'
             >
               Profile
               {/* omit notificatio badge for time being per Dan's insistance that admin handle all team assignment
@@ -71,19 +75,19 @@ export const Navbar = () => {
               )} */}
             </Link>
 
-            <UserButton afterSignOutUrl="/" />
+            <UserButton afterSignOutUrl='/' />
           </div>
         ) : (
-          <div className="navbar-end flex gap-2">
+          <div className='navbar-end flex gap-2'>
             <Link
-              href="/sign-up"
-              className="hover:bg-primary cursor-pointer badge p-4 uppercase text-white"
+              href='/sign-up'
+              className='hover:bg-primary cursor-pointer badge p-4 uppercase text-white'
             >
               Signup
             </Link>
             <Link
-              href="/sign-in"
-              className="hover:bg-primary cursor-pointer badge p-4 uppercase text-white"
+              href='/sign-in'
+              className='hover:bg-primary cursor-pointer badge p-4 uppercase text-white'
             >
               Login
             </Link>
@@ -91,5 +95,5 @@ export const Navbar = () => {
         )}
       </nav>
     </div>
-  );
+  )
 };

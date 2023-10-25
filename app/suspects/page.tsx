@@ -40,23 +40,26 @@ const SuspectsPage = () => {
 
   return (
     <div className='full flex-col-tl gap-8'>
-      <h1 className='text-2xl uppercase mt-4'>{heading}</h1>
-      <ul className='SUSPECT_LIST z-10 full grid grid-cols-2 lg:grid-cols-3  auto-rows-auto gap-[15px]'>
+      <h1 className='text-2xl mt-4'>
+        Top Suspects <span className='text-error italic font-bold'>So Far...</span>
+      </h1>
+      <p>At this point in the game, these are the suspects who seem most suspicious. Select a portrait to learn more about the suspect&#39;s background.</p>
+      <ul className='SUSPECT_LIST z-10 full grid grid-cols-2 lg:grid-cols-4  auto-rows-auto gap-[15px]'>
         {suspects?.map((suspect: any, idx: number) => {
           return (
             <li
               key={suspect._id}
-              className='SUSPECT_ITEM full flex-col-bl cursor-pointer '
+              className='SUSPECT_ITEM full flex-col-bl cursor-pointer rounded-md overflow-hidden group border-transparent border-2 hover:border-secondary'
               onClick={() => handleSuspectClick(suspect._id)}
             >
-              <div className='w-full aspect-square relative'>
+              <div className='full relative'>
                 <img
                   className='absolute rounded-t-md full object-cover'
                   src={suspect.image_url}
                   alt={suspect.suspect_name}
                 />
               </div>
-              <button className='btn w-full rounded-t-none btn-secondary'>
+              <button className='btn w-full rounded-none group-hover:btn-secondary'>
                 {suspect.suspect_name}
               </button>
             </li>

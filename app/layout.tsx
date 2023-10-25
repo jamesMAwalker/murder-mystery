@@ -29,16 +29,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <NextTopLoader />
           <Navbar />
           <EndingCard />
-          <main className='layout'>
-            {children}
-          </main>
+          <main className='layout'>{children}</main>
           {/* <ToastHandler /> */}
           <BottomNav />
-          <img
-            src='/site-bg.png'
-            alt='darkened murder evidence board'
-            className='fixed inset-0 full'
-          />
+          <div className='img-wrap fixed inset-0 full'>
+            <img
+              src='/site-bg.png'
+              alt='darkened murder evidence board'
+              className='full object-cover'
+            />
+          </div>
 
           <ModalsRenderer />
         </Providers>

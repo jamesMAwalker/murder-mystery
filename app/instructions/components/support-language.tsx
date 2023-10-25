@@ -132,7 +132,7 @@ function DiscussionPage() {
       <div className='flex-col-tl gap-2'>
         <h3 className='text-xl font-bold text-accent'>Discussion Tips</h3>
         <p>
-          During your team meetings you can use these key words to guide your
+          During your team meetings you can use these key phrases to guide your
           discussion.
         </p>
       </div>

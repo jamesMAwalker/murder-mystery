@@ -18,7 +18,7 @@ const SuspectDashboard = () => {
   const user = useQuery(api.users.getFromSession)
 
   return (
-    <div className='flex-col-tl gap-8'>
+    <div className='flex-col-tl gap-8 lg:h-full'>
       <DashboardHeader
         user={user}
         setActiveTab={setActiveTab}
@@ -42,7 +42,7 @@ const DashboardHeader = ({ user, setActiveTab, activeTab }: any) => {
             <span>Welcome,</span>
             <span className='text-secondary'>{user?.name}!</span>
           </p>
-          <div className='tabs tabs-boxed w-full'>
+          <div className='tabs tabs-boxed w-full lg:w-auto'>
             {['Suspect', 'Rd. 1', 'Rd. 2', 'Rd. 3'].map((tab, idx) => (
               <a
                 key={tab}
@@ -58,7 +58,7 @@ const DashboardHeader = ({ user, setActiveTab, activeTab }: any) => {
           </div>
         </>
       ) : (
-        <SectionLoader />
+        <SectionLoader classes='items-start' />
       )}
     </div>
   )
@@ -67,7 +67,7 @@ const DashboardHeader = ({ user, setActiveTab, activeTab }: any) => {
 const SuspectCard = () => {
   const suspectInfo = useQuery(api.suspects.getFromUserSession)
 
-  if (!suspectInfo) return <SectionLoader />
+  if (!suspectInfo) return <SectionLoader classes='items-start' />
 
   return (
     <div className='USER_INFO flex-col-tl gap-4'>
@@ -93,7 +93,7 @@ const InstructionsDisplay = ({ instructionsSet }: any) => {
   const instructions = instructionsData?.instructions
   const rdInstructions = instructions?.[instructionsSet]
 
-  if (!rdInstructions || !instructionsData) return <SectionLoader />
+  if (!rdInstructions || !instructionsData) return <SectionLoader classes='items-start' />
 
   return (
     <div className='INSTRUCTIONS_DISPLAY flex-col-tl gap-6 full'>

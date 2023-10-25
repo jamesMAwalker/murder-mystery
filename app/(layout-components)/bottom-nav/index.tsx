@@ -14,8 +14,6 @@ export const BottomNav = () => {
   const user = useQuery(api.users.getFromSession)
   const activeRound = useQuery(api.phased_rounds.getActiveRound)
 
-  const userRole = user?.role
-
   // navigation set up.
   const { push } = useRouter()
   const pathname = usePathname()
@@ -66,7 +64,7 @@ export const BottomNav = () => {
           const buttonProps = {
             ...page,
             activeRound,
-            userRole,
+            user,
             handleClick: () => handleClick(idx, page.path)
           }
 
@@ -83,19 +81,19 @@ function BottomNavButton({
   icon,
   pageTitle,
   activeRound,
-  userRole,
+  user,
   handleClick
 }: any) {
   const shouldBeHidden = {
-    // hidden before round 1.
-    guess: activeRound?.round_number! <= 0,
+    // hidden before round 1, or if user has no team.
+    guess: activeRound?.round_number! <= 0 || !user?.has_team,
     suspects: activeRound?.round_number! <= 0,
 
     // hidden if not admin.
-    admin: userRole?.toLowerCase() !== 'admin',
+    admin: user?.role?.toLowerCase() !== 'admin',
 
     // hidden if not suspect.
-    script: userRole?.toLowerCase() !== 'suspect'
+    script: user?.role?.toLowerCase() !== 'suspect'
   }
 
   const hide = shouldBeHidden[pageKey as keyof typeof shouldBeHidden]
@@ -103,7 +101,7 @@ function BottomNavButton({
   return (
     <li
       className={cn(
-        'BN_BUTTON bg-white/5 hover:bg-secondary/30 text-white hover:text-secondary gap-2 aspect-square flex-col-center w-full text-primary-content peer-checked:text-secondary-content focus:text-secondary',
+        'BN_BUTTON bg-white/5 cursor-pointer hover:bg-secondary/30 text-white hover:text-secondary gap-2 aspect-square flex-col-center w-full text-primary-content peer-checked:text-secondary-content focus:text-secondary',
         hide && '!hidden'
       )}
       onClick={handleClick}

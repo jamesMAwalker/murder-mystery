@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 
 const ReportsPage = () => {
   return (
-    <div className="flex-col-tl gap-16">
+    <div className="flex-col-tl lg:h-full gap-16">
       <div className="INTRO flex-col-tl gap-2">
-        <h1 className="text-2xl font-bold">Evidence Reports Page</h1>
+        <h1 className="text-2xl font-bold text-warning">Evidence Reports Page</h1>
         <p>
           As the investigation continues, new evidence will come to light,
           giving you further clues about who may be the perpetrator.

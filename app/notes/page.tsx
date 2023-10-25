@@ -35,7 +35,7 @@ const NotesPage = ({ params }: any) => {
   const suspect = suspects?.find((s) => s._id === selectedSuspect)!
 
   return (
-    <div className='flex-col-tl h-full gap-10'>
+    <div className='flex-col-tl lg:h-full gap-10'>
       <div className='HEADING flex-col-tl gap-4'>
         <h1 className='text-2xl font-bold'>Detective&apos;s Notes</h1>
         <p>

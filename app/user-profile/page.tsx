@@ -72,7 +72,7 @@ const UserProfilePage = () => {
   }
 
   return (
-    <div className="my-4 md:my-8 space-y-2 md:space-y-2 bg-slate-800 rounded-lg shadow-md p-2 md:p-4">
+    <div className="my-4 md:my-8 space-y-2 md:space-y-2 bg-slate-800 rounded-lg shadow-md p-2 md:p-4 lg:h-full lg:bg-transparent">
       <UserInfoSection />
       <RevisedTeamInfo isOpen={isTeamInfoOpen} setIsOpen={setIsTeamInfoOpen} />
       {/* <SuspectsDashboardButton />
@@ -109,13 +109,13 @@ export default UserProfilePage;
 function UserInfoSection() {
   const user = useQuery(api.users.getFromSession);
   return (
-    <div className="flex flex-col w-full p-4 bg-slate-800 rounded-lg">
-      <div className="flex text-slate-100 items-center text-xl md:text-2xl font-bold">
+    <div className="flex flex-col lg:flex-row lg:gap-2 lg:items-center lg:justify-start w-full p-4 bg-slate-800 lg:bg-transparent rounded-lg">
+      <div className="text-slate-100 items-center text-xl md:text-2xl font-bold">
         Welcome to&nbsp;<span className="text-red-500">Murder</span>
         <span className="text-slate-100">Mystery,</span>
       </div>
-      <h1 className="text-xl md:text-2xl font-bold mt-2">
-        <span className="text-2xl text-slate-100">{user?.name}</span>
+      <h1 className="text-xl md:text-2xl font-bold">
+        <span className="text-2xl text-accent">{user?.name}!</span>
       </h1>
     </div>
   );

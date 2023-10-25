@@ -14,7 +14,7 @@ export default function Home() {
           alt=''
           className='w-full lg:w-1/2 lg:rounded-lg aspect-square object-cover'
         />
-        <p className='flex-col-tl gap-4'>
+        <p className='flex-col-tl gap-4 border-t lg:border-red-500 lg:pt-4 lg:mt-2'>
           <span>
             Who is the murderer! Put your English skills to the test by
             interviewing suspects, taking written notes on their stories, and
