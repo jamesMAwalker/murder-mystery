@@ -48,7 +48,7 @@ export const BottomNav = () => {
   }
 
   return (
-    <div className='fixed z-50 bottom-0 left-0 rounded-none collapse bg-primary pt-4 w-full'>
+    <div className='fixed z-50 bottom-0 left-0 rounded-none collapse bg-primary lg:bg-slate-800 pt-4 w-full lg:w-[375px] lg:rounded-md lg:m-[-5px]'>
       <span className='absolute z-[50] translate-x-[-50%] top-[6px] left-1/2 h-[3px] w-[50px] bg-white/50 rounded-md'></span>
       <input
         ref={checkBoxRef}
@@ -56,7 +56,7 @@ export const BottomNav = () => {
         type='checkbox'
         className='peer'
       />
-      <p className='uppercase tracking-wide text-lg w-full collapse-title font-bold flex items-center justify-center bg-primary py-4 !px-0 peer-checked:text-secondary-content'>
+      <p className='uppercase tracking-wide text-lg w-full collapse-title font-bold flex items-center justify-center bg-primary lg:bg-slate-800 py-4 !px-0 peer-checked:text-secondary-content'>
         <span>{pages[currentPathIdx].pageTitle}</span>
       </p>
 

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body
         className={`relative flex flex-col items-center justify-center  ${inter.className}`}
       >
@@ -29,22 +29,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <NextTopLoader />
           <Navbar />
           <EndingCard />
-          <main className="py-24 pb-32 w-[90%] min-h-screen h-auto relative w-full flex flex-col items-center z-10">
-            <div className="content-wrapper h-auto w-[90%] z-10">
-              {children}
-            </div>
+          <main className='layout'>
+            {children}
           </main>
           <ToastHandler />
           <BottomNav />
           <img
-            src="/site-bg.png"
-            alt="darkened murder evidence board"
-            className="fixed inset-0 full"
+            src='/site-bg.png'
+            alt='darkened murder evidence board'
+            className='fixed inset-0 full'
           />
 
           <ModalsRenderer />
         </Providers>
       </body>
     </html>
-  );
+  )
 }
