@@ -12,16 +12,22 @@ export default function Home() {
         <img
           src='/notebook.png'
           alt=''
-          className='w-full aspect-square object-cover'
+          className='w-full lg:w-1/2 lg:rounded-lg aspect-square object-cover'
         />
-        <p className="flex-col-tl gap-4">
+        <p className='flex-col-tl gap-4'>
           <span>
             Who is the murderer! Put your English skills to the test by
             interviewing suspects, taking written notes on their stories, and
             collaborating with other students to figure out whodunnit.
           </span>
-          <span>This Electronic Detective&#39;s handbook includes all the information and tools you need to get to the bottom of the mystery. Take notes on each of the suspects on your notebook page, review evidence that comes through in your reports inbox, and review background details at any time from the story and suspects pages.</span>
-          <span className="italic font-bold text-red-500">Happy hunting!</span>
+          <span>
+            This Electronic Detective&#39;s handbook includes all the
+            information and tools you need to get to the bottom of the mystery.
+            Take notes on each of the suspects on your notebook page, review
+            evidence that comes through in your reports inbox, and review
+            background details at any time from the story and suspects pages.
+          </span>
+          <span className='italic font-bold text-red-500'>Happy hunting!</span>
         </p>
       </div>
     </main>
