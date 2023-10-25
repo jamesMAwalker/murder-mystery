@@ -48,8 +48,8 @@ export const Navbar = () => {
   }, [isSignedIn, user]);
 
   return (
-    <div className="nav-wrapper z-20 fixed top-0 p-4 flex w-full items-center">
-      <nav className="navbar p-2 w-full rounded-md bg-slate-800 text-white">
+    <div className="nav-wrapper z-20 fixed top-0 p-4 lg:p-0 flex w-full items-center">
+      <nav className="navbar p-2 w-full rounded-md lg:rounded-none bg-slate-800 lg:bg-slate-800/30 lg:backdrop-blur text-white">
         <span className="navbar-start">
           <Link href="/" className="btn btn-ghost normal-case text-xl flex">
             <span>M</span>
