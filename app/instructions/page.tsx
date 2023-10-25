@@ -15,7 +15,7 @@ const InstructionsPage = () => {
         <span className='text-red-700 italic'>Murder Mystery</span>
       </h1>
       <img
-        className='w-full aspect-square object-cover saturate-0'
+        className='w-full aspect-square lg:aspect-[20/7] object-cover saturate-0'
         src='/background.jpg'
         alt='evidence board'
       />
