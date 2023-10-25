@@ -13,12 +13,12 @@ export default BackgroundPage;
 
 function IntroSection() {
   return (
-    <div className="flex-col-tl gap-4">
-      <h1 className="text-2xl font-bold">The Background Story</h1>
+    <div className='flex-col-tl gap-4'>
+      <h1 className='text-2xl font-bold'>The Background Story</h1>
       <img
-        className="w-full aspect-square object-cover saturate-0"
-        src="/background-2.jpg"
-        alt="evidence board"
+        className='w-full aspect-square lg:aspect-[20/7] lg:object-center object-cover saturate-0'
+        src='/background-2.jpg'
+        alt='evidence board'
       />
       <p>
         In the vibrant coastal city of Danang, an exclusive party has been
@@ -28,7 +28,7 @@ function IntroSection() {
         the charismatic teacher and rising star in the language teaching sector.
       </p>
     </div>
-  );
+  )
 }
 
 function VictimSection() {
@@ -36,7 +36,7 @@ function VictimSection() {
     <div className="flex-col-tl gap-4">
       <h1 className="text-xl font-bold">The Victim</h1>
       <img
-        className="w-full aspect-square object-cover saturate-0"
+        className="w-full aspect-square lg:aspect-[20/7] lg:object-top object-cover saturate-0"
         src="/den.webp"
         alt="Den Vau the rapper"
       />
