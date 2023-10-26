@@ -6,12 +6,13 @@ import { useConvexAuth, useMutation, useQuery } from 'convex/react-internal'
 import { api } from '@/convex/_generated/api'
 import { cn } from '@/lib/utils'
 import { Id } from '@/convex/_generated/dataModel'
+import { SectionLoader } from '../(components)/ui-components/loaders'
 
 const SubmitGuess = () => {
   const [activeTab, setActiveTab] = useState('Submit Guess')
 
   return (
-    <div className='flex-col-tl gap-8'>
+    <div className='flex-col-tl gap-8 lg:h-full'>
       <div className='INTRO flex-col-tl gap-4'>
         <h1 className='text-2xl font-bold'>Submit Your Guess</h1>
         <div className='tabs tabs-boxed'>
@@ -83,6 +84,8 @@ function SubmitGuessSection() {
 
   if (!isAuthenticated) return null
 
+  if (!suspects) return <SectionLoader classes='items-start' />
+
   return (
     <div className='full flex-col-tl gap-4 lg:gap-10'>
       <h2>Choose Your Prime Suspect</h2>
@@ -118,7 +121,7 @@ function SubmitGuessSection() {
           })}
       </ul>
       {selectedSuspect >= 0 && suspects && (
-        <div className='PRIME_SUSPECT_CARD card h-[25vh] lg:h-[35vh] card-side bg-base-100 shadow-xl'>
+        <div className='PRIME_SUSPECT_CARD card h-[25vh] lg:h-[35vh] card-side bg-base-100 shadow-xl border border-secondary'>
           <figure className='w-[40%] shrink-0'>
             <img
               className='w-full h-full object-cover'
@@ -126,7 +129,7 @@ function SubmitGuessSection() {
               alt={suspects[selectedSuspect]?.suspect_name!}
             />
           </figure>
-          <div className='card-body h-full flex-col-center  '>
+          <div className='card-body h-full flex-col-tl  '>
             <h2 className='card-title flex-col-tl gap-2'>
               <span>Your Prime Suspect</span>
               <span className='text-secondary font-bold lg:text-2xl'>
@@ -172,7 +175,7 @@ function InstructionsSection() {
         </p>
       </div>
       <div className='flex-col-tl'>
-        <h4 className='italic text-accent'>Majority Rules</h4>
+        <h4 className='italic text-accent'>Majority Rules!</h4>
         <p>
           At the end of the game, the suspect with the most votes becomes the
           team&#39;s official choice. It&#39;s a democratic decision, so make
@@ -213,7 +216,7 @@ function TeamGuessCard() {
   if (!teamSuspect) return null
 
   return (
-    <div className='PRIME_SUSPECT_CARD card h-[25vh] card-side bg-base-100 shadow-xl'>
+    <div className='TEAM_SUSPECT_CARD card h-[25vh] lg:h-[35vh] card-side bg-base-100 shadow-xl border border-accent'>
       <figure className='shrink-0 w-[40%]'>
         <img
           className='w-full h-full object-cover'
@@ -221,10 +224,10 @@ function TeamGuessCard() {
           alt={teamSuspect?.suspect_name!}
         />
       </figure>
-      <div className='card-body h-full flex-col-center  '>
+      <div className='card-body h-full flex-col-tl'>
         <h2 className='card-title flex-col-tl gap-2'>
-          <span>Your Team&#39;s Prime Suspect</span>
-          <span className='text-accent font-bold'>
+          <span>Your Team&#39;s Prime Suspect (by vote)</span>
+          <span className='text-accent font-bold lg:text-2xl'>
             {teamSuspect?.suspect_name!}
           </span>
         </h2>
