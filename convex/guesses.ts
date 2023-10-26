@@ -34,6 +34,9 @@ export const createFromSession = mutation({
 
     if (!guess?._id) throw Error('Error finding guess!');
 
+    // fail silently when guess array is null
+    if (!Array.isArray(guess?.guesses)) return null;
+
     // add guess to guesses array.
     db.patch(guess?._id, {
       guesses: [...guess?.guesses, suspect_id]
@@ -92,6 +95,10 @@ export const retractGuessFromSession = mutation({
       .unique();
 
     if (!guess?._id) throw Error('Error finding guess!');
+
+    // fail silently when guess array is null
+    if (!Array.isArray(guess?.guesses)) return null;
+
 
     // remove guess from guesses array.
     db.patch(guess?._id, {
