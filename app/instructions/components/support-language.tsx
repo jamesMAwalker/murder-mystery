@@ -13,8 +13,9 @@ export const SupportLanguagePage = () => {
   return (
     <div className='flex-col-tl gap-4'>
       <div className='flex-col-tl gap-2'>
+        <h2 className='text-xl font-bold'>How to Get Good Information</h2>
         <p>
-          If you aren&#34;t sure what to say during each of the rounds, you can
+          If you aren&#39;t sure what to say during each of the rounds, you can
           use some of the tips below to help you get started.
         </p>
       </div>
