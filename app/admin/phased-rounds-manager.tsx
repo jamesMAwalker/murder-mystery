@@ -164,12 +164,6 @@ function PhaseBlock({ phase, roundId }: any) {
         Phase:{' '}
         <span className='text-accent'>&#34;{phase.phase_title}&#34;</span>
       </h6>
-      {phase.phase_type === 'discuss' && (
-        <span className='text-warning mb-2'>
-          💡 Start this timer to inform users that discussion has 1min
-          remaining.
-        </span>
-      )}
       <div className='BTN_GRID grid grid-cols-2 auto-rows-auto gap-2 flow-column full'>
         {/* <DigitalTimer totalSeconds={phase.phase_current_time} /> */}
         <DigitalTimer startingTime={phase.phase_starting_time} />
@@ -207,12 +201,17 @@ function PhaseBlock({ phase, roundId }: any) {
 
         {/* Next Phase Btn: Only show when round has more than 1 phase. */}
         {currentRound?.phases.length! > 1 && (
-          <button
-            className='btn btn-primary col-span-2'
-            onClick={handleStartNextPhase}
-          >
-            Next Phase
-          </button>
+          <ControlButton
+            text='Next Phase'
+            action={handleStartNextPhase}
+            btnStyle='btn-primary col-span-2'
+          />
+          // <button
+          //   className='btn btn-primary col-span-2'
+          //   onClick={handleStartNextPhase}
+          // >
+          //   Next Phase
+          // </button>
         )}
       </div>
     </li>
