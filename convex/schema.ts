@@ -15,7 +15,7 @@ export default defineSchema({
     votes_locked: v.boolean(),
   }),
   guesses: defineTable({
-    guesses: v.array(v.id("suspects")),
+    guesses: v.union(v.array(v.id("suspects")), v.null()),
     suspect_guess_id: v.union(v.id("suspects"), v.null()),
     suspect_guess_name: v.union(v.string(), v.null()),
     team_id: v.id("teams"),
