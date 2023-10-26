@@ -8,19 +8,19 @@ export const HowToPage = () => {
         <p>
           Get ready for an engaging and immersive way to enhance your English
           speaking and comprehension skills with our Murder Mystery English
-          Game! To kick things off, assemble your teams, with a minimum of two
-          players per team. Then, brace yourselves for three thrilling timed
-          rounds.
+          Game! To kick things off, we&#39;ll have a mingle round where you can
+          warm up your English skills. Then, brace yourselves for three
+          thrilling timed rounds.
         </p>
       </div>
       <div className='flex-col-tl '>
         <h3 className='text-lg font-bold text-accent'>The Rounds</h3>
         <p>
           You will participate in three rounds, each involving suspect
-          interviews, note collection, and discussions with your teammates. As
-          the rounds progress, new evidence from the investigation will be
-          introduced. Stay prepared to integrate this new information into your
-          evolving theories!
+          interviews, note collection, a speaking phase, and discussions with
+          your teammates. As the rounds progress, new evidence from the
+          investigation will be introduced. Stay prepared to integrate this new
+          information into your evolving theories!
         </p>
       </div>
       <div className='flex-col-tl '>
@@ -29,6 +29,14 @@ export const HowToPage = () => {
           In the first phase, every teammate gets the opportunity to interview
           one of the six suspects individually. You must carefully record your
           interview notes during this crucial step.
+        </p>
+      </div>
+      <div className='flex-col-tl '>
+        <h5 className='text-lg italic text-accent'>Speaking Phase</h5>
+        <p>
+          In this phase, participants in the game will speak for 2 minutes about
+          their current theories on the game. Consult the &#34;support
+          language&#34; section for tips on how to phrase your arguments.
         </p>
       </div>
       <div className='flex-col-tl '>
