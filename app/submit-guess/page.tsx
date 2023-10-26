@@ -9,19 +9,19 @@ import { Id } from '@/convex/_generated/dataModel'
 import { SectionLoader } from '../(components)/ui-components/loaders'
 
 const SubmitGuess = () => {
-  const [activeTab, setActiveTab] = useState('Submit Guess')
+  const [activeTab, setActiveTab] = useState(0)
 
   return (
     <div className='flex-col-tl gap-8 lg:h-full'>
       <div className='INTRO flex-col-tl gap-4'>
-        <h1 className='text-2xl font-bold'>Submit Your Guess</h1>
+        <h1 className='text-2xl font-bold'>Set Your Current Guess</h1>
         <div className='tabs tabs-boxed'>
-          {['Submit Guess', 'Instructions'].map((tab) => {
-            const isActive = tab === activeTab
+          {['Set Guess', 'Instructions'].map((tab, idx) => {
+            const isActive = idx === activeTab
 
             return (
               <a
-                onClick={() => setActiveTab(tab)}
+                onClick={() => setActiveTab(idx)}
                 className={cn(
                   'tab tab-lg',
                   isActive && 'tab-active text-accent'
@@ -34,8 +34,8 @@ const SubmitGuess = () => {
           })}
         </div>
       </div>
-      {activeTab === 'Submit Guess' && <SubmitGuessSection />}
-      {activeTab === 'Instructions' && <InstructionsSection />}
+      {activeTab === 0 && <SubmitGuessSection />}
+      {activeTab === 1 && <InstructionsSection />}
     </div>
   )
 }
@@ -46,8 +46,8 @@ function SubmitGuessSection() {
   const { isAuthenticated } = useConvexAuth()
   const [selectedSuspect, setSelectedSuspect] = useState(0)
 
+  const game = useQuery(api.game.getGameObject)
   const suspects = useQuery(api.suspects.getAll)
-
   const userGuess = useQuery(api.user_guesses.getFromSessionByUser)
 
   // handle setting selected suspect with db info.
@@ -88,7 +88,13 @@ function SubmitGuessSection() {
 
   return (
     <div className='full flex-col-tl gap-4 lg:gap-10'>
-      <h2>Choose Your Prime Suspect</h2>
+      {game?.votes_locked ? (
+        <h2 className='text-2xl font-bold text-warning'>Voting is locked!</h2>
+      ) : (
+        <h2 className='text-2xl font-bold'>
+          Choose Your <span className='text-secondary'>Prime Suspect!</span>
+        </h2>
+      )}
       <ul className='SUSPECT_LIST w-full grid grid-cols-3 gap-4 lg:grid-cols-5'>
         {Array.isArray(suspects) &&
           suspects?.map((suspect, idx) => {
@@ -100,7 +106,8 @@ function SubmitGuessSection() {
                 onClick={() => handleUpdateGuessInDb(suspect._id, idx)}
                 className={cn(
                   'SUSPECT_PORTRAIT relative rounded-md w-full flex-col-bl aspect-square border border-4 p-2',
-                  selectedStyle ? 'border-secondary' : 'border-neutral'
+                  selectedStyle ? 'border-secondary' : 'border-neutral',
+                  game?.votes_locked && 'opacity-50 pointer-events-none'
                 )}
               >
                 <span
