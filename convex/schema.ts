@@ -16,8 +16,8 @@ export default defineSchema({
   }),
   guesses: defineTable({
     guesses: v.array(v.id("suspects")),
-    suspect_guess_id: v.id("suspects"),
-    suspect_guess_name: v.string(),
+    suspect_guess_id: v.union(v.id("suspects"), v.null()),
+    suspect_guess_name: v.union(v.string(), v.null()),
     team_id: v.id("teams"),
     team_name: v.string(),
   }),
