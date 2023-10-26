@@ -56,7 +56,7 @@ function SubmitGuessSection() {
     if (userGuess) {
       // get index of user's guess from db.
       const selectedSuspectIdx = suspects?.findIndex(
-        (suspect) => suspect._id === userGuess?.suspect_guess_id
+        (suspect: any) => suspect._id === userGuess?.suspect_guess_id
       )
 
       // if userGuess index was found, setSelectedSuspect to that index.
