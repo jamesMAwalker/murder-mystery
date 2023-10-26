@@ -56,7 +56,7 @@ export const Navbar = () => {
             <span className='text-red-500 ml-[-10px]'>M</span>
           </Link>
         </span>
-        <h1 className='hidden lg:flex text-2xl font-bold w-full flex-center'>
+        <h1 className='hidden lg:flex-center text-2xl font-bold w-full'>
           <span className='text-red-500'>Murder</span>
           <span className='text-slate-100'>Mystery</span>
         </h1>
