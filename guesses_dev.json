@@ -1,0 +1,30 @@
+[
+  {
+    "guesses": null,
+    "suspect_guess_id": null, 
+    "suspect_guess_name": null,
+    "team_id": "4je6p49hsr6pqnf8regprty99k48h50",
+    "team_name": "Team 1"
+  },
+  {
+    "guesses": null,
+    "suspect_guess_id": null, 
+    "suspect_guess_name": null,
+    "team_id": "4jqryhyg9sx3jh05nfx4hvqb9k49v78",
+    "team_name": "Team 2"
+  },
+  {
+    "guesses": null,
+    "suspect_guess_id": null, 
+    "suspect_guess_name": null,
+    "team_id": "4jrem9nw32mqkmjb1f2pncpe9k4ca80",
+    "team_name": "Team 3"
+  },
+  {
+    "guesses": null,
+    "suspect_guess_id": null, 
+    "suspect_guess_name": null,
+    "team_id": "4g841sjh6g4zj74670qnnacv9k49shr",
+    "team_name": "Team 4"
+  }
+]
