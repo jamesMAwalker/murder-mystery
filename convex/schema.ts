@@ -88,8 +88,8 @@ export default defineSchema({
     team_name: v.string(),
   }),
   user_guesses: defineTable({
-    suspect_guess_id: v.union(v.id("suspects"), v.null()),
-    suspect_guess_name: v.union(v.string(), v.null()),
+    suspect_guess_id: v.id("suspects"),
+    suspect_guess_name: v.string(),
     user_id: v.id("users"),
     user_name: v.string(),
     user_team_id: v.id("teams"),
