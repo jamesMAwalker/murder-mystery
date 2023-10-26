@@ -43,8 +43,8 @@
         "phase_id": "interview2","phase_id": "discuss",
         "phase_type": "discuss",
         "phase_title": "Team Discussion",
-        "phase_starting_time": 60,
-        "phase_current_time": 60,
+        "phase_starting_time": 300,
+        "phase_current_time": 300,
         "completed": false,
         "active": false
       }
@@ -77,8 +77,8 @@
         "phase_id": "interview2",
         "phase_type": "discuss",
         "phase_title": "Discussion Phase",
-        "phase_starting_time": 60,
-        "phase_current_time": 60,
+        "phase_starting_time": 300,
+        "phase_current_time": 300,
         "completed": false,
         "active": false
       }
@@ -111,8 +111,8 @@
         "phase_id": "discuss",
         "phase_type": "discuss",
         "phase_title": "Discussion Phase",
-        "phase_starting_time": 60,
-        "phase_current_time": 60,
+        "phase_starting_time": 300,
+        "phase_current_time": 300,
         "completed": false,
         "active": false
       }
