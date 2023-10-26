@@ -4,7 +4,7 @@ export const HowToPage = () => {
   return (
     <>
       <div className='flex-col-tl '>
-        <h3 className='text-xl font-bold text-primary'>Overview</h3>
+        <h3 className='text-xl font-bold'>Overview</h3>
         <p>
           Get ready for an engaging and immersive way to enhance your English
           speaking and comprehension skills with our Murder Mystery English
@@ -23,7 +23,7 @@ export const HowToPage = () => {
           information into your evolving theories!
         </p>
       </div>
-      <div className='flex-col-tl '>
+      <div className='flex-col-tl ml-4'>
         <h5 className='text-lg italic text-accent'>Interview Phase</h5>
         <p>
           In the first phase, every teammate gets the opportunity to interview
@@ -31,7 +31,7 @@ export const HowToPage = () => {
           interview notes during this crucial step.
         </p>
       </div>
-      <div className='flex-col-tl '>
+      <div className='flex-col-tl ml-4'>
         <h5 className='text-lg italic text-accent'>Speaking Phase</h5>
         <p>
           In this phase, participants in the game will speak for 2 minutes about
@@ -39,7 +39,7 @@ export const HowToPage = () => {
           language&#34; section for tips on how to phrase your arguments.
         </p>
       </div>
-      <div className='flex-col-tl '>
+      <div className='flex-col-tl ml-4'>
         <h5 className='text-lg italic text-accent'>New Evidence!</h5>
         <p>
           As the interview phase concludes, a new piece of evidence will come
@@ -47,7 +47,7 @@ export const HowToPage = () => {
           round.
         </p>
       </div>
-      <div className='flex-col-tl '>
+      <div className='flex-col-tl ml-4'>
         <h5 className='text-lg italic text-accent'>Discussion Phase</h5>
         <p>
           During the discussion phase, teammates work together to analyze the
@@ -61,7 +61,7 @@ export const HowToPage = () => {
         <h5>Conclusion</h5>
       </div>
       <div className='flex-col-tl '>
-        <h5 className='text-lg font-bold text-secondary'>Conclusion</h5>
+        <h5 className='text-lg font-bold text-warning'>Game Conclusion</h5>
         <p>
           After three rounds of investigative fun, your team will submit its
           final verdict on the guilty suspect. Get it right, and you&#39;ll earn
