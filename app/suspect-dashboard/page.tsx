@@ -125,7 +125,7 @@ const InstructionsDisplay = ({ instructionsSet }: any) => {
       </div>
       <div className='INSTRUCTIONS_BLOCK flex-col-tl gap-2'>
         <h4 className='TITLE font-semibold'>
-          Cast Suspicion on: <span className='text-warning'>Jack</span>
+          Where to Focus Your Suspicion
         </h4>
         <p className='CONTENT'>{rdInstructions.target_suspect}</p>
       </div>
