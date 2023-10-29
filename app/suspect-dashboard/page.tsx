@@ -9,7 +9,7 @@ import { useRoleBasedRedirect } from '../(hooks)/navigation/useRoleBasedRedirect
 import { SectionLoader } from '../(components)/ui-components/loaders'
 
 const SuspectDashboard = () => {
-  const [activeTab, setActiveTab] = useState(1)
+  const [activeTab, setActiveTab] = useState(0)
 
   useRoleBasedRedirect({
     allowed_role: 'suspect'
@@ -25,7 +25,7 @@ const SuspectDashboard = () => {
         activeTab={activeTab}
       />
       {activeTab === 0 && <SuspectCard />}
-      {[1, 2, 3].includes(activeTab) && (
+      {[1, 2, 3, 4].includes(activeTab) && (
         <InstructionsDisplay instructionsSet={activeTab - 1} />
       )}
     </div>
@@ -43,18 +43,20 @@ const DashboardHeader = ({ user, setActiveTab, activeTab }: any) => {
             <span className='text-secondary'>{user?.name}!</span>
           </p>
           <div className='tabs tabs-boxed w-full lg:w-auto'>
-            {['Suspect', 'Rd. 1', 'Rd. 2', 'Rd. 3'].map((tab, idx) => (
-              <a
-                key={tab}
-                onClick={() => setActiveTab(idx)}
-                className={cn(
-                  'tab tab-lg',
-                  idx === activeTab && 'tab-active text-accent'
-                )}
-              >
-                {tab}
-              </a>
-            ))}
+            {['Suspect', 'Mingle', 'Rd. 1', 'Rd. 2', 'Rd. 3'].map(
+              (tab, idx) => (
+                <a
+                  key={tab}
+                  onClick={() => setActiveTab(idx)}
+                  className={cn(
+                    'tab tab-lg',
+                    idx === activeTab && 'tab-active text-accent'
+                  )}
+                >
+                  {tab}
+                </a>
+              )
+            )}
           </div>
         </>
       ) : (
@@ -89,17 +91,34 @@ const SuspectCard = () => {
 }
 
 const InstructionsDisplay = ({ instructionsSet }: any) => {
+  // needed to display active round
+  const roundNumber = instructionsSet
+  const activeRound = useQuery(api.phased_rounds.getActiveRound)
+  const showAsActiveRound = roundNumber === activeRound?.round_number
+
+  // needed to display correct instructions
   const instructionsData = useQuery(api.suspect_instructions.getFromUserSession)
   const instructions = instructionsData?.instructions
   const rdInstructions = instructions?.[instructionsSet]
 
-  if (!rdInstructions || !instructionsData) return <SectionLoader classes='items-start' />
+  if (!rdInstructions || !instructionsData)
+    return <SectionLoader classes='items-start' />
 
   return (
     <div className='INSTRUCTIONS_DISPLAY flex-col-tl gap-6 full'>
       <h4 className='ROUND_NUMBER text-xl font-bold'>
-        Round - {rdInstructions.round_number}: Instructions
+        Instructions for:{' '}
+        <span className='text-primary'>
+          Round - {rdInstructions.round_number}
+        </span>
       </h4>
+      {showAsActiveRound ? (
+        <div className='badge badge-warning uppercase p-3'>
+          This Round is Active
+        </div>
+      ) : (
+        <div className='badge badge-outline uppercase p-3'>Round Inactive</div>
+      )}
       <div className='INSTRUCTIONS_BLOCK flex-col-tl gap-2'>
         <h4 className='TITLE font-semibold'>Overview</h4>
         <p className='CONTENT'>{rdInstructions.general_instructions}</p>
@@ -111,11 +130,15 @@ const InstructionsDisplay = ({ instructionsSet }: any) => {
         <p className='CONTENT'>{rdInstructions.target_suspect}</p>
       </div>
       <div className='INSTRUCTIONS_LIST_BLOCK flex-col-tl gap-2'>
-        <h4 className='TITLE font-semibold text-success'>Things You SHOULD Talk About</h4>
+        <h4 className='TITLE font-semibold text-success'>
+          Things You SHOULD Talk About
+        </h4>
         <ul className='LIST'>{rdInstructions.dos}</ul>
       </div>
       <div className='INSTRUCTIONS_LIST_BLOCK flex-col-tl gap-2'>
-        <h4 className='TITLE font-semibold text-error'>Things to AVOID Talking About</h4>
+        <h4 className='TITLE font-semibold text-error'>
+          Things to AVOID Talking About
+        </h4>
         <ul className='LIST'>{rdInstructions.donts}</ul>
       </div>
     </div>
