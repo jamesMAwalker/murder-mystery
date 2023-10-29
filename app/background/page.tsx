@@ -36,7 +36,7 @@ function IntroSection() {
         videographer for a famous TikTok Influencer who investigates haunted
         areas. You have a deep history of working together to explore famous
         haunted places in Vietnam. At some point in the recent past, the Rival
-        approached you and tried to bribe you, to sabotage the Influencer’s
+        approached you and tried to bribe you, to sabotage the Influencer&#39;s
         videos. You rejected these advances. During your time at the ruins, the
         groundskeeper has been very difficult to work with, not being supportive
         and refusing to help out or even get in the way of potential videos. The
@@ -44,12 +44,12 @@ function IntroSection() {
         refused to do, despite obviously having some in his shack. You have long
         harbored secret love of the influencer, and recently confessed these
         feelings to her, only to have your heart broken with a brutal and
-        callous rejection. You’ve stormed off and wrote a letter to the
+        callous rejection. You&#39;ve stormed off and wrote a letter to the
         influencer venting your upset emotions which you keep in a box in the
         large chamber. Probably you were never going to give it to the
-        Influencer but you haven't made up your mind yet. You have access to the
-        Influencer’s cloud storage and can see that she’s uploaded one final
-        video.
+        Influencer but you haven&#39;t made up your mind yet. You have access to
+        the Influencer&#39;s cloud storage and can see that she&#39;s uploaded
+        one final video.
       </p>
     </div>
   )
